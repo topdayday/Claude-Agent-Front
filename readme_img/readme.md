@@ -16,37 +16,37 @@ The registration invitation code is a repeated 3-digit image verification code. 
 
 PC index page
 
-![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/m_chat.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_index.jpg)
 
 
 
 PC chat page 
 
-![](C:\Users\Administrator\Desktop\git\pc_chat.png)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_chat.jpg)
 
 
 
 PC chat history page
 
-![](C:\Users\Administrator\Desktop\git\pc_his.png)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_his.jpg)
 
 
 
 Mobile index page
 
-![](C:\Users\Administrator\Desktop\git\m_index.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/m_index.jpg)
 
 
 
 Mobile chat page
 
-![](C:\Users\Administrator\Desktop\git\m_chat.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/m_chat.jpg)
 
 
 
 Mobile chat history  page
 
-![](C:\Users\Administrator\Desktop\git\m_his.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/m_his.jpg)
 
 
 
