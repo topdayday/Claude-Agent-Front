@@ -16,7 +16,7 @@ The registration invitation code is a repeated 3-digit image verification code. 
 
 PC index page
 
-![](C:\Users\Administrator\Desktop\git\pc_index.png)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/m_chat.jpg)
 
 
 
