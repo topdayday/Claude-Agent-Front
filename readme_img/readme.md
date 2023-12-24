@@ -16,19 +16,19 @@ The registration invitation code is a repeated 3-digit image verification code. 
 
 PC index page
 
-![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_index.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_index.png)
 
 
 
 PC chat page 
 
-![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_chat.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_chat.png)
 
 
 
 PC chat history page
 
-![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_his.jpg)
+![](https://github.com/topdayday/Claude-Agent-Front/blob/main/readme_img/pc_his.png)
 
 
 
