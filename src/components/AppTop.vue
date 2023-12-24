@@ -1,0 +1,132 @@
+<template>
+  <div class="top">
+    <div class="top-left" @click="toTop()">
+      <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
+     </div>
+    <div class="top-center">
+    </div>
+    <div class="top-right">
+      <div class="top-button-contains">
+        <el-button  class="top-button el-icon-refresh"    @click="newSession()"></el-button>
+        <el-button  class="top-button el-icon-document"    @click="setDrawer()"></el-button>
+        <el-button  class="top-button el-icon-edit-outline"    @click="setMember()"></el-button>
+        <el-button  class="top-button el-icon-close"    @click="loginOut()"></el-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+import {generate_session} from "@/utils/request";
+export default {
+  name: 'AppTop',
+  props: {
+    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean
+  },
+  data(){
+    return {
+      model_type:[{
+        value: '选项1',
+        label: '黄金糕'
+      },{
+        value: '选项2',
+        label: '黄金糕'
+      }],
+    }
+  },
+  methods:{
+    toTop(){
+      // var height = document.documentElement.scrollHeight; // 获取页面总高度
+      // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 获取页面滚动的高度
+      // var clientHeight = document.documentElement.clientHeight; // 获取视口的高度
+      //
+      // // 检查是否在顶部
+      // if (scrollTop === 0) {
+      //   console.log("页面在顶部");
+      //   // window.scrollTo(0, document.documentElement.scrollTop);
+      //   // window.scrollTo({ buttom: 0, behavior: 'smooth' }); // 平滑滚动到顶部
+      // }else if (scrollTop + clientHeight >= height) {
+      //   console.log("页面在底部");
+      //   window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
+      // }
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
+    },
+    setMember(){
+      this.$emit('update:showMember', true);
+    },
+    setDrawer(){
+      this.$emit('update:showDrawer', true);
+    },
+    newSession(){
+      let token=localStorage.getItem('token');
+      generate_session(token).then(data => {
+        localStorage.setItem('session_id',data);
+        this.$emit('update:session_id', data); //
+        console.log('generate_session:',data);
+      }) .catch(error => {
+        console.error(error);
+        this.loading=false;
+      });
+    },
+    loginOut(){
+      localStorage.removeItem('token');
+      localStorage.removeItem('session_id');
+      this.$emit('update:token', null);
+      this.$emit('update:session_id', null);
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .top{
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to bottom,
+    rgba(0,0,0,0.1),
+    rgba(253,253,248,0.1));
+    display: flex;
+  }
+  .top-left{
+    width:  50px;
+    margin-left: 5px;
+  }
+
+  .top-center{
+    flex: 1;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2px;
+  }
+  .top-right{
+    width: 150px;
+    margin-top: 2px;
+  }
+  .top-button-contains{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .top-button{
+    background-color: rgba(255,255,255,0.2);;
+    color: black;
+    height: 28px;
+    padding: 5px 5px;
+    border: 0px;
+  }
+
+  ::v-deep .el-button--primary{
+    background-color: rgba(255,255,255,0.2);
+    border: 0px;
+    height: 30px;
+  }
+
+  ::v-deep  .el-button--primary:focus, .el-button--primary:hover{
+    background-color: rgba(255,255,255,0.2);
+    border: 0px;
+    height: 30px;
+  }
+  ::v-deep  .el-select{
+    max-height: 30px;
+  }
+</style>
