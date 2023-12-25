@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
 let server_url = '/'
-server_url = 'http://ai.topdayday/';
+// server_url = 'http://ai.topdayday.com/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {
