@@ -1,7 +1,14 @@
 import axios from "axios";
+import { MessageBox } from "element-ui";
 let server_url = '/'
-// server_url = 'http://192.168.8.48:8000/';
+server_url = 'http://ai.topdayday/';
 let base_url = server_url + 'cnaude';
+
+export function login_out() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('session_id');
+}
+
 export function get_captcha() {
     return axios({
         method: 'POST',
@@ -16,10 +23,10 @@ export function get_captcha() {
         if(response.data.code===0){
             return response.data.data;
         }else{
-            alert('请求失败(get_captcha)')
+            MessageBox.alert('请求失败(get_captcha)','提示')
         }
     }).catch(()=>{
-            alert('发送请求图片验证码失败,请联系管理员！')
+            MessageBox.alert('发送请求图片验证码失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -43,10 +50,10 @@ export function member_login(loginData) {
             if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                 alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('发送登录请求失败,请联系管理员！')
+            MessageBox.alert('发送登录请求失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -68,13 +75,17 @@ export function member_register(loginData) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
-                alert( response.data.data);
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            }
+            else if(response.data.code===0){
+                MessageBox.alert( response.data.data,'提示');
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('发送注册请求失败,请联系管理员！')
+            MessageBox.alert('发送注册请求失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -94,13 +105,16 @@ export function list_session(token,session_id) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else  if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
                 alert( response.data.data);
             }
         }).catch(()=>{
-            alert('请求历史数据失败,请联系管理员！')
+            MessageBox.alert('请求历史数据失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -122,13 +136,16 @@ export function assistant(token,session_id, content_in,model_type) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('发送请求失败,请联系管理员！')
+            MessageBox.alert('发送请求失败,请联系管理员！','提示')
             throw new Error('请求失败'); // 如果需要，可以在这里抛出一个错误
         });
 }
@@ -148,13 +165,16 @@ export function latest_session(token) {
         }
     })
     .then(response => {
-        if(response.data.code===0){
+        if(response.data.code===-1){
+            login_out();
+            MessageBox.alert( response.data.data,'提示');
+        } else  if(response.data.code===0){
             return response.data.data;
         }else if(response.data.code===1){
-            alert( response.data.data);
+            MessageBox.alert( response.data.data,'提示');
         }
     }).catch(()=>{
-            alert('请求查找当前会话失败,请联系管理员！')
+            MessageBox.alert('请求查找当前会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
     });
 }
@@ -175,13 +195,16 @@ export function del_session(token,session_id) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data);
             }
         }).catch(()=>{
-            alert('请求删除会话失败,请联系管理员！')
+            MessageBox.alert('请求删除会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -200,13 +223,16 @@ export function generate_session(token) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('请求新会话失败,请联系管理员！')
+            MessageBox.alert('请求新会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -226,13 +252,16 @@ export function member_info(token) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('请求用户信息失败,请联系管理员！')
+            MessageBox.alert('请求用户信息失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }
@@ -255,13 +284,16 @@ export function member_edit(token,loginData) {
         }
     })
         .then(response => {
-            if(response.data.code===0){
+            if(response.data.code===-1){
+                login_out();
+                MessageBox.alert( response.data.data,'提示');
+            } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
-                alert( response.data.data);
+                MessageBox.alert( response.data.data,'提示');
             }
         }).catch(()=>{
-            alert('修改用户资料失败,请联系管理员！')
+            MessageBox.alert('修改用户资料失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
 }

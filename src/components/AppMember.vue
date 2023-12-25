@@ -37,7 +37,7 @@
 <script>
 import {member_info} from  '@/utils/request.js';
 import {member_edit} from  '@/utils/request.js'
-
+import { MessageBox } from "element-ui";
 
 export default {
   name: 'AppMember',
@@ -96,7 +96,7 @@ export default {
     },
     submitForm(formName) {
       if(this.memberData.new_password !== this.memberData.new_password1){
-        alert('两次输入新密码不一致！')
+        MessageBox.alert('两次输入新密码不一致！','提示')
         return false;
       }
       let token=localStorage.getItem('token');
@@ -104,7 +104,7 @@ export default {
         if (valid) {
           member_edit(token,this.memberData).then(data => {
             if(Object.keys(data).length>0){
-              alert('修改成功！')
+              MessageBox.alert('修改成功！','提示')
               console.log(data)
               this.closeDg('memberForm')
             }

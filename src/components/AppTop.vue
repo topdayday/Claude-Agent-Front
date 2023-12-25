@@ -37,19 +37,6 @@ export default {
   },
   methods:{
     toTop(){
-      // var height = document.documentElement.scrollHeight; // 获取页面总高度
-      // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 获取页面滚动的高度
-      // var clientHeight = document.documentElement.clientHeight; // 获取视口的高度
-      //
-      // // 检查是否在顶部
-      // if (scrollTop === 0) {
-      //   console.log("页面在顶部");
-      //   // window.scrollTo(0, document.documentElement.scrollTop);
-      //   // window.scrollTo({ buttom: 0, behavior: 'smooth' }); // 平滑滚动到顶部
-      // }else if (scrollTop + clientHeight >= height) {
-      //   console.log("页面在底部");
-      //   window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
-      // }
       window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
     },
     setMember(){
