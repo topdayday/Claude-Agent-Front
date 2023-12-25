@@ -1,12 +1,13 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
 let server_url = '/'
-// server_url = 'http://ai.topdayday.com/';
+server_url = 'http://127.0.0.1:8000/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {
     localStorage.removeItem('token');
     localStorage.removeItem('session_id');
+    location.reload(true);
 }
 
 export function get_captcha() {
@@ -76,8 +77,8 @@ export function member_register(loginData) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             }
             else if(response.data.code===0){
                 MessageBox.alert( response.data.data,'提示');
@@ -106,8 +107,8 @@ export function list_session(token,session_id) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             } else  if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
@@ -137,8 +138,8 @@ export function assistant(token,session_id, content_in,model_type) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
@@ -166,8 +167,8 @@ export function latest_session(token) {
     })
     .then(response => {
         if(response.data.code===-1){
-            login_out();
             MessageBox.alert( response.data.data,'提示');
+            login_out();
         } else  if(response.data.code===0){
             return response.data.data;
         }else if(response.data.code===1){
@@ -224,8 +225,8 @@ export function generate_session(token) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
@@ -253,8 +254,8 @@ export function member_info(token) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
@@ -285,8 +286,8 @@ export function member_edit(token,loginData) {
     })
         .then(response => {
             if(response.data.code===-1){
-                login_out();
                 MessageBox.alert( response.data.data,'提示');
+                login_out();
             } else   if(response.data.code===0){
                 return response.data.data;
             }else if(response.data.code===1){
