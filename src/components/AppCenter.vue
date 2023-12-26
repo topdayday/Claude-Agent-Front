@@ -1,38 +1,54 @@
 <template>
 <div class="content-main">
   <div class="" v-if="showIndexContent">
-      <span class="card_sense" >Claude Agent</span>
-      <div  class="card_contains">
-          <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:isHidden }"  @click="selectType(0)">
-            <i v-if="model_type===0" class="selected-icon">✓已选</i>
-            <h3 class="gmat-headline-4 gradient gradient-1">高性能</h3>
-            <div  v-bind:class="{ hidden: isHidden }">
-              <div class="containt_txt">更快、更便宜但仍然非常强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解。</div>
-              <h4  class="containt_txt">适用场景:</h4>
-              <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-                <li> 高性能</li>
-                <li> 低延迟</li>
-                <li> 轻量级对话</li>
-                <li> 辅助编码</li>
-                <li> 适度的内容生成</li>
-              </ul>
+      <span class="card_sense" >Cloud AI</span>
+          <div  class="card_contains">
+            <div  v-bind:class="{selected_box:model_type===2, card_item:true, card_item_max:isHidden }"  @click="selectType(2)">
+              <i v-if="model_type===2" class="selected-icon">✓已选</i>
+              <h3 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h3>
+              <div  v-bind:class="{ hidden: isHidden }">
+                <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
+                <h4 class="containt_txt">适用场景:</h4>
+                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
+                  <li> 复杂的推理</li>
+                  <li> 丰富的创造力</li>
+                  <li> 深思熟虑的对话</li>
+                  <li> 高质量编码</li>
+                  <li> 详细的内容生成</li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div  v-bind:class="{selected_box:model_type===1, card_item:true, card_item_max:isHidden }"  @click="selectType(1)">
-            <i v-if="model_type===1" class="selected-icon">✓已选</i>
-            <h3 class="gmat-headline-4 gradient gradient-1">高质量</h3>
-            <div  v-bind:class="{ hidden: isHidden }">
-              <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
-              <h4 class="containt_txt">适用场景:</h4>
-              <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-                <li> 复杂的推理</li>
-                <li> 丰富的创造力</li>
-                <li> 深思熟虑的对话</li>
-                <li> 高质量编码</li>
-                <li> 详细的内容生成</li>
-              </ul>
+            <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:isHidden }"  @click="selectType(0)">
+              <i v-if="model_type===0" class="selected-icon">✓已选</i>
+              <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
+              <div  v-bind:class="{ hidden: isHidden }">
+                <div class="containt_txt">更快、更便宜但仍然非常强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解。</div>
+                <h4  class="containt_txt">适用场景:</h4>
+                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
+                  <li> 高性能</li>
+                  <li> 低延迟</li>
+                  <li> 轻量级对话</li>
+                  <li> 辅助编码</li>
+                  <li> 适度的内容生成</li>
+                </ul>
+              </div>
             </div>
-          </div>
+            <div  v-bind:class="{selected_box:model_type===1, card_item:true, card_item_max:isHidden }"  @click="selectType(1)">
+              <i v-if="model_type===1" class="selected-icon">✓已选</i>
+              <h3 class="gmat-headline-4 gradient gradient-1">Claude Pro</h3>
+              <div  v-bind:class="{ hidden: isHidden }">
+                <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
+                <h4 class="containt_txt">适用场景:</h4>
+                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
+                  <li> 复杂的推理</li>
+                  <li> 丰富的创造力</li>
+                  <li> 深思熟虑的对话</li>
+                  <li> 高质量编码</li>
+                  <li> 详细的内容生成</li>
+                </ul>
+              </div>
+            </div>
+
       </div>
       <div><a target="#"  href="https://www.anthropic.com/product" class="product_price">产品与价格</a></div>
       <h1 class="card_start" >让我们开始新的探索吧！</h1>
