@@ -1,20 +1,48 @@
 <template>
   <div>
     <div class="content-main" id="login_index">
-      <h1 class="index_title" v-bind:class="{index_title:isHidden,index_title_min:isHidden }" >T2Day ai agent</h1>
+      <h1 class="index_title" v-bind:class="{index_title:isHidden,index_title_min:isHidden }">T2Day AI Agent</h1>
       <div  class="card_contains">
         <div  v-bind:class="{card_item:true ,hidden: !isHidden}">
-          <h3 class="gmat-headline-4 gradient gradient-1">T2Day ai agent</h3>
+          <!--<h3 class="gmat-headline-4 gradient gradient-1">T2Day ai agent</h3>-->
           <h4 class="containt_txt">方便快捷的使用体验</h4>
           <div  class="containt_txt">集成主流AI大模型:</div>
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
+            <li> Claude 2.1</li>
+            <li> Llama2 70B</li>
             <li> Gemini Pro</li>
-            <li> Claude Pro</li>
-            <li> Claude Smart</li>
           </ol>
 
         </div>
+        <div  v-bind:class="{card_item:true ,hidden: isHidden}">
+          <h3 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h3>
+          <div class="containt_txt">更快、更便宜但仍然非常强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解。</div>
 
+          <h4  class="containt_txt">适用场景:</h4>
+          <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
+            <li> 高性能</li>
+            <li> 低延迟</li>
+            <li> 轻量级对话</li>
+            <li> 辅助编码</li>
+            <li> 适度的内容生成</li>
+          </ul>
+
+        </div>
+
+        <div  v-bind:class="{card_item:true,hidden: isHidden }">
+          <h3 class="gmat-headline-4 gradient gradient-1">Llama2 70B</h3>
+          <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
+
+            <h4 class="containt_txt">适用场景:</h4>
+            <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
+              <li> 复杂的推理</li>
+              <li> 丰富的创造力</li>
+              <li> 深思熟虑的对话</li>
+              <li> 高质量编码</li>
+              <li> 详细的内容生成</li>
+            </ul>
+
+        </div>
 
         <div  v-bind:class="{card_item:true ,hidden: isHidden}">
           <h3 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h3>
@@ -28,34 +56,6 @@
             <li> 数据分析</li>
             <li> 信息检索</li>
           </ul>
-
-        </div>
-        <div  v-bind:class="{card_item:true ,hidden: isHidden}">
-          <h3 class="gmat-headline-4 gradient gradient-1">Claude Pro</h3>
-          <div class="containt_txt">更快、更便宜但仍然非常强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解。</div>
-
-            <h4  class="containt_txt">适用场景:</h4>
-            <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-              <li> 高性能</li>
-              <li> 低延迟</li>
-              <li> 轻量级对话</li>
-              <li> 辅助编码</li>
-              <li> 适度的内容生成</li>
-            </ul>
-
-        </div>
-        <div  v-bind:class="{card_item:true,hidden: isHidden }">
-          <h3 class="gmat-headline-4 gradient gradient-1">Claude Smart</h3>
-          <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
-
-            <h4 class="containt_txt">适用场景:</h4>
-            <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-              <li> 复杂的推理</li>
-              <li> 丰富的创造力</li>
-              <li> 深思熟虑的对话</li>
-              <li> 高质量编码</li>
-              <li> 详细的内容生成</li>
-            </ul>
 
         </div>
       </div>
