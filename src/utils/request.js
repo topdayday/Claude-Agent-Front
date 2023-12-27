@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
 let server_url = '/'
-server_url = 'http://127.0.0.1:8000/';
+// server_url = 'http://127.0.0.1:8000/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {

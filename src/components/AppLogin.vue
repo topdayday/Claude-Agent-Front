@@ -10,7 +10,7 @@
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
             <li> Gemini Pro</li>
             <li> Claude Pro</li>
-            <li> Claude</li>
+            <li> Claude Smart</li>
           </ol>
 
         </div>
