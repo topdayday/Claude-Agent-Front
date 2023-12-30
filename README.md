@@ -1,5 +1,5 @@
-# claudecn
-
+# T2Day ai agent 
+Ai agent service base AWS bedrock, suport Google Gemini, Meta Llama2 70B, Anthropic Claude2.1
 
 
 **Project  demo**
