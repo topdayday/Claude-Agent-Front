@@ -7,9 +7,9 @@
       size="100%"
       :before-close="handleClose">
       <el-row v-for="(item, index) in conversation_list" :key="index">
-        <div  class="his_row" @click="viewSession(item.session_id)">
+        <div  class="his_row">
         <el-col :span="11" >
-          <div class="conversation-his"><span class="his_li" >{{item.content_in}}</span></div>
+          <div class="conversation-his" @click="viewSession(item.session_id)"><span class="his_li" >{{item.content_in}}</span></div>
         </el-col>
         <el-col :span="8">
           <div class="conversation-his"><span class="his_li">{{item.create_time}}</span></div>
