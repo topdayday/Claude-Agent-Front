@@ -163,7 +163,6 @@ export default {
       list_session(token,session_id).then(data => {
         this.content_his= data;
         this.scrollToBottom();
-        console.log('captcha:',data);
       }) .catch(error => {
         console.error(error);
       });
@@ -193,11 +192,12 @@ export default {
       }
       this.sent_status = 1;
       assistant(token,session_id,this.content_in,this.model_type).then(data => {
-        this.content_his.push(data)
-        this.scrollToBottom();
         this.sent_status = 0;
-        this.content_in='';
-        console.log('captcha:',data);
+        this.scrollToBottom();
+        if(data){
+          this.content_his.push(data);
+          this.content_in='';
+        }
       }) .catch(error => {
         console.error(error);
         this.sent_status = 0;

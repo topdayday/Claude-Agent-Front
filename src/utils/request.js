@@ -144,6 +144,7 @@ export function assistant(token,session_id, content_in,model_type) {
                 return response.data.data;
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
+                return '';
             }
         }).catch(()=>{
             MessageBox.alert('发送请求失败,请联系管理员！','提示')
