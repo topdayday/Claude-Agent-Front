@@ -141,6 +141,7 @@ export default {
     window.addEventListener('resize', this.handleResize);
     // 初始检查窗口宽度
     this.checkWidth();
+    this.install_copy_code();
   },
   beforeDestroy() {
     // 在组件销毁前移除事件监听，避免内存泄漏
@@ -207,11 +208,77 @@ export default {
         window.scrollTo(0, document.body.scrollHeight);
       })
     },
+    install_copy_code(){
+      // get the list of all highlight code blocks
+      const highlights = document.querySelectorAll("div.highlight")
+
+      highlights.forEach(div => {
+        // create the copy button
+        const copy = document.createElement("button")
+        copy.innerHTML = "Copy"
+        // add the event listener to each click
+        copy.addEventListener("click", this.handleCopyClick)
+        // append the copy button to each code block
+        div.append(copy)
+      })
+    },
+
+    copyToClipboard(str) {
+      const el = document.createElement("textarea") // Create a <textarea> element
+      el.value = str // Set its value to the string that you want copied
+      el.setAttribute("readonly", "") // Make it readonly to be tamper-proof
+      el.style.position = "absolute"
+      el.style.left = "-9999px" // Move outside the screen to make it invisible
+      document.body.appendChild(el) // Append the <textarea> element to the HTML document
+      const selected =
+          document.getSelection().rangeCount > 0 // Check if there is any content selected previously
+              ? document.getSelection().getRangeAt(0) // Store selection if found
+              : false // Mark as false to know no selection existed before
+      el.select() // Select the <textarea> content
+      document.execCommand("copy") // Copy - only works as a result of a user action (e.g. click events)
+      document.body.removeChild(el) // Remove the <textarea> element
+      if (selected) {
+        // If a selection existed before copying
+        document.getSelection().removeAllRanges() // Unselect everything on the HTML document
+        document.getSelection().addRange(selected) // Restore the original selection
+      }
+    },
+
+    handleCopyClick(evt) {
+      // get the children of the parent element
+      const { children } = evt.target.parentElement
+      // grab the first element (we append the copy button on afterwards, so the first will be the code element)
+      // destructure the innerText from the code block
+      const { innerText } = Array.from(children)[0]
+      // copy all of the code to the clipboard
+      this.copyToClipboard(innerText)
+      // alert to show it worked, but you can put any kind of tooltip/popup to notify it worked
+      alert(innerText)
+    }
+
   },
 }
 </script>
 
 <style scoped>
+div.highlight button {
+  color: #adb5bd;
+  box-sizing: border-box;
+  transition: 0.2s ease-out;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 5px 10px;
+  font-size: 0.8em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 0 0.15rem;
+}
+
+
+
 .content{
   background-color: #fcfcfc;
   border: 1px solid #fdfdfd;
