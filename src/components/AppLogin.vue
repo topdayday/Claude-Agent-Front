@@ -65,7 +65,7 @@
             title="用户登录"
             :visible.sync="showLoginForm"
             :show-close="true"
-            fullscreen="true"
+            :fullscreen="true"
             center>
             <div class="login-container"  id="login_from">
               <el-form ref="loginForm"  :label-position="top" :model="loginData" :rules="loginRules" class="login-form">

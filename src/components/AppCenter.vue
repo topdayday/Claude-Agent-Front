@@ -68,7 +68,7 @@
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
         <div class="content-assistant">
-          <div v-html="item.content_out"></div>
+          <div @mouseover="install_copy_code()" v-html="item.content_out"></div>
         </div>
       </div>
     </div>
@@ -141,7 +141,6 @@ export default {
     window.addEventListener('resize', this.handleResize);
     // 初始检查窗口宽度
     this.checkWidth();
-    this.install_copy_code();
   },
   beforeDestroy() {
     // 在组件销毁前移除事件监听，避免内存泄漏
@@ -210,12 +209,12 @@ export default {
     },
     install_copy_code(){
       // get the list of all highlight code blocks
-      const highlights = document.querySelectorAll("div.highlight")
-
+      const highlights = document.querySelectorAll(".codehilite")
       highlights.forEach(div => {
         // create the copy button
         const copy = document.createElement("button")
-        copy.innerHTML = "Copy"
+        copy.innerHTML = "复制代码"
+        copy.classList.add("btn_copy");
         // add the event listener to each click
         copy.addEventListener("click", this.handleCopyClick)
         // append the copy button to each code block
@@ -261,8 +260,8 @@ export default {
 </script>
 
 <style scoped>
-div.highlight button {
-  color: #adb5bd;
+.btn_copy{
+  color: black;
   box-sizing: border-box;
   transition: 0.2s ease-out;
   cursor: pointer;

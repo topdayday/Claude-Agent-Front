@@ -2,7 +2,6 @@
   <el-dialog
       title="用户信息编辑"
       :visible.sync="showMemberVal"
-      fullscreen="true"
       :show-close="false"
       center>
       <div class="login-container">
