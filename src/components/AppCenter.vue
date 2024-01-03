@@ -68,7 +68,7 @@
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
         <div class="content-assistant">
-          <div @mouseover="install_copy_code()" v-html="item.content_out"></div>
+          <div @mouseover="installCopyCode(this)"  v-html="item.content_out"></div>
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@ export default {
     }
   },
   created(){
-    this.list_session();
+    this.current_session();
     let local_model_type=localStorage.getItem('model_type')
     if(local_model_type){
       this.model_type=Number(local_model_type);
@@ -124,7 +124,7 @@ export default {
 
   watch:{
     session_id(){
-      this.list_session();
+      this.currentSession();
     },
   },
   computed:{
@@ -156,7 +156,7 @@ export default {
       // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
       this.isHidden = this.windowWidth < 1100;
     },
-    list_session() {
+    currentSession() {
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
       list_session(token,session_id).then(data => {
@@ -190,7 +190,7 @@ export default {
         localStorage.setItem('model_type', 0);
       }
       this.sent_status = 1;
-      assistant(token,session_id,this.content_in,this.model_type).then(data => {
+      assistant(token,session_id,this.content_in.trim(),this.model_type).then(data => {
         this.sent_status = 0;
         this.scrollToBottom();
         if(data){
@@ -207,52 +207,47 @@ export default {
         window.scrollTo(0, document.body.scrollHeight);
       })
     },
-    install_copy_code(){
-      // get the list of all highlight code blocks
-      const highlights = document.querySelectorAll(".codehilite")
+
+    installCopyCode(el){
+      const btn = el.querySelectorAll(".btn_copy")
+      if(btn){
+        return
+      }
+      const highlights = el.querySelectorAll(".codehilite")
       highlights.forEach(div => {
-        // create the copy button
         const copy = document.createElement("button")
         copy.innerHTML = "复制代码"
         copy.classList.add("btn_copy");
-        // add the event listener to each click
         copy.addEventListener("click", this.handleCopyClick)
-        // append the copy button to each code block
         div.append(copy)
       })
     },
 
     copyToClipboard(str) {
-      const el = document.createElement("textarea") // Create a <textarea> element
-      el.value = str // Set its value to the string that you want copied
-      el.setAttribute("readonly", "") // Make it readonly to be tamper-proof
+      const el = document.createElement("textarea")
+      el.value = str
+      el.setAttribute("readonly", "")
       el.style.position = "absolute"
-      el.style.left = "-9999px" // Move outside the screen to make it invisible
-      document.body.appendChild(el) // Append the <textarea> element to the HTML document
+      el.style.left = "-9999px"
+      document.body.appendChild(el)
       const selected =
-          document.getSelection().rangeCount > 0 // Check if there is any content selected previously
-              ? document.getSelection().getRangeAt(0) // Store selection if found
-              : false // Mark as false to know no selection existed before
-      el.select() // Select the <textarea> content
-      document.execCommand("copy") // Copy - only works as a result of a user action (e.g. click events)
-      document.body.removeChild(el) // Remove the <textarea> element
+          document.getSelection().rangeCount > 0
+              ? document.getSelection().getRangeAt(0)
+              : false
+      el.select()
+      document.execCommand("copy")
+      document.body.removeChild(el)
       if (selected) {
-        // If a selection existed before copying
-        document.getSelection().removeAllRanges() // Unselect everything on the HTML document
-        document.getSelection().addRange(selected) // Restore the original selection
+        document.getSelection().removeAllRanges()
+        document.getSelection().addRange(selected)
       }
     },
 
     handleCopyClick(evt) {
-      // get the children of the parent element
       const { children } = evt.target.parentElement
-      // grab the first element (we append the copy button on afterwards, so the first will be the code element)
-      // destructure the innerText from the code block
       const { innerText } = Array.from(children)[0]
-      // copy all of the code to the clipboard
       this.copyToClipboard(innerText)
-      // alert to show it worked, but you can put any kind of tooltip/popup to notify it worked
-      alert(innerText)
+      // alert(innerText)
     }
 
   },
