@@ -59,7 +59,7 @@
           <div class="circle">你</div>
         </div>
         <div class="content-human">
-          <div v-html="item.content_in"></div>
+          <div>{{item.content_in}}</div>
         </div>
       </div>
 
@@ -68,7 +68,7 @@
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
         <div class="content-assistant">
-          <div @mouseover="installCopyCode(this)"  v-html="item.content_out"></div>
+          <div :id="item.id" @click="installCopyCode(item.id)"  v-html="item.content_out"></div>
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@ export default {
     }
   },
   created(){
-    this.current_session();
+    this.currentSession();
     let local_model_type=localStorage.getItem('model_type')
     if(local_model_type){
       this.model_type=Number(local_model_type);
@@ -208,19 +208,35 @@ export default {
       })
     },
 
-    installCopyCode(el){
-      const btn = el.querySelectorAll(".btn_copy")
-      if(btn){
+    installCopyCode(id){
+      const parent = document.getElementById(id);
+      if(parent.hasAttribute('showCopy')) {
         return
       }
-      const highlights = el.querySelectorAll(".codehilite")
+      const highlights = parent.querySelectorAll(".codehilite")
       highlights.forEach(div => {
         const copy = document.createElement("button")
         copy.innerHTML = "复制代码"
-        copy.classList.add("btn_copy");
-        copy.addEventListener("click", this.handleCopyClick)
+        copy.style.cssText = `
+        color: white;
+        box-sizing: border-box;
+        transition: 0.2s ease-out;
+        cursor: pointer;
+        user-select: none;
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(0, 0, 0, 0);
+        padding: 5px 10px;
+        font-size: 0.8em;
+        // position: absolute;
+        // top: 0;
+        // right: 0;
+        border-radius: 0 0.15rem;
+      `;
+        copy.addEventListener("click", this.handleCopyClick);
+        // div.insertBefore(copy, div.firstChild);
         div.append(copy)
       })
+      parent.setAttribute('showCopy', 'true');
     },
 
     copyToClipboard(str) {
@@ -247,7 +263,11 @@ export default {
       const { children } = evt.target.parentElement
       const { innerText } = Array.from(children)[0]
       this.copyToClipboard(innerText)
-      // alert(innerText)
+      this.$notify({
+        title: '提示',
+        message: '内容已复制成功！',
+        type: 'success'
+      });
     }
 
   },
@@ -255,23 +275,9 @@ export default {
 </script>
 
 <style scoped>
-.btn_copy{
-  color: black;
-  box-sizing: border-box;
-  transition: 0.2s ease-out;
-  cursor: pointer;
-  user-select: none;
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0);
-  padding: 5px 10px;
-  font-size: 0.8em;
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-radius: 0 0.15rem;
-}
-
-
+  .codehilite{
+    display: flex; justify-content: flex-end;
+  }
 
 .content{
   background-color: #fcfcfc;
@@ -422,6 +428,30 @@ export default {
   display: none; /* 或者使用其他隐藏样式，如 visibility: hidden; */
 }
 
+/* 表格的样式 */
+::v-deep  table {
+  width: 100%; /* 表格宽度为100% */
+  border-collapse: collapse; /* 边框合并为一个 */
+}
+
+/* 表格的边框样式 */
+::v-deep  table, th, td {
+  border: 1px solid rgba(0,0,0,0.2); /* 边框宽度为1像素，颜色为黑色 */
+}
+
+/* 表头的样式 */
+::v-deep  th {
+  background-color: #f2f2f2; /* 背景颜色为浅灰色 */
+  color: black; /* 文字颜色为黑色 */
+  padding: 8px; /* 内边距为8像素 */
+}
+
+/* 表格行的样式 */
+::v-deep  tr:nth-child(even) {
+  background-color: #f2f2f2; /* 偶数行的背景颜色为浅灰色 */
+}
+
+
 ::v-deep  pre {
   background-color: rgba(0,0,0,0.7);  /* 设置背景颜色 */
   padding: 10px;  /* 设置内边距 */
@@ -429,6 +459,7 @@ export default {
   overflow: auto;  /* 如果内容超出容器，出现滚动条 */
   text-align: left;
   color: white;
+  margin-bottom: 6px;
 }
 ::v-deep  p{
     text-align: left;
