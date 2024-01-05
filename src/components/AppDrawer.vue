@@ -6,6 +6,9 @@
       direction="rtl"
       size="100%"
       :before-close="handleClose">
+      <template v-if="loading">
+        <el-spinner></el-spinner>
+      </template>
       <el-row v-for="(item, index) in conversation_list" :key="index">
         <div  class="his_row">
         <el-col :span="11" >
@@ -18,6 +21,10 @@
           <el-button  @click="deleteSession(item.session_id)">删除</el-button>
         </el-col>
         </div>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="end">
+        <el-button v-if="pageNumber>0 && !loading" @click="previousPage()">上一页</el-button>
+        <el-button v-if="conversation_list.length>=30 && !loading"  @click="nextPage()">下一页</el-button>
       </el-row>
   </el-drawer>
   </div>
@@ -36,6 +43,8 @@ export default {
     return{
       conversation_list:[],
       show:false,
+      pageNumber:0,
+      loading:true,
     }
   },
   created() {
@@ -45,7 +54,7 @@ export default {
     showDrawer(){
         this.show =this.showDrawer;
         if(this.show){
-          this.latest_session();
+          this.latestSession();
         }
     },
   },
@@ -55,14 +64,33 @@ export default {
       this.show=false;
       this.$emit('update:showDrawer', false);
     },
-    latest_session(){
+
+    nextPage(){
+        this.pageNumber++;
+        if( this.pageNumber<0){
+          this.pageNumber=0;
+        }
+      this.latestSession();
+    },
+    previousPage(){
+      this.pageNumber--;
+      if( this.pageNumber<0){
+        this.pageNumber=0;
+      }
+      this.latestSession()
+    },
+    latestSession(){
+      let _this=this;
       let token=localStorage.getItem('token');
       this.loading=true;
-      latest_session(token).then(data => {
+      this.conversation_list=[]
+      latest_session(token,this.pageNumber).then(data => {
         this.conversation_list= data;
+        this.loading=false;
         console.log('latest_session:',data);
       }) .catch(error => {
         console.error(error);
+        _this.loading=false;
       });
     },
     deleteSession(session_id){

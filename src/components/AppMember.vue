@@ -3,6 +3,7 @@
       title="用户信息编辑"
       :visible.sync="showMemberVal"
       :show-close="false"
+      :fullscreen="true"
       center>
       <div class="login-container">
         <el-form  ref="memberForm" :model="memberData"  label-width="100px" >

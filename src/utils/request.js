@@ -154,12 +154,13 @@ export function assistant(token,session_id, content_in,model_type) {
 
 
 
-export function latest_session(token) {
+export function latest_session(token,page_number) {
     return axios({
         method: 'POST',
         url: base_url+'/latest_session/',
         data: {
             token:token,
+            page_number:page_number,
         },
         headers: {
             'Content-Type': 'multipart/form-data',
