@@ -8,7 +8,7 @@
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h4>
               <div  v-bind:class="{ hidden: isHidden }">
-                <div class="containt_txt">更快、更便宜但仍然非常强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解。</div>
+                <div class="containt_txt">由Anthropic开发,更快更强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解.</div>
                 <h4  class="containt_txt">适用场景:</h4>
                 <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
                   <li> 高性能</li>
@@ -21,9 +21,9 @@
             </div>
             <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:isHidden }"  @click="selectType(10)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">LLama2 70B</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">LLAMA2 70B</h4>
               <div  v-bind:class="{ hidden: isHidden }">
-                <div class="containt_txt">我们最强大的模型，擅长执行从复杂对话和创意内容生成到详细指导的广泛任务.</div>
+                <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
                 <h4 class="containt_txt">适用场景:</h4>
                 <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
                   <li> 复杂的推理</li>
