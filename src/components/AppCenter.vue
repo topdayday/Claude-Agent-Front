@@ -53,7 +53,8 @@
       <h1 class="card_start" >让我们开始新的探索吧！</h1>
     </div>
   <div class="content-warp">
-    <div class="content" v-for="(item, index) in content_his" :key="index">
+    <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id"  @click="installCopyCode(item.id)" >
+      <button @click="delConversation(item.id)" v-if="editable" class="btn-edit">删除对话</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!isHidden">
           <div class="circle">你</div>
@@ -68,7 +69,7 @@
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
         <div class="content-assistant">
-          <div :id="item.id" @click="installCopyCode(item.id)"  v-html="item.content_out"></div>
+          <div :id="item.id"  v-html="item.content_out"></div>
         </div>
       </div>
     </div>
@@ -91,7 +92,7 @@
 <script>
 import {list_session} from  '@/utils/request.js';
 import {assistant} from  '@/utils/request.js';
-
+import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
@@ -108,6 +109,7 @@ export default {
       sent_status: 0,
       model_type:0,
       isHidden: false, // 初始状态，可以根据需要设置
+      editable:false,
       windowWidth: window.innerWidth // 获取初始窗口宽度
     }
   },
@@ -208,11 +210,30 @@ export default {
       })
     },
 
+    delConversation(c_id){
+      let token=localStorage.getItem('token');
+      del_conversation(token,c_id).then(data => {
+        if(data){
+          const div = document.querySelector('#content_'+c_id);
+          if(div){
+            div.remove();
+            this.$notify({
+              title: '提示',
+              message: '对话已删除！',
+              type: 'success'
+            });
+          }
+        }
+      }) .catch(error => {
+        console.error(error);
+      });
+    },
     installCopyCode(id){
       const parent = document.getElementById(id);
       if(parent.hasAttribute('showCopy')) {
         return
       }
+      this.editable=true;
       const highlights = parent.querySelectorAll(".codehilite")
       highlights.forEach(div => {
         const copy = document.createElement("button")
@@ -227,9 +248,6 @@ export default {
         border: 1px solid rgba(0, 0, 0, 0);
         padding: 5px 10px;
         font-size: 0.8em;
-        // position: absolute;
-        // top: 0;
-        // right: 0;
         border-radius: 0 0.15rem;
       `;
         copy.addEventListener("click", this.handleCopyClick);
@@ -428,6 +446,19 @@ export default {
   display: none; /* 或者使用其他隐藏样式，如 visibility: hidden; */
 }
 
+.btn-edit{
+  color: white;
+  box-sizing: border-box;
+  transition: 0.2s ease-out;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 5px 10px;
+  font-size: 0.8em;
+  border-radius: 0 0.15rem;
+  float: right;
+}
 /* 表格的样式 */
 ::v-deep  table {
   width: 100%; /* 表格宽度为100% */
