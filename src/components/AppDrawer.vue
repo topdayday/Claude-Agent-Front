@@ -96,7 +96,7 @@ export default {
     deleteSession(session_id){
       let token=localStorage.getItem('token');
       del_session(token,session_id).then(data => {
-        this.latest_session();
+        this.latestSession();
         console.log('deleteSession:',data);
       }) .catch(error => {
         console.error(error);
