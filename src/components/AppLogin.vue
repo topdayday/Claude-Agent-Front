@@ -46,7 +46,7 @@
 
         <div  v-bind:class="{card_item:true ,hidden: isHidden}">
           <h3 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h3>
-          <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以在各种任务上执行，包括文本生成、机器翻译、问答和摘要.</div>
+          <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以执行各种任务.</div>
 
           <h4  class="containt_txt">适用场景:</h4>
           <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
