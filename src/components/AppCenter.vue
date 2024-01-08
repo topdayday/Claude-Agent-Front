@@ -469,10 +469,6 @@ export default {
   border-collapse: collapse; /* 边框合并为一个 */
 }
 
-/* 表格的边框样式 */
-::v-deep  table, th, td {
-  border: 1px solid rgba(0,0,0,0.2); /* 边框宽度为1像素，颜色为黑色 */
-}
 
 /* 表头的样式 */
 ::v-deep  th {
