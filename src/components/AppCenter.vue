@@ -54,7 +54,8 @@
     </div>
   <div class="content-warp">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id"  @click="installCopyCode(item.id)" >
-      <button @click="delConversation(item.id)" v-if="editable" class="btn-edit">删除对话</button>
+      <button @click="delConversation(item.id)" v-if="editable" class="btn-edit">删除</button>
+      <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn-edit">复制</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!isHidden">
           <div class="circle">你</div>
@@ -213,22 +214,30 @@ export default {
     },
 
     delConversation(c_id){
-      let token=localStorage.getItem('token');
-      del_conversation(token,c_id).then(data => {
-        if(data){
-          const div = document.querySelector('#content_'+c_id);
-          if(div){
-            div.remove();
-            this.$notify({
-              title: '提示',
-              message: '对话已删除！',
-              type: 'success'
-            });
+      this.$confirm('你确定要删除该对话吗？', '提示', {
+        cancelButtonText: '退出',
+        confirmButtonText: '确定',
+        type: 'warning'
+      }).then(() => {
+        let token=localStorage.getItem('token');
+        del_conversation(token,c_id).then(data => {
+          if(data){
+            const div = document.querySelector('#content_'+c_id);
+            if(div){
+              div.remove();
+              this.$notify({
+                title: '提示',
+                message: '对话已删除！',
+                type: 'success'
+              });
+            }
           }
-        }
-      }) .catch(error => {
-        console.error(error);
+        }) .catch(error => {
+          console.error(error);
+        });
+      }).catch(() => {
       });
+
     },
     installCopyCode(id){
       const parent = document.getElementById(id);
@@ -278,7 +287,17 @@ export default {
         document.getSelection().addRange(selected)
       }
     },
-
+    handleCopyConversation(id) {
+      const parent = document.getElementById('content_'+id);
+      const { children } =parent;
+      let { innerText } = Array.from(children)[3]
+      this.copyToClipboard(innerText)
+      this.$notify({
+        title: '提示',
+        message: '内容已复制成功！',
+        type: 'success'
+      });
+    },
     handleCopyClick(evt) {
       const { children } = evt.target.parentElement
       const { innerText } = Array.from(children)[0]
@@ -462,6 +481,7 @@ export default {
   font-size: 0.8em;
   border-radius: 0 0.15rem;
   float: right;
+  margin-left: 8px;
 }
 /* 表格的样式 */
 ::v-deep  table {

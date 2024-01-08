@@ -94,14 +94,30 @@ export default {
       });
     },
     deleteSession(session_id){
-      let token=localStorage.getItem('token');
-      del_session(token,session_id).then(data => {
-        this.latestSession();
-        console.log('deleteSession:',data);
-      }) .catch(error => {
-        console.error(error);
-        this.loading=false;
-      });
+        this.$confirm('你确定要删除会话所有对话吗？', '提示', {
+            cancelButtonText: '退出',
+            confirmButtonText: '确定',
+            type: 'warning'
+        }).then(() => {
+            let token=localStorage.getItem('token');
+            del_session(token,session_id).then(data => {
+                this.latestSession();
+                console.log('deleteSession:',data);
+                this.$notify({
+                    title: '提示',
+                    message: '会话已删除！',
+                    type: 'success'
+                });
+            }) .catch(error => {
+                console.error(error);
+                this.loading=false;
+            });
+        }).catch(() => {
+
+        });
+
+
+
     },
 
     viewSession(session_id){
