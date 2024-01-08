@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
 let server_url = '/'
-// server_url = 'http://127.0.0.1:8000/';
+// server_url = 'http://127.0.0.1:80/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {
@@ -179,6 +179,36 @@ export function latest_session(token,page_number) {
     }).catch(()=>{
             MessageBox.alert('请求查找当前会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
+    });
+}
+
+
+
+export function del_conversation(token,c_id) {
+    return axios({
+        method: 'POST',
+        url:base_url+'/del_conversation/',
+        data: {
+            token:token,
+            c_id:c_id,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+    .then(response => {
+        if(response.data.code===-1){
+            login_out();
+            MessageBox.alert( response.data.data,'提示');
+        } else   if(response.data.code===0){
+            return response.data.data;
+        }else if(response.data.code===1){
+            MessageBox.alert( response.data.data);
+        }
+    }).catch(()=>{
+        MessageBox.alert('请求删除对话失败,请联系管理员！','提示')
+        throw new Error('请求失败');
     });
 }
 
