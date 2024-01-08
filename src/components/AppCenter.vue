@@ -66,7 +66,8 @@
 
       <div class="content-assistant-warp">
         <div class="content-assistant-icon"  v-if="!isHidden">
-          <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
+          <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
         <div class="content-assistant">
           <div :id="item.id"  v-html="item.content_out"></div>
@@ -162,6 +163,7 @@ export default {
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
       list_session(token,session_id).then(data => {
+        this.editable=false;
         this.content_his= data;
         this.scrollToBottom();
       }) .catch(error => {
@@ -300,6 +302,7 @@ export default {
 .content{
   background-color: #fcfcfc;
   border: 1px solid #fdfdfd;
+  border-bottom: 2px solid rgba(0,0,0,0.1);
   box-shadow:
           0 2px 5px rgba(0,0,0,0.1),
           inset 0 1px 0 rgba(255,255,255,0.1);
@@ -307,6 +310,7 @@ export default {
   margin: auto;
   margin-bottom:40px;
   padding: 10px 10px 10px 2px;
+
 }
 .circle {
   width: 25px;
