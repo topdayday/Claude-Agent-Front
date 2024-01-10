@@ -20,7 +20,7 @@
               </div>
             </div>
             <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:isHidden }"  @click="selectType(10)">
-              <i v-if="model_type===1" class="selected-icon">✓已选</i>
+              <i v-if="model_type===10" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">LLAMA2 70B</h4>
               <div  v-bind:class="{ hidden: isHidden }">
                 <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
@@ -57,7 +57,7 @@
       <button @click="delConversation(item.id)" v-if="editable" class="btn-edit">删除对话</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!isHidden">
-          <div class="circle">你</div>
+          <div class="circle"><span style="margin-left: -3px;">你</span></div>
         </div>
         <div class="content-human">
           <div>{{item.content_in}}</div>
