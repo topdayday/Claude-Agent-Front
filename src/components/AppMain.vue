@@ -1,10 +1,10 @@
 <template>
   <div class="app_mian">
     <div class="fixed-top" v-if="token">
-        <AppTop :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"  :token.sync="token"  />
+        <AppTop :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"  :token.sync="token"  @selectModel="selectModel" :selectedModel.sync="selectedModel"  />
     </div>
     <div class="AppCenter"  v-if="token" >
-      <AppCenter  :session_id.sync="session_id"/>
+      <AppCenter  :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
     </div>
     <div class="" v-if="token">
       <AppDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
@@ -40,13 +40,17 @@ export default {
       session_id:'',
       showDrawer:false,
       showMember:false,
+      selectedModel:0,
     }
   },
   mounted(){
      this.token=localStorage.getItem('token');
   },
   methods:{
-
+    selectModel(model){
+      localStorage.setItem('model_type',model);
+      this.selectedModel=model;
+    }
   },
   watch:{
     session_id(){

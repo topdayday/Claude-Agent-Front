@@ -1,7 +1,7 @@
 <template>
 <div class="content-main">
   <div class="" v-if="showIndexContent">
-      <span class="card_sense" >T2Day AI Agent</span>
+      <span class="card_sense" ></span>
           <div  class="card_contains">
 
             <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:isHidden }"  @click="selectType(0)">
@@ -21,7 +21,7 @@
             </div>
             <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:isHidden }"  @click="selectType(10)">
               <i v-if="model_type===10" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">LLAMA2 70B</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Llama2 70B</h4>
               <div  v-bind:class="{ hidden: isHidden }">
                 <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
                 <h4 class="containt_txt">适用场景:</h4>
@@ -54,8 +54,8 @@
     </div>
   <div class="content-warp">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id"  @click="installCopyCode(item.id)" >
-      <button @click="delConversation(item.id)" v-if="editable" class="btn-edit">删除</button>
-      <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn-edit">复制</button>
+      <button @click="delConversation(item.id)" v-if="editable" class="btn_edit">删除</button>
+      <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!isHidden">
           <div class="circle"><span style="margin-left: -3px;">你</span></div>
@@ -84,7 +84,7 @@
               placeholder="按下 Ctrl+Enter 提交,请输入你想知道的..."
               v-model="content_in">
       </el-input>
-      <el-button  class="btn-sent" type="primary" :icon="sent_status_ico" @click="sendMessage()">发送</el-button>
+      <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()">发送</el-button>
     </div>
   </div>
 </div>
@@ -98,7 +98,7 @@ import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String
+    session_id: String,selectedModel:Number
   },
   comments:{
 
@@ -117,18 +117,21 @@ export default {
   },
   created(){
     this.currentSession();
-    let local_model_type=localStorage.getItem('model_type')
-    if(local_model_type){
-      this.model_type=Number(local_model_type);
-    }else{
-      this.model_type=0;
-      localStorage.setItem('model_type', 0);
-    }
+    this.load_model_type();
   },
 
   watch:{
     session_id(){
       this.currentSession();
+    },
+    showIndexContent(){
+      this.load_model_type();
+    },
+    selectedModel(selectedModel){
+      this.selectType(selectedModel);
+    },
+    model_type(model_type){
+      this.$emit('selectModel',model_type)
     },
   },
   computed:{
@@ -138,7 +141,6 @@ export default {
     showIndexContent(){
       return  this.content_his.length===0;
     },
-
   },
   mounted(){
     // 监听窗口大小变化事件
@@ -151,6 +153,14 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods:{
+    load_model_type(){
+      let local_model_type=localStorage.getItem('model_type')
+      if(local_model_type){
+        this.model_type=Number(local_model_type);
+      }else{
+        this.model_type=0;
+      }
+    },
     handleResize() {
       // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
       this.windowWidth = window.innerWidth;
@@ -173,7 +183,6 @@ export default {
     },
     selectType(model_type){
       this.model_type=model_type;
-      localStorage.setItem('model_type', model_type)
     },
     sendMessage(){
       if( this.sent_status === 1){
@@ -192,7 +201,6 @@ export default {
         this.model_type=Number(local_model_type);
       }else{
         this.model_type=0;
-        localStorage.setItem('model_type', 0);
       }
       this.sent_status = 1;
       assistant(token,session_id,this.content_in.trim(),this.model_type).then(data => {
@@ -240,9 +248,24 @@ export default {
 
     },
     installCopyCode(id){
+      if(this.editable){
+        this.editable=false;
+        const parent = document.getElementById(id);
+        const btnCodes = document.querySelectorAll(".btn-code");
+        for (const btnCode of btnCodes) {
+          btnCode.parentElement.removeChild(btnCode);
+        }
+        parent.removeAttribute('showCopy');
+        return;
+      }
       const parent = document.getElementById(id);
       if(parent.hasAttribute('showCopy')) {
-        return
+        const btnCodes = document.querySelectorAll(".btn-code");
+        for (const btnCode of btnCodes) {
+          btnCode.parentElement.removeChild(btnCode);
+        }
+        parent.removeAttribute('showCopy');
+        return;
       }
       this.editable=true;
       const highlights = parent.querySelectorAll(".codehilite")
@@ -260,9 +283,10 @@ export default {
         padding: 5px 10px;
         font-size: 0.8em;
         border-radius: 0 0.15rem;
+        line-height:20px;
       `;
+        copy.classList.add("btn-code");
         copy.addEventListener("click", this.handleCopyClick);
-        // div.insertBefore(copy, div.firstChild);
         div.append(copy)
       })
       parent.setAttribute('showCopy', 'true');
@@ -332,15 +356,15 @@ export default {
 
 }
 .circle {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   background-color: black;
   border-radius: 50%;
   color: white;
   text-align: center;
   font-size: 16px;
   margin-left: 5px;
-
+  margin-right: 8px;
 }
 
 .content-human-warp{
@@ -349,7 +373,7 @@ export default {
 }
 .content-human-icon {
   width: 36px;
-  margin-top: 0px;
+  margin-top: 5px;
 }
 .content-human{
   margin-left:0px;
@@ -357,6 +381,7 @@ export default {
   background-color: #fdfdfd;
   text-align: left;
   padding-bottom: 10px;
+  padding-top: 5px;
   overflow-x: auto;
 }
 .content-assistant-warp{
@@ -364,7 +389,7 @@ export default {
 }
 .content-assistant-icon {
   width: 36px;
-  margin-top: 16px;
+  margin-top: 18px;
 }
 .content-assistant{
   margin: auto;
@@ -400,7 +425,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
 }
-.btn-sent{
+.btn_sent{
   margin-right: 4px;
   min-height: 54px;
 }
@@ -466,22 +491,23 @@ export default {
 }
 
 .hidden {
-  display: none; /* 或者使用其他隐藏样式，如 visibility: hidden; */
+  display: none;
 }
 
-.btn-edit{
+.btn_edit{
   color: white;
   box-sizing: border-box;
   transition: 0.2s ease-out;
   cursor: pointer;
   user-select: none;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(0, 0, 0, 0);
-  padding: 5px 10px;
-  font-size: 0.8em;
-  border-radius: 0 0.15rem;
+  background: #409EFF;
+  border: 0px solid rgba(0, 0, 0, 0);
+  padding: 4px 10px;
+  font-size: 14px;
+  border-radius: 0.15rem 0.15rem;
   float: right;
   margin-left: 8px;
+  line-height: 20px;
 }
 /* 表格的样式 */
 ::v-deep  table {

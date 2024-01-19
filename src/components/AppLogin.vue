@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content-main" id="login_index">
-      <h1 class="index_title" v-bind:class="{index_title:isHidden,index_title_min:isHidden }">T2Day AI Agent</h1>
+      <h1 class="index_title" v-bind:class="{index_title:isHidden,index_title_min:isHidden }">T2Day</h1>
       <div  class="card_contains">
         <div  v-bind:class="{card_item:true ,hidden: !isHidden}">
           <!--<h3 class="gmat-headline-4 gradient gradient-1">T2Day ai agent</h3>-->
@@ -9,7 +9,7 @@
           <div  class="containt_txt">集成主流AI大模型:</div>
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
             <li> Claude 2.1</li>
-            <li> Llama2 70B</li>
+            <li> Llama2 70b</li>
             <li> Gemini Pro</li>
           </ol>
 
@@ -30,8 +30,8 @@
         </div>
 
         <div  v-bind:class="{card_item:true,hidden: isHidden }">
-          <h3 class="gmat-headline-4 gradient gradient-1">LLAMA2 70B</h3>
-          <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
+          <h3 class="gmat-headline-4 gradient gradient-1">Llama2 70b</h3>
+          <div class="containt_txt">Llama2 70b采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
 
             <h4 class="containt_txt">适用场景:</h4>
             <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">

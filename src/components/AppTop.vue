@@ -2,8 +2,17 @@
   <div class="top">
     <div class="top-left" @click="toTop()">
       <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
-     </div>
+    </div>
     <div class="top-center">
+      <el-select v-model="model_type" placeholder="请选择模型">
+        <el-option
+            v-for="model in model_types"
+            :key="model.value"
+            :label="model.label"
+            :value="model.value"
+            :disabled="model.disabled">
+        </el-option>
+      </el-select>
     </div>
     <div class="top-right">
       <div class="top-button-contains">
@@ -22,17 +31,35 @@ import {generate_session} from "@/utils/request";
 export default {
   name: 'AppTop',
   props: {
-    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean
+    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,selectedModel:Number
   },
   data(){
     return {
-      model_type:[{
-        value: '选项1',
-        label: '黄金糕'
-      },{
-        value: '选项2',
-        label: '黄金糕'
+      model_types: [{
+        value: 0,
+        label: 'Calude 2.1'
+      }, {
+        value: 10,
+        label: 'Llama2 70b',
+      }, {
+        value: 2,
+        label: 'Gemini Pro'
       }],
+      model_type: 0,
+    }
+  },
+  watch:{
+    model_type(model_type){
+     this.$emit('selectModel',model_type)
+    },
+    selectedModel(selectedModel){
+      this.model_type=selectedModel;
+    },
+  },
+  mounted() {
+    let m_type =localStorage.getItem('model_type');
+    if(m_type!=null){
+      this.model_type=Number(m_type);
     }
   },
   methods:{
@@ -115,5 +142,27 @@ export default {
   }
   ::v-deep  .el-select{
     max-height: 30px;
+  }
+
+  ::v-deep  .el-input__inner {
+    -webkit-appearance: none;
+    background-color: rgba(255,255,255,0.001);
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.01);
+    box-sizing: border-box;
+    color: #83878d;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    outline: 0;
+    padding-left: 30px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+    text-align: center;
+  }
+  ::v-deep  .el-input__suffix{
+    display: none;
+    width: 1px;
   }
 </style>
