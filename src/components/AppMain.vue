@@ -15,7 +15,9 @@
     <div class=""  v-if="!token">
       <AppLogin :token.sync="token" :session_id.sync="session_id" />
     </div>
-
+    <div class="letf_his" v-if="token">
+      <AppLeftDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
+    </div>
   </div>
 </template>
 
@@ -25,6 +27,7 @@
   import AppLogin from './AppLogin.vue'
   import AppDrawer from './AppDrawer.vue'
   import AppMember from './AppMember.vue'
+  import AppLeftDrawer from './AppLeftDrawer.vue'
 export default {
   name: 'AppMain',
   components: {
@@ -33,6 +36,7 @@ export default {
     AppLogin,
     AppDrawer,
     AppMember,
+    AppLeftDrawer,
   },
   data(){
     return{
@@ -91,5 +95,12 @@ export default {
     max-width: 786px;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .letf_his {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 1000;
   }
 </style>

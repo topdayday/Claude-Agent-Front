@@ -159,7 +159,7 @@
       },
       checkWidth() {
         // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
-        this.isHidden = this.windowWidth < 1100;
+        this.isHidden = this.windowWidth < 1300;
       },
       showForm(){
         this.showLoginForm=true;
