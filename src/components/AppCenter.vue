@@ -384,7 +384,7 @@ export default {
   padding-bottom: 10px;
   padding-top: 5px;
   overflow-x: auto;
-  max-width: 100vw;
+  max-width: calc(100vw - 4px);
 }
 .content-assistant-warp{
   display: flex;
@@ -399,7 +399,7 @@ export default {
   border-top: 1px dotted #d4d4d4;
   flex: 1;
   overflow-x: auto;
-  max-width: 100vw;
+  max-width: calc(100vw - 4px);
 }
 
 .send_message {
