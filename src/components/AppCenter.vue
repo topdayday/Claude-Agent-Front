@@ -1,6 +1,7 @@
 <template>
 <div class="content-main">
-  <div class="" v-if="showIndexContent">
+  <div class="main-left" v-if="!isHidden"></div>
+  <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
           <div  class="card_contains">
 
@@ -76,7 +77,7 @@
       </div>
     </div>
   </div>
-  <div class="fixed-bottom" v-on:keydown.ctrl.enter="sendMessage">
+  <div :class="isHidden?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
     <div  v-bind:class="{ send_message:true, send_message_min: !isHidden }">
       <el-input
               type="textarea"
@@ -378,7 +379,6 @@ export default {
 }
 .content-human{
   margin-left:0px;
-  /*max-width: 780px;*/
   background-color: #fdfdfd;
   text-align: left;
   padding-bottom: 10px;
@@ -397,7 +397,6 @@ export default {
   background-color: #fcfcfc;
   border-top: 1px dotted #d4d4d4;
   flex: 1;
-  width: 100vw;
   overflow-x: auto;
 }
 
@@ -415,6 +414,11 @@ export default {
   padding-bottom: 46px;
   padding-top: 36px;
   width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+.main-left{
+  min-width: 260px;
 }
 .fixed-bottom {
   position: fixed;
@@ -423,7 +427,17 @@ export default {
   z-index: 999;
   margin: 2px auto;
   max-width: 804px;
-  left: 50%;
+  left:calc(50vw + 120px);
+  transform: translateX(-50%);
+}
+.fixed-bottom-hiden {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  z-index: 999;
+  margin: 2px auto;
+  max-width: 804px;
+  left:calc(50vw);
   transform: translateX(-50%);
 }
 .btn_sent{
@@ -543,7 +557,6 @@ export default {
     text-align: left;
   }
 ::v-deep  li{
-  text-align: left;
   text-align: left;
   margin: 0 20px;
   min-height: 36px;

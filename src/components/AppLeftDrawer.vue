@@ -9,7 +9,7 @@
               <el-scrollbar style="height: 100vh;">
                   <el-menu
                           @close="handleClose"
-                          background-color="#545c64"
+                          background-color="#000000"
                           text-color="#fff"
                           active-text-color="#ffd04b">
                       <el-menu-item @click="viewSession(item.session_id)" :index="index" v-for="(item, index) in conversation_list"  :key="index">{{item.content_in}}</el-menu-item>
@@ -113,7 +113,7 @@ export default {
         line-height: 18px;
         color: white;
         font-size: 18px;
-        background-color: black;
+        background-color: #000000;
         display: flex;
         justify-content: center;
     }
@@ -123,7 +123,7 @@ export default {
         background-color: #409EFF;
     }
     .his_container{
-        width: 250px;
+        width: 260px;
         height: 100vh;
         /*margin-top: 30px;*/
         background-color: #545c64;
