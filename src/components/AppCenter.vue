@@ -398,6 +398,7 @@ export default {
   border-top: 1px dotted #d4d4d4;
   flex: 1;
   overflow-x: auto;
+  max-width: 100vw;
 }
 
 .send_message {
