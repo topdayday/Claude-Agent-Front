@@ -384,6 +384,7 @@ export default {
   padding-bottom: 10px;
   padding-top: 5px;
   overflow-x: auto;
+  max-width: 100vw;
 }
 .content-assistant-warp{
   display: flex;
