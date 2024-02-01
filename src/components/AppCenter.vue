@@ -1,14 +1,14 @@
 <template>
 <div class="content-main">
-  <div class="main-left" v-if="!isHidden"></div>
+  <div class="main-left" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
           <div  class="card_contains">
 
-            <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:isHidden }"  @click="selectType(0)">
+            <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:smallWidth }"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h4>
-              <div  v-bind:class="{ hidden: isHidden }">
+              <div  v-bind:class="{ hidden: smallWidth }">
                 <div class="containt_txt">由Anthropic开发,更快更强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解.</div>
                 <h4  class="containt_txt">适用场景:</h4>
                 <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
@@ -20,10 +20,10 @@
                 </ul>
               </div>
             </div>
-            <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:isHidden }"  @click="selectType(10)">
+            <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:smallWidth }"  @click="selectType(10)">
               <i v-if="model_type===10" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Llama2 70b</h4>
-              <div  v-bind:class="{ hidden: isHidden }">
+              <div  v-bind:class="{ hidden: smallWidth }">
                 <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
                 <h4 class="containt_txt">适用场景:</h4>
                 <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
@@ -35,10 +35,10 @@
                 </ul>
               </div>
             </div>
-            <div  v-bind:class="{selected_box:model_type===2, card_item:true, card_item_max:isHidden }"  @click="selectType(2)">
+            <div  v-bind:class="{selected_box:model_type===2, card_item:true, card_item_max:smallWidth }"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h4>
-              <div  v-bind:class="{ hidden: isHidden }">
+              <div  v-bind:class="{ hidden: smallWidth }">
                 <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以执行各种任务.</div>
                 <h4 class="containt_txt">适用场景:</h4>
                 <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
@@ -58,7 +58,7 @@
       <button @click="delConversation(item.id)" v-if="editable" class="btn_edit">删除</button>
       <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
       <div class="content-human-warp">
-        <div class="content-human-icon" v-if="!isHidden">
+        <div class="content-human-icon" v-if="!smallWidth">
           <div class="circle"><span style="margin-left: -3px;"   @click="installCopyCode(item.id)">你</span></div>
         </div>
         <div class="content-human">
@@ -67,7 +67,7 @@
       </div>
 
       <div class="content-assistant-warp">
-        <div class="content-assistant-icon"  v-if="!isHidden"  @click="installCopyCode(item.id)">
+        <div class="content-assistant-icon"  v-if="!smallWidth"  @click="installCopyCode(item.id)">
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
@@ -77,8 +77,8 @@
       </div>
     </div>
   </div>
-  <div :class="isHidden?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
-    <div  v-bind:class="{ send_message:true, send_message_min: !isHidden }">
+  <div :class="smallWidth?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
+    <div  v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
       <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 100}"
@@ -111,7 +111,6 @@ export default {
       content_in:'',
       sent_status: 0,
       model_type:0,
-      isHidden: false, // 初始状态，可以根据需要设置
       editable:false,
     }
   },
@@ -133,9 +132,6 @@ export default {
     model_type(model_type){
       this.$emit('selectModel',model_type)
     },
-    smallWidth(smallWidth){
-      this.isHidden=smallWidth;
-    }
   },
   computed:{
     sent_status_ico(){

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="content-main" id="login_index">
-      <h1 class="index_title" v-bind:class="{index_title:isHidden,index_title_min:isHidden }">T2Day</h1>
+      <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day</h1>
       <div  class="card_contains">
-        <div  v-bind:class="{card_item:true ,hidden: !isHidden}">
+        <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
           <!--<h3 class="gmat-headline-4 gradient gradient-1">T2Day ai agent</h3>-->
           <h4 class="containt_txt">方便快捷的使用体验</h4>
           <div  class="containt_txt">集成主流AI大模型:</div>
@@ -14,7 +14,7 @@
           </ol>
 
         </div>
-        <div  v-bind:class="{card_item:true ,hidden: isHidden}">
+        <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
           <h3 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h3>
           <div class="containt_txt">由Anthropic开发,更快更强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解.</div>
 
@@ -29,7 +29,7 @@
 
         </div>
 
-        <div  v-bind:class="{card_item:true,hidden: isHidden }">
+        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
           <h3 class="gmat-headline-4 gradient gradient-1">Llama2 70b</h3>
           <div class="containt_txt">Llama2 70b采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
 
@@ -44,7 +44,7 @@
 
         </div>
 
-        <div  v-bind:class="{card_item:true ,hidden: isHidden}">
+        <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
           <h3 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h3>
           <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以执行各种任务.</div>
 
@@ -68,14 +68,14 @@
             :fullscreen="true"
             center>
             <div class="login-container"  id="login_from">
-              <el-form ref="loginForm"  :label-position="top" :model="loginData" :rules="loginRules" class="login-form">
+              <el-form ref="loginForm"  :model="loginData" :rules="loginRules" class="login-form">
                 <el-form-item label="登录名"  prop="username">
                   <el-input v-model="loginData.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                   <el-input type="password" v-model="loginData.password"></el-input>
                 </el-form-item>
-                <el-form-item label="验证码"   :label-position="top"  prop="captcha">
+                <el-form-item label="验证码"   prop="captcha">
                   <el-input v-model="loginData.captcha"  placeholder="请输入图片验证码"></el-input>
                 </el-form-item>
                 <div class="captcha flex-container">
@@ -128,7 +128,6 @@
         tokenVal:'',
         sessionIdVal:'',
         showLoginForm:false,
-        isHidden: false, // 初始状态，可以根据需要设置
       };
     },
 
@@ -150,9 +149,6 @@
       sessionIdVal(newSessionId) {
         this.$emit('update:session_id', newSessionId); // 发出事件通知父组件
       },
-      smallWidth(smallWidth){
-        this.isHidden=smallWidth;
-      }
     },
     methods: {
       showForm(){
@@ -207,12 +203,6 @@
         },
 
     },
-    mounted() {
-      // 监听窗口大小变化事件
-      window.addEventListener('resize', this.handleResize);
-      // 初始检查窗口宽度
-      this.checkWidth();
-    }
   };
 </script>
 

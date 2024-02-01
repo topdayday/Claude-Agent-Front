@@ -1,5 +1,5 @@
 <template>
-  <div class="his_container" v-if="!isHidden">
+  <div class="his_container" v-if="!smallWidth">
       <el-row class="tac">
           <el-col :span="24">
               <div  class="btn_new" @click="newSession()">
@@ -12,7 +12,7 @@
                           background-color="#000000"
                           text-color="#fff"
                           active-text-color="#ffd04b">
-                      <el-menu-item @click="viewSession(item.session_id)" :index="index" v-for="(item, index) in conversation_list"  :key="index">{{item.content_in}}</el-menu-item>
+                      <el-menu-item @click="viewSession(item.session_id)" :index="index.toString()" v-for="(item, index) in conversation_list"  :key="index">{{item.content_in}}</el-menu-item>
                   </el-menu>
               </el-scrollbar>
           </el-col>
@@ -35,20 +35,13 @@ export default {
       show:true,
       pageNumber:0,
       loading:true,
-      isHidden: false,
     }
   },
   created() {
       this.latestSession();
   },
-  watch:{
-    smallWidth(smallWidth){
-      this.isHidden=smallWidth;
-    }
-  },
+
   methods:{
-
-
     handleClose(){
       this.show=false;
     },

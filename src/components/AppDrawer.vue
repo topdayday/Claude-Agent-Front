@@ -11,11 +11,11 @@
       </template>
       <el-row v-for="(item, index) in conversation_list" :key="index">
         <div  class="his_row">
-        <el-col :span="11" >
+        <el-col :span="12" >
           <div class="conversation-his" @click="viewSession(item.session_id)"><span class="his_li" >{{item.content_in}}</span></div>
         </el-col>
-        <el-col :span="8">
-          <div class="conversation-his"><span class="his_li">{{item.create_time}}</span></div>
+        <el-col :span="7">
+          <div class="conversation-his"><span class="his_li">{{dateFormat(item.create_time)}}</span></div>
         </el-col>
         <el-col :span="5">
           <el-button  @click="deleteSession(item.session_id)">删除</el-button>
@@ -125,6 +125,29 @@ export default {
       this.$emit('update:session_id', session_id); // 发出事件通知父组件
       this.handleClose();
     },
+    dateFormat(time) {
+      if(time===undefined||time==null){
+        return '';
+      }
+      var d = new Date(time)
+
+      var year = d.getFullYear()
+      var month = d.getMonth() + 1
+      var day = d.getDate() //
+
+
+      var clock = year + '/'
+
+      if (month < 10) { clock += '0' }
+
+      clock += month + '/'
+
+      if (day < 10) { clock += '0' }
+
+      clock += day + ' '
+      return (clock)
+    }
+
   },
 }
 </script>
@@ -180,7 +203,7 @@ export default {
     padding-left: 10px;
     padding-bottom: 5px;
     /*background-color: #f8f8f8; !* 背景色 *!*/
-    border-bottom: 1px dotted #ccc; /* 底部边框 */
+    border-bottom: 1px #ccc solid; /* 底部边框 */
     /*border-top: 1px solid #ccc; !* 底部边框 *!*/
   }
 

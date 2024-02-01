@@ -1,11 +1,11 @@
 <template>
   <div class="app_mian">
     <div class="fixed-top" v-if="token">
-        <AppTop  :smallWidth="smallWidth" :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"
+        <AppTop  :smallWidth.sync="smallWidth" :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"
                 :token.sync="token"  @selectModel="selectModel" :selectedModel.sync="selectedModel"  />
     </div>
     <div class="AppCenter"  v-if="token" >
-      <AppCenter :smallWidth="smallWidth" :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
+      <AppCenter :smallWidth.sync="smallWidth" :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
     </div>
     <div class="" v-if="token">
       <AppDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
@@ -14,10 +14,10 @@
       <AppMember :showMember.sync="showMember" />
     </div>
     <div class=""  v-if="!token">
-      <AppLogin :token.sync="token" :session_id.sync="session_id" />
+      <AppLogin :smallWidth.sync="smallWidth" :token.sync="token" :session_id.sync="session_id" />
     </div>
     <div class="letf_his" v-if="token">
-      <AppLeftDrawer  :smallWidth="smallWidth" :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
+      <AppLeftDrawer  :smallWidth.sync="smallWidth" :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
     </div>
   </div>
 </template>
