@@ -107,6 +107,7 @@
     props: {
       token: String,
       session_id: String,
+      smallWidth:Boolean,
     },
     comments:{
 
@@ -128,7 +129,6 @@
         sessionIdVal:'',
         showLoginForm:false,
         isHidden: false, // 初始状态，可以根据需要设置
-        windowWidth: window.innerWidth // 获取初始窗口宽度
       };
     },
 
@@ -150,17 +150,11 @@
       sessionIdVal(newSessionId) {
         this.$emit('update:session_id', newSessionId); // 发出事件通知父组件
       },
+      smallWidth(smallWidth){
+        this.isHidden=smallWidth;
+      }
     },
     methods: {
-      handleResize() {
-        // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
-        this.windowWidth = window.innerWidth;
-        this.checkWidth();
-      },
-      checkWidth() {
-        // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
-        this.isHidden = this.windowWidth < 1300;
-      },
       showForm(){
         this.showLoginForm=true;
       },

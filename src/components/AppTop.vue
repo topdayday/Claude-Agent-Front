@@ -4,7 +4,7 @@
       <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
     </div>
     <div class="top-center">
-      <el-select v-model="model_type" placeholder="请选择模型">
+      <el-select v-if="!isHidden" v-model="model_type" placeholder="请选择模型">
         <el-option
             v-for="model in model_types"
             :key="model.value"
@@ -31,7 +31,7 @@ import {generate_session} from "@/utils/request";
 export default {
   name: 'AppTop',
   props: {
-    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,selectedModel:Number
+    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,selectedModel:Number,smallWidth:Boolean
   },
   data(){
     return {
@@ -46,6 +46,7 @@ export default {
         label: 'Gemini Pro'
       }],
       model_type: 0,
+      isHidden:false,
     }
   },
   watch:{
@@ -55,6 +56,9 @@ export default {
     selectedModel(selectedModel){
       this.model_type=selectedModel;
     },
+    smallWidth(smallWidth){
+      this.isHidden=smallWidth;
+    }
   },
   mounted() {
     let m_type =localStorage.getItem('model_type');
@@ -110,8 +114,9 @@ export default {
   .top-center{
     flex: 1;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
     margin-top: 2px;
+    margin-left:210px;
   }
   .top-right{
     width: 150px;
@@ -151,7 +156,8 @@ export default {
     border-radius: 4px;
     border: 1px solid rgba(255,255,255,0.01);
     box-sizing: border-box;
-    color: #83878d;
+    color: #000000;
+    font-weight: bold;
     display: inline-block;
     height: 30px;
     line-height: 30px;
@@ -164,5 +170,9 @@ export default {
   ::v-deep  .el-input__suffix{
     display: none;
     width: 1px;
+  }
+  ::v-deep  .el-input__inner{
+    text-align: left;
+    padding: 0 20px;
   }
 </style>

@@ -99,7 +99,7 @@ import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String,selectedModel:Number
+    session_id: String,selectedModel:Number,smallWidth:Boolean
   },
   comments:{
 
@@ -113,7 +113,6 @@ export default {
       model_type:0,
       isHidden: false, // 初始状态，可以根据需要设置
       editable:false,
-      windowWidth: window.innerWidth // 获取初始窗口宽度
     }
   },
   created(){
@@ -134,6 +133,9 @@ export default {
     model_type(model_type){
       this.$emit('selectModel',model_type)
     },
+    smallWidth(smallWidth){
+      this.isHidden=smallWidth;
+    }
   },
   computed:{
     sent_status_ico(){
@@ -144,14 +146,8 @@ export default {
     },
   },
   mounted(){
-    // 监听窗口大小变化事件
-    window.addEventListener('resize', this.handleResize);
-    // 初始检查窗口宽度
-    this.checkWidth();
   },
   beforeDestroy() {
-    // 在组件销毁前移除事件监听，避免内存泄漏
-    window.removeEventListener('resize', this.handleResize);
   },
   methods:{
     load_model_type(){
@@ -162,15 +158,7 @@ export default {
         this.model_type=0;
       }
     },
-    handleResize() {
-      // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
-      this.windowWidth = window.innerWidth;
-      this.checkWidth();
-    },
-    checkWidth() {
-      // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
-      this.isHidden = this.windowWidth < 1300;
-    },
+
     currentSession() {
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
@@ -399,7 +387,7 @@ export default {
   border-top: 1px dotted #d4d4d4;
   flex: 1;
   overflow-x: auto;
-  max-width: calc(100vw - 4px);
+  max-width: calc(100vw - 6px);
 }
 
 .send_message {

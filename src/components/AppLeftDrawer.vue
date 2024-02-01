@@ -27,7 +27,7 @@ import {generate_session} from "@/utils/request";
 export default {
   name: 'AppLeftDrawer',
   props: {
-    showDrawer: Boolean, session_id: String,
+    showDrawer: Boolean, session_id: String,smallWidth:Boolean
   },
   data(){
     return{
@@ -36,35 +36,18 @@ export default {
       pageNumber:0,
       loading:true,
       isHidden: false,
-      windowWidth: window.innerWidth // 获取初始窗口宽度
     }
   },
   created() {
       this.latestSession();
   },
-    mounted(){
-        // 监听窗口大小变化事件
-        window.addEventListener('resize', this.handleResize);
-        // 初始检查窗口宽度
-        this.checkWidth();
-    },
-    beforeDestroy() {
-        // 在组件销毁前移除事件监听，避免内存泄漏
-        window.removeEventListener('resize', this.handleResize);
-    },
   watch:{
-
+    smallWidth(smallWidth){
+      this.isHidden=smallWidth;
+    }
   },
   methods:{
-      handleResize() {
-          // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
-          this.windowWidth = window.innerWidth;
-          this.checkWidth();
-      },
-      checkWidth() {
-          // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
-          this.isHidden = this.windowWidth < 1300;
-      },
+
 
     handleClose(){
       this.show=false;
@@ -113,9 +96,11 @@ export default {
         line-height: 18px;
         color: white;
         font-size: 18px;
+        font-weight: bold;
         background-color: #000000;
         display: flex;
         justify-content: center;
+        /*border-bottom: rgba(255,255,255,0.5) 1px solid;*/
     }
     .btn_new:hover{
         color: white;

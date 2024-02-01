@@ -1,10 +1,11 @@
 <template>
   <div class="app_mian">
     <div class="fixed-top" v-if="token">
-        <AppTop :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"  :token.sync="token"  @selectModel="selectModel" :selectedModel.sync="selectedModel"  />
+        <AppTop  :smallWidth="smallWidth" :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"
+                :token.sync="token"  @selectModel="selectModel" :selectedModel.sync="selectedModel"  />
     </div>
     <div class="AppCenter"  v-if="token" >
-      <AppCenter  :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
+      <AppCenter :smallWidth="smallWidth" :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
     </div>
     <div class="" v-if="token">
       <AppDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
@@ -16,7 +17,7 @@
       <AppLogin :token.sync="token" :session_id.sync="session_id" />
     </div>
     <div class="letf_his" v-if="token">
-      <AppLeftDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
+      <AppLeftDrawer  :smallWidth="smallWidth" :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
     </div>
   </div>
 </template>
@@ -45,16 +46,35 @@ export default {
       showDrawer:false,
       showMember:false,
       selectedModel:0,
+      smallWidth:false,
+      windowWidth: window.innerWidth // 获取初始窗口宽度
     }
   },
   mounted(){
      this.token=localStorage.getItem('token');
+    // 监听窗口大小变化事件
+    window.addEventListener('resize', this.handleResize);
+    // 初始检查窗口宽度
+    this.checkWidth();
+  },
+  beforeDestroy() {
+    // 在组件销毁前移除事件监听，避免内存泄漏
+    window.removeEventListener('resize', this.handleResize);
   },
   methods:{
     selectModel(model){
       localStorage.setItem('model_type',model);
       this.selectedModel=model;
-    }
+    },
+    handleResize() {
+      // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
+      this.windowWidth = window.innerWidth;
+      this.checkWidth();
+    },
+    checkWidth() {
+      // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
+      this.smallWidth = this.windowWidth < 1300;
+    },
   },
   watch:{
     session_id(){
