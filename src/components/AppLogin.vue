@@ -2,61 +2,35 @@
   <div>
     <div class="content-main" id="login_index">
       <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day</h1>
+      <h2 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">集成主流AI大模型</h2>
       <div  class="card_contains">
         <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
-          <!--<h3 class="gmat-headline-4 gradient gradient-1">T2Day ai agent</h3>-->
-          <h4 class="containt_txt">方便快捷的使用体验</h4>
-          <div  class="containt_txt">集成主流AI大模型:</div>
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
-            <li> Claude 2.1</li>
-            <li> Llama2 70b</li>
-            <li> Gemini Pro</li>
+            <li> Claude</li>
+            <li> Gemini</li>
+            <li> Mistral</li>
+            <li> PaML</li>
+            <li> Llama</li>
+            <li> CodeBison</li>
           </ol>
-
         </div>
         <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-          <h3 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h3>
-          <div class="containt_txt">由Anthropic开发,更快更强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解.</div>
-
-          <h4  class="containt_txt">适用场景:</h4>
-          <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-            <li> 高性能</li>
-            <li> 低延迟</li>
-            <li> 轻量级对话</li>
-            <li> 辅助编码</li>
-            <li> 适度的内容生成</li>
-          </ul>
-
+          <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
         </div>
-
         <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-          <h3 class="gmat-headline-4 gradient gradient-1">Llama2 70b</h3>
-          <div class="containt_txt">Llama2 70b采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
-
-            <h4 class="containt_txt">适用场景:</h4>
-            <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-              <li> 复杂的推理</li>
-              <li> 丰富的创造力</li>
-              <li> 深思熟虑的对话</li>
-              <li> 高质量编码</li>
-              <li> 详细的内容生成</li>
-            </ul>
-
+          <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
         </div>
-
+        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+          <h3 class="gmat-headline-4 gradient gradient-1">Mistral</h3>
+        </div>
+        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+          <h3 class="gmat-headline-4 gradient gradient-1">PaML</h3>
+        </div>
+        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+          <h3 class="gmat-headline-4 gradient gradient-1">LLama</h3>
+        </div>
         <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-          <h3 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h3>
-          <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以执行各种任务.</div>
-
-          <h4  class="containt_txt">适用场景:</h4>
-          <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-            <li> 机器翻译</li>
-            <li> 文本翻译</li>
-            <li> 代码生成</li>
-            <li> 数据分析</li>
-            <li> 信息检索</li>
-          </ul>
-
+          <h3 class="gmat-headline-4 gradient gradient-1">CodeBison</h3>
         </div>
       </div>
       <div><el-button target="#" class="product_price" @click="showForm()">注册/登录</el-button></div>

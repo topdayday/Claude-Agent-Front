@@ -38,13 +38,26 @@ export default {
       model_types: [{
         value: 0,
         label: 'Calude 2.1'
-      }, {
-        value: 10,
-        label: 'Llama2 70b',
-      }, {
+      },{
+        value: 1,
+        label: 'Calude 3',
+      },{
         value: 2,
-        label: 'Gemini Pro'
-      }],
+        label: 'Geminio pro',
+      },{
+        value: 3,
+        label: 'Mistral 8x7b'
+      },{
+          value: 4,
+          label: 'PaML 2'
+        },{
+          value: 5,
+          label: 'Code bison'
+        },{
+          value: 10,
+          label: 'LLama 2'
+        }
+      ],
       model_type: 0,
     }
   },

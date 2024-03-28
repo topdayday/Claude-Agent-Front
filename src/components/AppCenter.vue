@@ -4,51 +4,33 @@
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
           <div  class="card_contains">
-
             <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:smallWidth }"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h4>
-              <div  v-bind:class="{ hidden: smallWidth }">
-                <div class="containt_txt">由Anthropic开发,更快更强大的模型，可以处理一系列任务，包括对话、文本分析、摘要和文档理解.</div>
-                <h4  class="containt_txt">适用场景:</h4>
-                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-                  <li> 高性能</li>
-                  <li> 低延迟</li>
-                  <li> 轻量级对话</li>
-                  <li> 辅助编码</li>
-                  <li> 适度的内容生成</li>
-                </ul>
-              </div>
             </div>
-            <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:smallWidth }"  @click="selectType(10)">
-              <i v-if="model_type===10" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Llama2 70b</h4>
-              <div  v-bind:class="{ hidden: smallWidth }">
-                <div class="containt_txt">LLAMA2 采用了自回归 Transformer 预训练方法，并在数据预训练方面进行了一系列优化，大大提高性能.</div>
-                <h4 class="containt_txt">适用场景:</h4>
-                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-                  <li> 复杂的推理</li>
-                  <li> 丰富的创造力</li>
-                  <li> 深思熟虑的对话</li>
-                  <li> 高质量编码</li>
-                  <li> 详细的内容生成</li>
-                </ul>
-              </div>
+            <div  v-bind:class="{selected_box:model_type===1, card_item:true, card_item_max:smallWidth }"  @click="selectType(1)">
+              <i v-if="model_type===1" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude 3</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===2, card_item:true, card_item_max:smallWidth }"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Gemini Pro</h4>
-              <div  v-bind:class="{ hidden: smallWidth }">
-                <div class="containt_txt">由Google AI开发，拥有2800亿个参数，在147种语言上进行了训练，可以执行各种任务.</div>
-                <h4 class="containt_txt">适用场景:</h4>
-                <ul style="background-color: rgba(255, 255, 255, 0.0);border: 0px;">
-                  <li> 机器翻译</li>
-                  <li> 文本翻译</li>
-                  <li> 代码生成</li>
-                  <li> 数据分析</li>
-                  <li> 信息检索</li>
-                </ul>
-              </div>
+              <h4 class="gmat-headline-4 gradient gradient-1">Gemini pro</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===3, card_item:true, card_item_max:smallWidth }"  @click="selectType(3)">
+              <i v-if="model_type===3" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===4, card_item:true, card_item_max:smallWidth }"  @click="selectType(4)">
+              <i v-if="model_type===4" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:smallWidth }"  @click="selectType(10)">
+              <i v-if="model_type===10" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Llama2</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===5, card_item:true, card_item_max:smallWidth }"  @click="selectType(5)">
+              <i v-if="model_type===5" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>
             </div>
       </div>
       <h1 class="card_start" >让我们开始新的探索吧！</h1>
@@ -436,12 +418,7 @@ export default {
   padding-left: 20px;
  }
 
-.card_contains{
-  display: flex;
-  justify-content:center;
-  padding: 0px 50px;
-  margin-top:50px;
-}
+
 .card_item{
   max-width: 400px;
   background-color: white;
