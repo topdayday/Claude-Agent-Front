@@ -56,7 +56,7 @@
         </div>
         <div class="content-assistant">
           <div :id="item.id"  v-html="item.content_out"></div>
-          <div class="ai-name">{{ai_model_name(item.model_type)}}</div>
+          <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div>
         </div>
       </div>
     </div>
@@ -131,25 +131,38 @@ export default {
   beforeDestroy() {
   },
   methods:{
-    ai_model_name(model_type){
+    showInfo(model_type,create_time){
+      let modelStr = '';
+      let timeStr='';
+      if(create_time){
+        timeStr=(create_time+'').replace("T", " ")
+      }
       switch (model_type) {
         case 0:
-          return 'Claude 2.1'
+          modelStr = 'Claude 2.1'
+          break
         case 1:
-          return 'Claude 3'
+          modelStr =  'Claude 3'
+          break
         case 2:
-          return 'Gemini pro'
+          modelStr =  'Gemini pro'
+          break
         case 3:
-          return 'Mistral 8x7b'
+          modelStr =  'Mistral 8x7b'
+          break
         case 4:
-          return 'PaLM2'
+          modelStr =  'PaLM2'
+          break
         case 5:
-          return 'Code-bison'
+          modelStr =  'Code-bison'
+          break
         case 10:
-          return 'LLama2'
+          modelStr =  'LLama2'
+          break
         default:
-          return ''
+          modelStr =  ''
       }
+      return  modelStr+' at:  '+timeStr;
     },
     load_model_type(){
       let local_model_type=localStorage.getItem('model_type')
@@ -501,14 +514,15 @@ export default {
 .hidden {
   display: none;
 }
-.ai-name{
-  max-width:100px;
+.content-info{
+  max-width:300px;
   float:right;
-  background-color:rgba(0,0,0,0.8);
+  /*background-color:rgba(0,0,0,0.8);*/
   font-size: 10px;
-  color: white;
+  color: rgb(0, 0, 0);
   text-align: right;
   padding-right: 5px;
+  font-style: italic;
 }
 .btn_edit{
   color: white;
