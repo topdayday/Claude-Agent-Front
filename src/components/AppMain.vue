@@ -1,21 +1,22 @@
 <template>
   <div class="app_mian">
     <div class="fixed-top" v-if="token">
-        <AppTop  :smallWidth.sync="smallWidth"
-                 :showDrawer.sync="showDrawer"
-                 :showMember.sync="showMember"
-                 :session_id.sync="session_id"
-                 :token.sync="token"
-                 :selectedModel.sync="selectedModel"
-                 :showLeftMenu.sync="showLeftMenu"
-                 @selectModel="selectModel"
-                 @setLeftMenu="setLeftMenu"/>
+      <AppTop  :smallWidth.sync="smallWidth"
+               :showDrawer.sync="showDrawer"
+               :showMember.sync="showMember"
+               :session_id.sync="session_id"
+               :token.sync="token"
+               :selectedModel.sync="selectedModel"
+               :showLeftMenu.sync="showLeftMenu"
+               @selectModel="selectModel"
+               @setLeftMenu="setLeftMenu"/>
     </div>
     <div class="AppCenter"  v-if="token" >
       <AppCenter :smallWidth.sync="smallWidth"
                  :session_id.sync="session_id"
                  :showLeftMenu.sync="showLeftMenu"
                  @selectModel="selectModel"
+                 @addConversation="addConversation"
                  :selectedModel.sync="selectedModel" />
     </div>
     <div class="" v-if="token">
@@ -32,7 +33,7 @@
                 :session_id.sync="session_id" />
     </div>
     <div class="letf_his" v-if="token">
-      <AppLeftDrawer  :smallWidth.sync="smallWidth"
+      <AppLeftDrawer ref="leftMenu" :smallWidth.sync="smallWidth"
                       :showDrawer.sync="showDrawer"
                       :showLeftMenu.sync="showLeftMenu"
                       :token.sync="token"
@@ -82,6 +83,9 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods:{
+    addConversation(data){
+      this.$refs.leftMenu.addConversation(data);
+    },
     selectModel(model){
       localStorage.setItem('model_type',model);
       this.selectedModel=model;

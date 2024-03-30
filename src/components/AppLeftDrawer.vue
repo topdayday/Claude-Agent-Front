@@ -46,7 +46,9 @@ export default {
     handleClose(){
       this.show=false;
     },
-
+    addConversation(data){
+      this.conversation_list.unshift(data);
+    },
     latestSession(){
       let _this=this;
       let token=localStorage.getItem('token');
@@ -74,7 +76,7 @@ export default {
               localStorage.setItem('session_id',data);
               this.$emit('update:session_id', data); //
               console.log('generate_session:',data);
-              this.latestSession()
+              // this.latestSession()
           }) .catch(error => {
               console.error(error);
               this.loading=false;

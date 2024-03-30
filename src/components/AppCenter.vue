@@ -3,15 +3,15 @@
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
-          <h3 class="card_start">T2Day AI</h3>
+          <h3 v-if="!smallWidth" class="card_start">T2Day AI</h3>
           <div  class="card_contains">
             <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude2.1 [支持上下文]</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude 3</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude3 [支持上下文]</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
@@ -158,7 +158,6 @@ export default {
         this.model_type=0;
       }
     },
-
     currentSession() {
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
@@ -198,7 +197,9 @@ export default {
         if(data){
           this.content_his.push(data);
           this.content_in='';
-
+          if(this.content_his.length===1){
+            this.$emit('addConversation',data);
+          }
         }
       }) .catch(error => {
         console.error(error);
