@@ -3,7 +3,7 @@
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
-          <h1 class="card_start">T2Day AI</h1>
+          <h3 class="card_start">T2Day AI</h3>
           <div  class="card_contains">
             <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
@@ -445,7 +445,7 @@ export default {
 
 
 .card_item{
-  min-width: 400px;
+  min-width: 300px;
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
