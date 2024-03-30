@@ -56,6 +56,7 @@
         </div>
         <div class="content-assistant">
           <div :id="item.id"  v-html="item.content_out"></div>
+          <div class="ai-name">{{ai_model_name(item.model_type)}}</div>
         </div>
       </div>
     </div>
@@ -129,6 +130,26 @@ export default {
   beforeDestroy() {
   },
   methods:{
+    ai_model_name(model_type){
+      switch (model_type) {
+        case 0:
+          return 'Claude 2.1'
+        case 1:
+          return 'Claude 3'
+        case 2:
+          return 'Gemini pro'
+        case 3:
+          return 'Mistral 8x7b'
+        case 4:
+          return 'PaLM2'
+        case 5:
+          return 'Code-bison'
+        case 10:
+          return 'LLama2'
+        default:
+          return ''
+      }
+    },
     load_model_type(){
       let local_model_type=localStorage.getItem('model_type')
       if(local_model_type){
@@ -475,7 +496,15 @@ export default {
 .hidden {
   display: none;
 }
-
+.ai-name{
+  max-width:100px;
+  float:right;
+  background-color:rgba(0,0,0,0.8);
+  font-size: 10px;
+  color: white;
+  text-align: right;
+  padding-right: 5px;
+}
 .btn_edit{
   color: white;
   box-sizing: border-box;
