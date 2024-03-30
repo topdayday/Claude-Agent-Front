@@ -36,7 +36,7 @@
           </div>
 
     </div>
-  <div class="content-warp">
+  <div class="content-warp"  v-loading="loading">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
       <button @click="delConversation(item.id)" v-if="editable" class="btn_edit">删除</button>
       <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
@@ -62,7 +62,7 @@
     </div>
   </div>
   <div :class="smallWidth?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
-    <div  v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
+    <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
       <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 100}"
@@ -96,6 +96,7 @@ export default {
       sent_status: 0,
       model_type:0,
       editable:false,
+      loading:false,
     }
   },
   created(){
@@ -159,13 +160,16 @@ export default {
       }
     },
     currentSession() {
+      this.loading=true;
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
       list_session(token,session_id).then(data => {
+        this.loading=false;
         this.editable=false;
         this.content_his= data;
         this.scrollToBottom();
       }) .catch(error => {
+        this.loading=false;
         console.error(error);
       });
     },
