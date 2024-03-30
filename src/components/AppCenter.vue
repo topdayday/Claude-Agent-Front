@@ -1,39 +1,40 @@
 <template>
 <div class="content-main">
-  <div class="main-left" v-if="!smallWidth"></div>
+  <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
+          <h1 class="card_start">T2Day AI</h1>
           <div  class="card_contains">
-            <div  v-bind:class="{selected_box:model_type===0, card_item:true, card_item_max:smallWidth }"  @click="selectType(0)">
+            <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude 2.1</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===1, card_item:true, card_item_max:smallWidth }"  @click="selectType(1)">
+            <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude 3</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===2, card_item:true, card_item_max:smallWidth }"  @click="selectType(2)">
+            <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Gemini pro</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===3, card_item:true, card_item_max:smallWidth }"  @click="selectType(3)">
+            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">
               <i v-if="model_type===3" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Mistral 8x7b</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===4, card_item:true, card_item_max:smallWidth }"  @click="selectType(4)">
+            <div  v-bind:class="{selected_box:model_type===4, card_item:true,}"  @click="selectType(4)">
               <i v-if="model_type===4" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===10, card_item:true, card_item_max:smallWidth }"  @click="selectType(10)">
+            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">
               <i v-if="model_type===10" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Llama2</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===5, card_item:true, card_item_max:smallWidth }"  @click="selectType(5)">
+            <div  v-bind:class="{selected_box:model_type===5, card_item:true,}"  @click="selectType(5)">
               <i v-if="model_type===5" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>
             </div>
-      </div>
-      <h1 class="card_start" >让我们开始新的探索吧！</h1>
+          </div>
+
     </div>
   <div class="content-warp">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
@@ -81,7 +82,7 @@ import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String,selectedModel:Number,smallWidth:Boolean
+    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean
   },
   comments:{
 
@@ -385,8 +386,11 @@ export default {
   display: flex;
   justify-content: center;
 }
-.main-left{
+.main_left{
   min-width: 260px;
+}
+.main_left_hide{
+  min-width: 0px;
 }
 .fixed-bottom {
   position: fixed;
@@ -420,9 +424,9 @@ export default {
 
 
 .card_item{
-  max-width: 400px;
+  min-width: 400px;
   background-color: white;
-  margin: 20px;
+  margin: 10px;
   /*padding: 50px 100px;*/
   border: 1px solid #fdfdfd;
   border-radius: 10px;

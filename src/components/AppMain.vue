@@ -1,23 +1,42 @@
 <template>
   <div class="app_mian">
     <div class="fixed-top" v-if="token">
-        <AppTop  :smallWidth.sync="smallWidth" :showDrawer.sync="showDrawer" :showMember.sync="showMember" :session_id.sync="session_id"
-                :token.sync="token"  @selectModel="selectModel" :selectedModel.sync="selectedModel"  />
+        <AppTop  :smallWidth.sync="smallWidth"
+                 :showDrawer.sync="showDrawer"
+                 :showMember.sync="showMember"
+                 :session_id.sync="session_id"
+                 :token.sync="token"
+                 :selectedModel.sync="selectedModel"
+                 :showLeftMenu.sync="showLeftMenu"
+                 @selectModel="selectModel"
+                 @setLeftMenu="setLeftMenu"/>
     </div>
     <div class="AppCenter"  v-if="token" >
-      <AppCenter :smallWidth.sync="smallWidth" :session_id.sync="session_id" @selectModel="selectModel" :selectedModel.sync="selectedModel" />
+      <AppCenter :smallWidth.sync="smallWidth"
+                 :session_id.sync="session_id"
+                 :showLeftMenu.sync="showLeftMenu"
+                 @selectModel="selectModel"
+                 :selectedModel.sync="selectedModel" />
     </div>
     <div class="" v-if="token">
-      <AppDrawer  :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
+      <AppDrawer  :showDrawer.sync="showDrawer"
+                  :token.sync="token"
+                  :session_id.sync="session_id" />
     </div>
     <div class=""  v-if="token">
       <AppMember :showMember.sync="showMember" />
     </div>
     <div class=""  v-if="!token">
-      <AppLogin :smallWidth.sync="smallWidth" :token.sync="token" :session_id.sync="session_id" />
+      <AppLogin :smallWidth.sync="smallWidth"
+                :token.sync="token"
+                :session_id.sync="session_id" />
     </div>
     <div class="letf_his" v-if="token">
-      <AppLeftDrawer  :smallWidth.sync="smallWidth" :showDrawer.sync="showDrawer" :token.sync="token"  :session_id.sync="session_id" />
+      <AppLeftDrawer  :smallWidth.sync="smallWidth"
+                      :showDrawer.sync="showDrawer"
+                      :showLeftMenu.sync="showLeftMenu"
+                      :token.sync="token"
+                      :session_id.sync="session_id" />
     </div>
   </div>
 </template>
@@ -47,11 +66,12 @@ export default {
       showMember:false,
       selectedModel:0,
       smallWidth:false,
+      showLeftMenu:localStorage.getItem('showLeftMenu')==='false'?false:true,
       windowWidth: window.innerWidth // 获取初始窗口宽度
     }
   },
   mounted(){
-     this.token=localStorage.getItem('token');
+    this.token=localStorage.getItem('token');
     // 监听窗口大小变化事件
     window.addEventListener('resize', this.handleResize);
     // 初始检查窗口宽度
@@ -65,6 +85,15 @@ export default {
     selectModel(model){
       localStorage.setItem('model_type',model);
       this.selectedModel=model;
+    },
+    setLeftMenu(show){
+      if(show){
+        localStorage.setItem('showLeftMenu',true);
+        this.showLeftMenu=true;
+      }else{
+        localStorage.setItem('showLeftMenu',false);
+        this.showLeftMenu=false;
+      }
     },
     handleResize() {
       // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div

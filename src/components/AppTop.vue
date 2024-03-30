@@ -1,10 +1,13 @@
 <template>
   <div class="top">
-    <div class="top-left" @click="toTop()">
-      <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
+    <div v-bind:class="{top_left:showLeftMenu, top_left_hide:!showLeftMenu,}" v-if="!smallWidth">
+      <el-button @click="changLeftMenu(false)" v-if="showLeftMenu"
+                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;" icon="el-icon-d-arrow-left"  size="small"></el-button>
+      <el-button @click="changLeftMenu(true)"  v-else
+                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;" icon="el-icon-d-arrow-right" size="small"></el-button>
     </div>
     <div class="top-center">
-      <el-select v-if="!smallWidth" v-model="model_type" placeholder="请选择模型">
+      <el-select  v-model="model_type" placeholder="请选择模型">
         <el-option
             v-for="model in model_types"
             :key="model.value"
@@ -31,16 +34,17 @@ import {generate_session} from "@/utils/request";
 export default {
   name: 'AppTop',
   props: {
-    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,selectedModel:Number,smallWidth:Boolean
+    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,
+    selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean
   },
   data(){
     return {
       model_types: [{
         value: 0,
-        label: 'Calude 2.1'
+        label: 'Claude 2.1'
       },{
         value: 1,
-        label: 'Calude 3',
+        label: 'Claude 3',
       },{
         value: 2,
         label: 'Geminio pro',
@@ -52,7 +56,7 @@ export default {
           label: 'PaML 2'
         },{
           value: 5,
-          label: 'Code bison'
+          label: 'Code-bison'
         },{
           value: 10,
           label: 'LLama 2'
@@ -78,6 +82,9 @@ export default {
   methods:{
     toTop(){
       window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
+    },
+    changLeftMenu(val){
+      this.$emit('setLeftMenu', val);
     },
     setMember(){
       this.$emit('update:showMember', true);
@@ -115,9 +122,13 @@ export default {
     rgba(253,253,248,0.1));
     display: flex;
   }
-  .top-left{
-    width:  50px;
-    margin-left: 5px;
+  .top_left{
+    width:  20px;
+    margin-left: 260px;
+  }
+  .top_left_hide{
+    width:  20px;
+    margin-left: 2px;
   }
 
   .top-center{
@@ -125,7 +136,7 @@ export default {
     font-weight: bold;
     text-align: left;
     margin-top: 2px;
-    margin-left:210px;
+    margin-left:10px;
   }
   .top-right{
     width: 150px;
