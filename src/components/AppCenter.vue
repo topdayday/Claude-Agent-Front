@@ -38,7 +38,7 @@
     </div>
   <div class="content-warp"  v-loading="loading">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
-      <button @click="delConversation(item.id)" v-if="editable" class="btn_edit">删除</button>
+      <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除</button>
       <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!smallWidth">
@@ -162,7 +162,8 @@ export default {
         default:
           modelStr =  ''
       }
-      return  modelStr+' at:  '+timeStr;
+      let timeInfo=modelStr+' at:  '+timeStr.slice(0,19);
+      return  timeInfo;
     },
     load_model_type(){
       let local_model_type=localStorage.getItem('model_type')
@@ -322,8 +323,14 @@ export default {
     handleCopyConversation(id) {
       const parent = document.getElementById('content_'+id);
       const { children } =parent;
-      let { innerText } = Array.from(children)[3]
-      this.copyToClipboard(innerText)
+      let { innerText } = Array.from(children)[1]
+      if(innerText == '复制'){
+        let { innerText } = Array.from(children)[3]
+        this.copyToClipboard(innerText)
+      }else{
+        let { innerText } = Array.from(children)[2]
+        this.copyToClipboard(innerText)
+      }
       this.$notify({
         title: '提示',
         message: '内容已复制成功！',
