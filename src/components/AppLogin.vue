@@ -61,7 +61,7 @@
                 </el-form-item>
                 <el-form-item  label="">
                   <div class="login-container">
-                    <el-button type="primary" @click="registForm('loginForm')">注册</el-button>
+                    <el-button type="primary" @click="registerForm('loginForm')">注册</el-button>
                     <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
                   </div>
                 </el-form-item>
@@ -118,10 +118,10 @@
     },
     watch: {
       tokenVal(newToken) {
-        this.$emit('update:token', newToken); // 发出事件通知父组件
+        this.$emit('update:token', newToken); //
       },
       sessionIdVal(newSessionId) {
-        this.$emit('update:session_id', newSessionId); // 发出事件通知父组件
+        this.$emit('update:session_id', newSessionId); //
       },
     },
     methods: {
@@ -133,27 +133,23 @@
          this.captchaImage= data;
           console.log('captcha:',data);
           }) .catch(error => {
-            console.error(error); // 如果发生错误，会打印错误信息
+            console.error(error); //
           });
       },
-      memberLogin() {
-        member_login().then(data => {
-          this.captchaImage= data;
-          console.log('captcha:',data);
-        }) .catch(error => {
-          console.error(error); // 如果发生错误，会打印错误信息
-        });
-      },
+
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             member_login(this.loginData).then(data => {
-              this.tokenVal=data.token;
-              this.sessionIdVal=data.session_id;
-              localStorage.setItem('token',this.tokenVal);
-              localStorage.setItem('session_id',this.sessionIdVal);
+              if(data){
+                this.$message.success('欢迎使用!')
+                this.tokenVal=data.token;
+                this.sessionIdVal=data.session_id;
+                localStorage.setItem('token',this.tokenVal);
+                localStorage.setItem('session_id',this.sessionIdVal);
+              }
             }) .catch(error => {
-              console.error(error); // 如果发生错误，会打印错误信息
+              console.error(error); //
             });
           } else {
             this.$message.error('表单验证失败！');
@@ -161,13 +157,19 @@
           }
         });
       },
-        registForm(formName) {
+        registerForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     member_register(this.loginData).then(data => {
-                        console.log(data);
+                      if(data) {
+                        this.$message.success('欢迎使用!')
+                        this.tokenVal = data.token;
+                        this.sessionIdVal = data.session_id;
+                        localStorage.setItem('token', this.tokenVal);
+                        localStorage.setItem('session_id', this.sessionIdVal);
+                      }
                     }) .catch(error => {
-                        console.error(error); // 如果发生错误，会打印错误信息
+                        console.error(error); //
                     });
                 } else {
                     this.$message.error('表单验证失败！');
