@@ -19,9 +19,9 @@
     </div>
     <div class="top-right">
       <div class="top-button-contains">
-        <el-button  class="top-button el-icon-refresh"    @click="newSession()"></el-button>
-        <el-button  class="top-button el-icon-document"    @click="setDrawer()"></el-button>
-        <el-button  class="top-button el-icon-edit-outline"    @click="setMember()"></el-button>
+        <el-button  class="top-button el-icon-plus"    @click="newSession()"></el-button>
+        <el-button  class="top-button el-icon-notebook-2"    @click="setDrawer()"></el-button>
+        <el-button  class="top-button el-icon-user"    @click="setMember()"></el-button>
         <el-button  class="top-button el-icon-close"    @click="loginOut()"></el-button>
       </div>
     </div>
