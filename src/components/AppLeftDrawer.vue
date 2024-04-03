@@ -3,8 +3,6 @@
       <el-row class="tac">
           <el-col :span="24">
               <div  class="btn_new" @click="newSession()">
-<!--                  <svg width="24" height="24" style="margin-top: 8px;" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>-->
-<!--                <span style="display: inline-block;line-height: 38px;padding-top: 3px;padding-left: 5px;"> </span>-->
                 <el-button style="width: 260px;border-radius:0px;font-size: 14px;"
                            icon="el-icon-circle-plus"
                            size="medium "
@@ -101,16 +99,17 @@ export default {
         justify-content: center;
         /*border-bottom: rgba(255,255,255,0.5) 1px solid;*/
     }
-    /*.btn_new:hover{*/
-    /*    color: white;*/
-    /*    font-size: 18px;*/
-    /*    background-color: #409EFF;*/
-    /*}*/
     .his_container{
         width: 260px;
         height: 100vh;
         /*margin-top: 30px;*/
         background-color: #545c64;
+    }
+    .bottom-div {
+      position: absolute; /* 相对于最近的已定位父元素进行定位 */
+      bottom: 0; /* 将其放置在父元素的底部 */
+      width: 100%; /* 使其宽度与父元素相同 */
+      background-color: #f2f2f2; /* 为了看得更清楚，给内部 div 添加背景色 */
     }
     ::v-deep   .el-menu-item{
         text-align: left;

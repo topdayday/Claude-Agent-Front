@@ -81,7 +81,7 @@ export function member_register(loginData) {
                 login_out();
             }
             else if(response.data.code===0){
-                MessageBox.alert( response.data.data,'提示');
+                return response.data.data;
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
