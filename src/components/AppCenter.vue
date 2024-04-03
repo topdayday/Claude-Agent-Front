@@ -61,12 +61,12 @@
       </div>
     </div>
   </div>
-  <div :class="smallWidth?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
+  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
       <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 100}"
-              placeholder="按下 Ctrl+Enter 提交,请输入你想知道的..."
+              placeholder="按下Ctrl+Enter提交..."
               v-model="content_in">
       </el-input>
       <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()">发送</el-button>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content-main" id="login_index">
-      <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day</h1>
+      <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day AI</h1>
       <h2 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">集成主流AI大模型</h2>
       <div  class="card_contains">
         <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
@@ -14,24 +14,29 @@
             <li> CodeBison</li>
           </ol>
         </div>
-        <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-          <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
+        <div>
+            <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
+             <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
+            </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
+            </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">Mistral</h3>
+            </div>
         </div>
-        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-          <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
+        <div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">PaML</h3>
+            </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">LLama</h3>
+            </div>
+            <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
+              <h3 class="gmat-headline-4 gradient gradient-1">CodeBison</h3>
+            </div>
         </div>
-        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-          <h3 class="gmat-headline-4 gradient gradient-1">Mistral</h3>
-        </div>
-        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-          <h3 class="gmat-headline-4 gradient gradient-1">PaML</h3>
-        </div>
-        <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-          <h3 class="gmat-headline-4 gradient gradient-1">LLama</h3>
-        </div>
-        <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-          <h3 class="gmat-headline-4 gradient gradient-1">CodeBison</h3>
-        </div>
+
       </div>
       <div><el-button target="#" class="product_price" @click="showForm()">注册/登录</el-button></div>
     </div>
@@ -56,7 +61,7 @@
                   <img width="80%" height="38" :src="captchaImageSource" @click="generateCaptcha" title="点击刷新验证码" v-if="captchaImage">
                   <el-button   @click="generateCaptcha">更换</el-button>
                 </div>
-                <el-form-item label="邀请码">
+                <el-form-item label="邀请码(加入QQ群：414802685 获取)">
                   <el-input v-model="loginData.invite_code"  placeholder="注册请输入邀请码，登录无需"></el-input>
                 </el-form-item>
                 <el-form-item  label="">

@@ -73,18 +73,18 @@ export default {
       this.handleClose();
     },
 
-      newSession(){
-          let token=localStorage.getItem('token');
-          generate_session(token).then(data => {
-              localStorage.setItem('session_id',data);
-              this.$emit('update:session_id', data); //
-              console.log('generate_session:',data);
-              // this.latestSession()
-          }) .catch(error => {
-              console.error(error);
-              this.loading=false;
-          });
-      },
+    newSession(){
+        let token=localStorage.getItem('token');
+        generate_session(token).then(data => {
+            localStorage.setItem('session_id',data);
+            this.$emit('update:session_id', data); //
+            console.log('generate_session:',data);
+            // this.latestSession()
+        }) .catch(error => {
+            console.error(error);
+            this.loading=false;
+        });
+    },
   },
 }
 </script>

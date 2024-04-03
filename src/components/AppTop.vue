@@ -16,6 +16,7 @@
             :disabled="model.disabled">
         </el-option>
       </el-select>
+      <el-link type="success">交流QQ群: 414802685</el-link>
     </div>
     <div class="top-right">
       <div class="top-button-contains">
