@@ -3,7 +3,7 @@
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
       <span class="card_sense" ></span>
-    <h3 v-if="!smallWidth" class="card_start">交流QQ群:[<span style="color: darkred;font-weight: bold;font-size: 22px;">414802685 </span>]</h3>
+    <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span>]</h3>
           <div  class="card_contains">
             <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>

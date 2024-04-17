@@ -61,7 +61,7 @@
                   <img width="80%" height="38" :src="captchaImageSource" @click="generateCaptcha" title="点击刷新验证码" v-if="captchaImage">
                   <el-button   @click="generateCaptcha">更换</el-button>
                 </div>
-                <el-form-item label="邀请码(加入QQ群：414802685 获取)">
+                <el-form-item label="邀请码">
                   <el-input v-model="loginData.invite_code"  placeholder="注册请输入邀请码，登录无需"></el-input>
                 </el-form-item>
                 <el-form-item  label="">
