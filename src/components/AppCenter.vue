@@ -5,33 +5,33 @@
       <span class="card_sense" ></span>
     <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3>
           <div  class="card_contains">
+            <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
+              <i v-if="model_type===2" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Gemini</h4>
+            </div>
             <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
               <i v-if="model_type===0" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude2.1 [支持上下文]</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude2</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude3 [支持上下文]</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude3</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
-              <i v-if="model_type===2" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Gemini pro</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">
-              <i v-if="model_type===3" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Mistral 8x7b</h4>
+            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">
+              <i v-if="model_type===10" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Llama3</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===4, card_item:true,}"  @click="selectType(4)">
               <i v-if="model_type===4" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">
-              <i v-if="model_type===10" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Llama2</h4>
-            </div>
             <div  v-bind:class="{selected_box:model_type===5, card_item:true,}"  @click="selectType(5)">
               <i v-if="model_type===5" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">
+              <i v-if="model_type===3" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>
             </div>
           </div>
 
@@ -139,16 +139,16 @@ export default {
       }
       switch (model_type) {
         case 0:
-          modelStr = 'Claude 2.1'
+          modelStr = 'Claude2'
           break
         case 1:
-          modelStr =  'Claude 3'
+          modelStr =  'Claude3'
           break
         case 2:
-          modelStr =  'Gemini pro'
+          modelStr =  'Gemini'
           break
         case 3:
-          modelStr =  'Mistral 8x7b'
+          modelStr =  'Mistral'
           break
         case 4:
           modelStr =  'PaLM2'
@@ -157,7 +157,7 @@ export default {
           modelStr =  'Code-bison'
           break
         case 10:
-          modelStr =  'LLama2'
+          modelStr =  'LLama3'
           break
         default:
           modelStr =  ''

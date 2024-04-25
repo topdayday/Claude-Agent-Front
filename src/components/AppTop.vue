@@ -39,28 +39,35 @@ export default {
   },
   data(){
     return {
-      model_types: [{
-        value: 0,
-        label: 'Claude 2.1'
-      },{
-        value: 1,
-        label: 'Claude 3',
-      },{
-        value: 2,
-        label: 'Geminio pro',
-      },{
-        value: 3,
-        label: 'Mistral 8x7b'
-      },{
-          value: 4,
-          label: 'PaML 2'
-        },{
-          value: 5,
-          label: 'Code-bison'
-        },{
-          value: 10,
-          label: 'LLama 2'
-        }
+      model_types: [
+          {
+            value: 2,
+            label: 'Gemini',
+          },
+          {
+            value: 0,
+            label: 'Claude2'
+          },
+          {
+            value: 1,
+            label: 'Claude3',
+          },
+          {
+            value: 10,
+            label: 'Llama3'
+          },
+          {
+            value: 4,
+            label: 'PaML2'
+          },
+          {
+            value: 5,
+            label: 'Code-bison'
+          },
+          {
+            value: 3,
+            label: 'Mistral'
+          }
       ],
       model_type: 0,
     }
