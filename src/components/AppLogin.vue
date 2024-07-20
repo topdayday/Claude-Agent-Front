@@ -12,6 +12,7 @@
             <li> PaML</li>
             <li> Llama</li>
             <li> CodeBison</li>
+            <li> Unicorn</li>
           </ol>
         </div>
         <div>
@@ -23,6 +24,9 @@
             </div>
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
               <h3 class="gmat-headline-4 gradient gradient-1">Mistral</h3>
+            </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">Unicorn</h3>
             </div>
         </div>
         <div>
@@ -36,7 +40,6 @@
               <h3 class="gmat-headline-4 gradient gradient-1">CodeBison</h3>
             </div>
         </div>
-
       </div>
       <div><el-button target="#" class="product_price" @click="showForm()">注册/登录</el-button></div>
     </div>

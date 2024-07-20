@@ -67,6 +67,10 @@ export default {
           {
             value: 3,
             label: 'Mistral'
+          },
+          {
+            value: 6,
+            label: 'Unicorn'
           }
       ],
       model_type: 0,

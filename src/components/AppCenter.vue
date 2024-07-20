@@ -33,6 +33,10 @@
               <i v-if="model_type===3" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>
             </div>
+            <div  v-bind:class="{selected_box:model_type===6, card_item:true,}"  @click="selectType(6)">
+              <i v-if="model_type===6" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">Unicorn</h4>
+            </div>
           </div>
 
     </div>
@@ -155,6 +159,9 @@ export default {
           break
         case 5:
           modelStr =  'Code-bison'
+          break
+        case 6:
+          modelStr =  'Unicorn'
           break
         case 10:
           modelStr =  'LLama3'
