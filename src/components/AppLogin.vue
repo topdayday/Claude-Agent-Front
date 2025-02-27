@@ -6,38 +6,26 @@
       <div  class="card_contains">
         <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
-            <li> Claude</li>
+            <li> DeepSeek</li>
+            <li> QWen</li>
             <li> Gemini</li>
-            <li> Mistral</li>
-            <li> PaML</li>
-            <li> Llama</li>
-            <li> CodeBison</li>
-            <li> Unicorn</li>
+            <li> Claude</li>
           </ol>
         </div>
         <div>
             <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-             <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
+             <h3 class="gmat-headline-4 gradient gradient-1">DeepSeek</h3>
             </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">QWen</h3>
+            </div>
+        </div>
+       <div>
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
               <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
             </div>
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">Mistral</h3>
-            </div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">Unicorn</h3>
-            </div>
-        </div>
-        <div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">PaML</h3>
-            </div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">LLama</h3>
-            </div>
-            <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-              <h3 class="gmat-headline-4 gradient gradient-1">CodeBison</h3>
+              <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
             </div>
         </div>
       </div>

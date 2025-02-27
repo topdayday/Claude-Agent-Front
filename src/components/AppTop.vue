@@ -41,39 +41,47 @@ export default {
     return {
       model_types: [
           {
+            value: 50,
+            label: 'DeepSeek',
+          },
+          {
+            value: 40,
+            label: 'QWen',
+          },
+          {
             value: 2,
             label: 'Gemini',
           },
-          {
-            value: 0,
-            label: 'Claude2'
-          },
+          // {
+          //   value: 0,
+          //   label: 'Claude2'
+          // },
           {
             value: 1,
-            label: 'Claude3',
+            label: 'Claude',
           },
-          {
-            value: 10,
-            label: 'Llama3'
-          },
-          {
-            value: 4,
-            label: 'PaML2'
-          },
-          {
-            value: 5,
-            label: 'Code-bison'
-          },
-          {
-            value: 3,
-            label: 'Mistral'
-          },
-          {
-            value: 6,
-            label: 'Unicorn'
-          }
+          // {
+          //   value: 10,
+          //   label: 'Llama3'
+          // },
+          // {
+          //   value: 4,
+          //   label: 'PaML2'
+          // },
+          // {
+          //   value: 5,
+          //   label: 'Code-bison'
+          // },
+          // {
+          //   value: 3,
+          //   label: 'Mistral'
+          // },
+          // {
+          //   value: 6,
+          //   label: 'Unicorn'
+          // }
       ],
-      model_type: 0,
+      model_type: 1,
     }
   },
   watch:{

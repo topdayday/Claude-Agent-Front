@@ -5,40 +5,47 @@
       <span class="card_sense" ></span>
     <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3>
           <div  class="card_contains">
+            <div  v-bind:class="{selected_box:model_type===50, card_item:true,}"  @click="selectType(50)">
+              <i v-if="model_type===2" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">DeepSeek</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===40, card_item:true,}"  @click="selectType(40)">
+              <i v-if="model_type===2" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">QWen</h4>
+            </div>
             <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Gemini</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">
-              <i v-if="model_type===0" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude2</h4>
-            </div>
+<!--            <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">-->
+<!--              <i v-if="model_type===0" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">Claude2</h4>-->
+<!--            </div>-->
             <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude3</h4>
+              <h4 class="gmat-headline-4 gradient gradient-1">Claude</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">
-              <i v-if="model_type===10" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Llama3</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===4, card_item:true,}"  @click="selectType(4)">
-              <i v-if="model_type===4" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===5, card_item:true,}"  @click="selectType(5)">
-              <i v-if="model_type===5" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">
-              <i v-if="model_type===3" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===6, card_item:true,}"  @click="selectType(6)">
-              <i v-if="model_type===6" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Unicorn</h4>
-            </div>
+<!--            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">-->
+<!--              <i v-if="model_type===10" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">Llama3</h4>-->
+<!--            </div>-->
+<!--            <div  v-bind:class="{selected_box:model_type===4, card_item:true,}"  @click="selectType(4)">-->
+<!--              <i v-if="model_type===4" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>-->
+<!--            </div>-->
+<!--            <div  v-bind:class="{selected_box:model_type===5, card_item:true,}"  @click="selectType(5)">-->
+<!--              <i v-if="model_type===5" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>-->
+<!--            </div>-->
+<!--            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">-->
+<!--              <i v-if="model_type===3" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>-->
+<!--            </div>-->
+<!--            <div  v-bind:class="{selected_box:model_type===6, card_item:true,}"  @click="selectType(6)">-->
+<!--              <i v-if="model_type===6" class="selected-icon">✓已选</i>-->
+<!--              <h4 class="gmat-headline-4 gradient gradient-1">Unicorn</h4>-->
+<!--            </div>-->
           </div>
-
     </div>
   <div class="content-warp"  v-loading="loading">
     <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
@@ -49,7 +56,10 @@
           <div class="circle"><span style="margin-left: -3px;"   @click="installCopyCode(item.id)">你</span></div>
         </div>
         <div class="content-human">
-          <div>{{item.content_in}}</div>
+          <div style="margin-bottom: 10px;" v-for="(content_in,index) in splitContent(item.content_in) " :key="index">
+            {{content_in}}
+          </div>
+          <div  class="content-info" style="text-align: left;float: left;">{{showInfo(-1,item.create_time)}}</div>
         </div>
       </div>
 
@@ -76,8 +86,8 @@
       <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()">发送</el-button>
     </div>
   </div>
-</div>
 
+</div>
 </template>
 
 <script>
@@ -135,6 +145,13 @@ export default {
   beforeDestroy() {
   },
   methods:{
+    splitContent(content){
+      if(content){
+        return content.split('<br>');
+      }else{
+        return [];
+      }
+    },
     showInfo(model_type,create_time){
       let modelStr = '';
       let timeStr='';
@@ -142,30 +159,36 @@ export default {
         timeStr=(create_time+'').replace("T", " ")
       }
       switch (model_type) {
-        case 0:
-          modelStr = 'Claude2'
+        case -1:
+          modelStr = 'You'
           break
         case 1:
-          modelStr =  'Claude3'
+          modelStr =  'Claude'
           break
         case 2:
           modelStr =  'Gemini'
           break
-        case 3:
-          modelStr =  'Mistral'
+        case 50:
+          modelStr =  'DeepSeek'
           break
-        case 4:
-          modelStr =  'PaLM2'
+        case 40:
+          modelStr =  'QWen'
           break
-        case 5:
-          modelStr =  'Code-bison'
-          break
-        case 6:
-          modelStr =  'Unicorn'
-          break
-        case 10:
-          modelStr =  'LLama3'
-          break
+        // case 3:
+        //   modelStr =  'Mistral'
+        //   break
+        // case 4:
+        //   modelStr =  'PaLM2'
+        //   break
+        // case 5:
+        //   modelStr =  'Code-bison'
+        //   break
+        // case 6:
+        //   modelStr =  'Unicorn'
+        //   break
+        // case 10:
+        //   modelStr =  'LLama3'
+        //   break
         default:
           modelStr =  ''
       }
