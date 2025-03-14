@@ -6,12 +6,8 @@
     <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3>
           <div  class="card_contains">
             <div  v-bind:class="{selected_box:model_type===50, card_item:true,}"  @click="selectType(50)">
-              <i v-if="model_type===2" class="selected-icon">✓已选</i>
+              <i v-if="model_type===50" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">DeepSeek</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===40, card_item:true,}"  @click="selectType(40)">
-              <i v-if="model_type===2" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">QWen</h4>
             </div>
             <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
               <i v-if="model_type===2" class="selected-icon">✓已选</i>
@@ -24,6 +20,10 @@
             <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
               <i v-if="model_type===1" class="selected-icon">✓已选</i>
               <h4 class="gmat-headline-4 gradient gradient-1">Claude</h4>
+            </div>
+            <div  v-bind:class="{selected_box:model_type===40, card_item:true,}"  @click="selectType(40)">
+              <i v-if="model_type===40" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">QWen</h4>
             </div>
 <!--            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">-->
 <!--              <i v-if="model_type===10" class="selected-icon">✓已选</i>-->

@@ -43,11 +43,7 @@ export default {
           {
             value: 50,
             label: 'DeepSeek',
-          },
-          {
-            value: 40,
-            label: 'QWen',
-          },
+          },     
           {
             value: 2,
             label: 'Gemini',
@@ -59,6 +55,10 @@ export default {
           {
             value: 1,
             label: 'Claude',
+          },
+          {
+            value: 40,
+            label: 'QWen',
           },
           // {
           //   value: 10,
@@ -81,7 +81,7 @@ export default {
           //   label: 'Unicorn'
           // }
       ],
-      model_type: 1,
+      model_type: 50,
     }
   },
   watch:{

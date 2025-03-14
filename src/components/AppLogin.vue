@@ -7,9 +7,9 @@
         <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
             <li> DeepSeek</li>
-            <li> QWen</li>
             <li> Gemini</li>
             <li> Claude</li>
+            <li> QWen</li>
           </ol>
         </div>
         <div>
@@ -17,15 +17,15 @@
              <h3 class="gmat-headline-4 gradient gradient-1">DeepSeek</h3>
             </div>
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">QWen</h3>
-            </div>
-        </div>
-       <div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
               <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
             </div>
+        </div>
+       <div>     
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
               <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
+            </div>
+            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
+              <h3 class="gmat-headline-4 gradient gradient-1">QWen</h3>
             </div>
         </div>
       </div>
