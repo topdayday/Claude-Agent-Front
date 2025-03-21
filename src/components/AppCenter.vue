@@ -443,6 +443,7 @@ export default {
   flex: 1;
   overflow-x: auto;
   max-width: calc(100vw - 6px);
+  padding:4px;
 }
 
 .send_message {
