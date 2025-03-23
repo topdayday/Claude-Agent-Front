@@ -8,6 +8,7 @@
                :token.sync="token"
                :selectedModel.sync="selectedModel"
                :showLeftMenu.sync="showLeftMenu"
+               :llmsModelInfo.sync="llmsModelInfo"
                @selectModel="selectModel"
                @setLeftMenu="setLeftMenu"/>
     </div>
@@ -17,7 +18,8 @@
                  :showLeftMenu.sync="showLeftMenu"
                  @selectModel="selectModel"
                  @addConversation="addConversation"
-                 :selectedModel.sync="selectedModel" />
+                 :selectedModel.sync="selectedModel"
+                 :llmsModelInfo.sync="llmsModelInfo" />
     </div>
     <div class="" v-if="token">
       <AppDrawer  :showDrawer.sync="showDrawer"
@@ -30,7 +32,8 @@
     <div class=""  v-if="!token">
       <AppLogin :smallWidth.sync="smallWidth"
                 :token.sync="token"
-                :session_id.sync="session_id" />
+                :session_id.sync="session_id" 
+                :llmsModelInfo.sync="llmsModelInfo"/>
     </div>
     <div class="letf_his" v-if="token">
       <AppLeftDrawer ref="leftMenu" :smallWidth.sync="smallWidth"
@@ -49,6 +52,7 @@
   import AppDrawer from './AppDrawer.vue'
   import AppMember from './AppMember.vue'
   import AppLeftDrawer from './AppLeftDrawer.vue'
+  import {list_llm} from "@/utils/request";
 export default {
   name: 'AppMain',
   components: {
@@ -68,8 +72,12 @@ export default {
       selectedModel:0,
       smallWidth:false,
       showLeftMenu:localStorage.getItem('showLeftMenu')==='false'?false:true,
-      windowWidth: window.innerWidth // 获取初始窗口宽度
+      windowWidth: window.innerWidth,  
+      llmsModelInfo:[],
     }
+  },
+  created(){
+    this.getLlmsModelInfo();
   },
   mounted(){
     this.token=localStorage.getItem('token');
@@ -107,6 +115,11 @@ export default {
     checkWidth() {
       // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值
       this.smallWidth = this.windowWidth < 1300;
+    },
+    getLlmsModelInfo(){
+        list_llm().then(data => {
+         this.llmsModelInfo= data;
+        })
     },
   },
   watch:{

@@ -4,15 +4,13 @@
       <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day AI</h1>
       <h2 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">集成主流AI大模型</h2>
       <div  class="card_contains">
-        <div  v-bind:class="{card_item:true ,hidden: !smallWidth}">
+
+        <div  class="card_item">
           <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
-            <li> DeepSeek</li>
-            <li> Gemini</li>
-            <li> Claude</li>
-            <li> QWen</li>
+            <li v-for="item in llmsModelInfo" :key="item.modelId">{{item.name}}</li>
           </ol>
         </div>
-        <div>
+        <!-- <div>
             <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
              <h3 class="gmat-headline-4 gradient gradient-1">DeepSeek</h3>
             </div>
@@ -27,7 +25,7 @@
             <div  v-bind:class="{card_item:true,hidden: smallWidth }">
               <h3 class="gmat-headline-4 gradient gradient-1">QWen</h3>
             </div>
-        </div>
+        </div> -->
       </div>
       <div><el-button target="#" class="product_price" @click="showForm()">注册/登录</el-button></div>
     </div>
@@ -78,6 +76,7 @@
       token: String,
       session_id: String,
       smallWidth:Boolean,
+      llmsModelInfo:Array,
     },
     comments:{
 
@@ -102,10 +101,7 @@
     },
 
     created(){
-      let token=localStorage.getItem('token');
-      if(!token){
-        this.generateCaptcha();
-      }
+
     },
     computed: {
       captchaImageSource() {
@@ -119,20 +115,22 @@
       sessionIdVal(newSessionId) {
         this.$emit('update:session_id', newSessionId); //
       },
+      showLoginForm(val){
+          if(val){
+             this.generateCaptcha();
+          }
+      },
     },
     methods: {
+  
       showForm(){
         this.showLoginForm=true;
       },
       generateCaptcha() {
         get_captcha().then(data => {
          this.captchaImage= data;
-          console.log('captcha:',data);
-          }) .catch(error => {
-            console.error(error); //
-          });
+      })
       },
-
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

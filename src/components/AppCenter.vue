@@ -5,46 +5,11 @@
       <span class="card_sense" ></span>
     <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3>
           <div  class="card_contains">
-            <div  v-bind:class="{selected_box:model_type===50, card_item:true,}"  @click="selectType(50)">
-              <i v-if="model_type===50" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">DeepSeek</h4>
+            <div   v-for="model in llmsModelInfo" :key="model.modelId" 
+               v-bind:class="{selected_box:model_type===model.modelId, card_item:true,}"  @click="selectType(model.modelId)">
+              <i v-if="model_type===model.modelId" class="selected-icon">✓已选</i>
+              <h4 class="gmat-headline-4 gradient gradient-1">{{model.name}}</h4>
             </div>
-            <div  v-bind:class="{selected_box:model_type===2, card_item:true,}"  @click="selectType(2)">
-              <i v-if="model_type===2" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Gemini</h4>
-            </div>
-<!--            <div  v-bind:class="{selected_box:model_type===0, card_item:true,}"  @click="selectType(0)">-->
-<!--              <i v-if="model_type===0" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">Claude2</h4>-->
-<!--            </div>-->
-            <div  v-bind:class="{selected_box:model_type===1, card_item:true,}"  @click="selectType(1)">
-              <i v-if="model_type===1" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">Claude</h4>
-            </div>
-            <div  v-bind:class="{selected_box:model_type===40, card_item:true,}"  @click="selectType(40)">
-              <i v-if="model_type===40" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">QWen</h4>
-            </div>
-<!--            <div  v-bind:class="{selected_box:model_type===10, card_item:true,}"  @click="selectType(10)">-->
-<!--              <i v-if="model_type===10" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">Llama3</h4>-->
-<!--            </div>-->
-<!--            <div  v-bind:class="{selected_box:model_type===4, card_item:true,}"  @click="selectType(4)">-->
-<!--              <i v-if="model_type===4" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">PaML2</h4>-->
-<!--            </div>-->
-<!--            <div  v-bind:class="{selected_box:model_type===5, card_item:true,}"  @click="selectType(5)">-->
-<!--              <i v-if="model_type===5" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">Code-bison</h4>-->
-<!--            </div>-->
-<!--            <div  v-bind:class="{selected_box:model_type===3, card_item:true,}"  @click="selectType(3)">-->
-<!--              <i v-if="model_type===3" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">Mistral</h4>-->
-<!--            </div>-->
-<!--            <div  v-bind:class="{selected_box:model_type===6, card_item:true,}"  @click="selectType(6)">-->
-<!--              <i v-if="model_type===6" class="selected-icon">✓已选</i>-->
-<!--              <h4 class="gmat-headline-4 gradient gradient-1">Unicorn</h4>-->
-<!--            </div>-->
           </div>
     </div>
   <div class="content-warp"  v-loading="loading">
@@ -68,8 +33,10 @@
           <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
         </div>
+
         <div class="content-assistant">
-          <div :id="item.id"  v-html="item.content_out"></div>
+          <div v-if="item.reason_out" v-html="item.reason_out"  :id="item.id+'_reason'"  ></div>
+          <div v-if="item.content_out" v-html="item.content_out"  :id="item.id"  ></div>
           <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div>
         </div>
       </div>
@@ -97,7 +64,7 @@ import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean
+    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,
   },
   comments:{
 

@@ -9,11 +9,10 @@
     <div class="top-center">
       <el-select  v-model="model_type" placeholder="请选择模型">
         <el-option
-            v-for="model in model_types"
-            :key="model.value"
-            :label="model.label"
-            :value="model.value"
-            :disabled="model.disabled">
+            v-for="model in llmsModelInfo"
+            :key="model.modelId"
+            :label="model.name"
+            :value="model.modelId">
         </el-option>
       </el-select>
     </div>
@@ -35,52 +34,10 @@ export default {
   name: 'AppTop',
   props: {
     showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,
-    selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean
+    selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,
   },
   data(){
     return {
-      model_types: [
-          {
-            value: 50,
-            label: 'DeepSeek',
-          },     
-          {
-            value: 2,
-            label: 'Gemini',
-          },
-          // {
-          //   value: 0,
-          //   label: 'Claude2'
-          // },
-          {
-            value: 1,
-            label: 'Claude',
-          },
-          {
-            value: 40,
-            label: 'QWen',
-          },
-          // {
-          //   value: 10,
-          //   label: 'Llama3'
-          // },
-          // {
-          //   value: 4,
-          //   label: 'PaML2'
-          // },
-          // {
-          //   value: 5,
-          //   label: 'Code-bison'
-          // },
-          // {
-          //   value: 3,
-          //   label: 'Mistral'
-          // },
-          // {
-          //   value: 6,
-          //   label: 'Unicorn'
-          // }
-      ],
       model_type: 50,
     }
   },
@@ -96,6 +53,8 @@ export default {
     let m_type =localStorage.getItem('model_type');
     if(m_type!=null){
       this.model_type=Number(m_type);
+    }else{
+      this.model_type=this.llmsModelInfo[0].modelId;
     }
   },
   methods:{
@@ -116,7 +75,6 @@ export default {
       generate_session(token).then(data => {
         localStorage.setItem('session_id',data);
         this.$emit('update:session_id', data); //
-        console.log('generate_session:',data);
       }) .catch(error => {
         console.error(error);
         this.loading=false;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
 let server_url = '/'
-// server_url = 'http://127.0.0.1:80/';
+//server_url = 'http://127.0.0.1:80/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {
@@ -328,5 +328,29 @@ export function member_edit(token,loginData) {
         }).catch(()=>{
             MessageBox.alert('修改用户资料失败,请联系管理员！','提示')
             throw new Error('请求失败');
+        });
+}
+
+export function list_llm() {
+    return axios({
+        method: 'POST',
+        url:base_url+'/list_llm/',
+        data: {
+          
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+        .then(response => {
+            if(response.data.code===0){
+                return response.data.data;
+            }else if(response.data.code===1){
+                MessageBox.alert( response.data.data,'提示');
+            }
+        }).catch(()=>{
+            MessageBox.alert('获取模型列表失败,请联系管理员！','提示')
+            throw new Error('获取模型列表失败');
         });
 }
