@@ -124,7 +124,7 @@ export default {
     justify-content: flex-end;
   }
   .top-button{
-    background-color: rgba(255,255,255,0.2);;
+    background-color: rgba(255,255,255,0);
     color: black;
     height: 28px;
     padding: 5px 5px;
@@ -132,7 +132,7 @@ export default {
   }
 
   ::v-deep .el-button--primary{
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0);
     border: 0px;
     height: 30px;
   }

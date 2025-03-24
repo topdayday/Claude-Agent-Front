@@ -367,6 +367,9 @@ export default {
   padding: 10px 10px 10px 2px;
 
 }
+.content-warp{
+  padding:0 4px;
+}
 .circle {
   width: 24px;
   height: 24px;
@@ -410,7 +413,6 @@ export default {
   flex: 1;
   overflow-x: auto;
   max-width: calc(100vw - 6px);
-  padding:4px;
 }
 
 .send_message {
