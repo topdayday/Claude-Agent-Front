@@ -125,39 +125,10 @@ export default {
       if(create_time){
         timeStr=(create_time+'').replace("T", " ")
       }
-      switch (model_type) {
-        case -1:
-          modelStr = 'You'
-          break
-        case 1:
-          modelStr =  'Claude'
-          break
-        case 2:
-          modelStr =  'Gemini'
-          break
-        case 50:
-          modelStr =  'DeepSeek'
-          break
-        case 40:
-          modelStr =  'QWen'
-          break
-        // case 3:
-        //   modelStr =  'Mistral'
-        //   break
-        // case 4:
-        //   modelStr =  'PaLM2'
-        //   break
-        // case 5:
-        //   modelStr =  'Code-bison'
-        //   break
-        // case 6:
-        //   modelStr =  'Unicorn'
-        //   break
-        // case 10:
-        //   modelStr =  'LLama3'
-        //   break
-        default:
-          modelStr =  ''
+      if(model_type===-1){
+         modelStr = 'You'
+      }else{
+        this.llmsModelInfo.forEach(item=>{if(item.modelId===model_type){modelStr = item.name;}})
       }
       let timeInfo=modelStr+' at:  '+timeStr.slice(0,19);
       return  timeInfo;
@@ -284,7 +255,7 @@ export default {
         transition: 0.2s ease-out;
         cursor: pointer;
         user-select: none;
-        background: rgba(0, 0, 0, 0.45);
+        background: #409EFF;;
         border: 1px solid rgba(0, 0, 0, 0);
         padding: 5px 10px;
         font-size: 0.8em;
@@ -361,7 +332,7 @@ export default {
   box-shadow:
           0 2px 5px rgba(0,0,0,0.1),
           inset 0 1px 0 rgba(255,255,255,0.1);
-  max-width: 780px;
+  max-width: 85%;
   margin: auto;
   margin-bottom:40px;
   padding: 10px 10px 10px 2px;
@@ -617,4 +588,19 @@ export default {
   margin-left: 2px;
 }
 
+::v-deep   hr {
+  /* 保持原有的样式 */
+  display: block;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  unicode-bidi: isolate;
+  overflow: hidden;
+
+  /* 修改颜色和样式 */
+  border-style: dotted; /* 改为虚线 */
+  border-color:rgba(0, 0, 0, 0.1);   /* 改为红色, 你可以替换成任何你想要的颜色 */
+  border-width: 1px;   /* 设置虚线的粗细，可以根据需要调整 */
+}
 </style>
