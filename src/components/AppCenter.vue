@@ -18,7 +18,7 @@
       <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!smallWidth">
-          <div class="circle"><span style="margin-left: -3px;"   @click="installCopyCode(item.id)">你</span></div>
+          <div class="circle"><span style="margin-left: -1px;"   @click="installCopyCode(item.id)">你</span></div>
         </div>
         <div class="content-human">
           <div style="margin-bottom: 10px;" v-for="(content_in,index) in splitContent(item.content_in) " :key="index">

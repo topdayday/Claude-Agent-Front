@@ -11,7 +11,7 @@
               <el-scrollbar style="height: 100vh;">
                   <el-menu
                           @close="handleClose"
-                          background-color="#000000"
+                          background-color="rgba(0,0,0,0.2)"
                           text-color="#fff"
                           active-text-color="#ffd04b">
                       <el-menu-item @click="viewSession(item.session_id)" :index="index.toString()" v-for="(item, index) in conversation_list"  :key="index">{{item.content_in}}</el-menu-item>
