@@ -45,8 +45,9 @@
   <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
       <el-input
+              autofocus=true
               type="textarea"
-              :autosize="{ minRows: 2, maxRows: 100}"
+              :autosize="{ minRows: 2, maxRows: 20}"
               placeholder="按下Ctrl+Enter提交..."
               v-model="content_in">
       </el-input>
@@ -429,10 +430,6 @@ export default {
   left:calc(50vw);
   transform: translateX(-50%);
 }
-.btn_sent{
-  margin-right: 4px;
-  min-height: 54px;
-}
 
 .containt_txt{
   text-align: left;
@@ -517,6 +514,21 @@ export default {
   margin-left: 8px;
   line-height: 20px;
 }
+
+.btn_sent{
+    margin-right: 4px;
+    min-height: 54px;
+    background-color: #fb7750  ;
+    border-color: #fb7750 ;
+    color: #fff;
+}
+.btn_sent:hover,.btn_sent:focus{
+    background-color: #fb8d6d;
+    border-color: #fb8d6d;
+    color: #fff;
+}
+
+
 /* 表格的样式 */
 ::v-deep  table {
   width: 100%; /* 表格宽度为100% */

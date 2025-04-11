@@ -3,17 +3,17 @@
       <el-row class="tac">
           <el-col :span="24">
               <div  class="btn_new" @click="newSession()">
-                <el-button style="width: 260px;border-radius:0px;font-size: 14px;"
-                           icon="el-icon-circle-plus"
-                           size="medium "
-                           type="primary" >新建对话</el-button>
+                <el-button class="new_button"
+                           size="mini" round
+                           ><span style="line-height:24px;">新建对话</span>
+                </el-button>
               </div>
-              <el-scrollbar style="height: 100vh;">
+              <el-scrollbar style="height: 100vh;" class="my-custom-scrollbar">
                   <el-menu
                           @close="handleClose"
-                          background-color="rgba(0,0,0,0.2)"
-                          text-color="#fff"
-                          active-text-color="#ffd04b">
+                          background-color="##fdfcf8"
+                          text-color="#000"
+                          active-text-color="#000">
                       <el-menu-item @click="viewSession(item.session_id)" :index="index.toString()" v-for="(item, index) in conversation_list"  :key="index">{{item.content_in}}</el-menu-item>
                   </el-menu>
               </el-scrollbar>
@@ -89,35 +89,87 @@ export default {
 
 <style scoped>
     .btn_new{
-        height: 38px;
+        height: 30px;
         line-height: 18px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        background-color: #000000;
+        font-size: 12px;
         display: flex;
         justify-content: center;
-        /*border-bottom: rgba(255,255,255,0.5) 1px solid;*/
+        background: linear-gradient(to bottom,
+    rgba(0,0,0,0.1),
+    rgba(253,253,248,0.1));
+        -webkit-box-shadow: 0 1px 5px 2px rgba(0, 0, 0, .15);
+        box-shadow: 0 1px 5px 2px rgba(0, 0, 0, .15)
     }
     .his_container{
         width: 260px;
         height: 100vh;
         /*margin-top: 30px;*/
-        background-color: #545c64;
+        background-color: #fdfcf8;
+        -webkit-box-shadow: 0 1px 5px 2px rgba(0, 0, 0, .15);
+        box-shadow: 0 1px 5px 2px rgba(0, 0, 0, .15)
     }
     .bottom-div {
-      position: absolute; /* 相对于最近的已定位父元素进行定位 */
-      bottom: 0; /* 将其放置在父元素的底部 */
-      width: 100%; /* 使其宽度与父元素相同 */
-      background-color: #f2f2f2; /* 为了看得更清楚，给内部 div 添加背景色 */
+      position: absolute; 
+      bottom: 0;  
+      width: 100%;  
+      background-color: #f2f2f2;  
     }
-    ::v-deep   .el-menu-item{
-        text-align: left;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 48px;
+ 
+    .new_button{
+        margin: 2px 0px !important; 
+        padding: 0px !important;
+        font-size: 12px;
+        width:50%;
+        background-color: #fb7750  ;
+        border-color: #fb7750 ;
+        color: #fff;
     }
-    ::v-deep    .el-menu{
+    .new_button:hover,.new_button:focus{
+        background-color: #fb8d6d;
+        border-color: #fb8d6d;
+        color: #fff;
+    }
+
+    :deep(.el-menu){
         border: 0px;
     }
+
+/* 默认状态 */
+:deep(.el-menu-item) {
+  background-color: #fdfcf8 !important; /* 你想要的默认颜色 */
+  transition: background-color 0.3s ease; /* 可选过渡效果 */
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 44px;
+  line-height: 44px;
+}
+
+/* 悬停/聚焦状态 */
+:deep(.el-menu-item:hover),
+:deep(.el-menu-item:focus) {
+  background-color: rgba(0,0,0,0.1) !important;
+}
+
+:deep(.el-menu-item.is-active) {
+  background-color:  rgba(0,0,0,0.2)  !important; 
+  color: #000 !important;  
+  border-radius: 4px;    
+}
+
+
+/* 使用 :deep() 穿透 scoped 限制，定位到 el-scrollbar 内部的元素 */
+/* 通过 .my-custom-scrollbar 限定范围，避免影响页面上其他的 el-scrollbar */
+.my-custom-scrollbar :deep(.el-scrollbar__bar.is-vertical .el-scrollbar__thumb) {
+  background-color: rgba(0,0,0,0.1); /* 设置为你想要的颜色 */
+  /* 你也可以添加其他样式，比如圆角 */
+  border-radius: 4px;
+}
+
+/* 可选：设置鼠标悬停时的颜色 */
+.my-custom-scrollbar :deep(.el-scrollbar__bar.is-vertical .el-scrollbar__thumb:hover) {
+  background-color: rgba(0,0,0,0.2); /* 设置为你想要的悬停颜色 */
+}
+
+
 </style>
