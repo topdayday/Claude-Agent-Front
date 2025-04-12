@@ -10,6 +10,7 @@
               </div>
               <el-scrollbar style="height: 100vh;" class="my-custom-scrollbar">
                   <el-menu
+                          :default-active="activeMenuIndex"
                           @close="handleClose"
                           background-color="##fdfcf8"
                           text-color="#000"
@@ -37,6 +38,7 @@ export default {
       show:true,
       pageNumber:0,
       loading:true,
+      activeMenuIndex:"0",
     }
   },
   created() {
@@ -58,11 +60,31 @@ export default {
       latest_session(token,this.pageNumber).then(data => {
         this.conversation_list= data;
         this.loading=false;
+        this.setActiveIndex();
         console.log('latest_session:',data);
       }) .catch(error => {
         console.error(error);
         _this.loading=false;
       });
+    },
+
+    setActiveIndex() {
+      let targetSessionId=localStorage.getItem('session_id');
+      if (!targetSessionId||!this.conversation_list || this.conversation_list.length === 0) {
+          this.activeMenuIndex =  "0";
+          console.log('activeMenuIndex:0',0);
+         return;
+      }
+      console.log('activeMenuIndex:targetSessionId',targetSessionId);
+      const index = this.conversation_list.findIndex(
+        item => item.session_id === targetSessionId
+      );
+       console.log('activeMenuIndex:index',index);
+      if (index !== -1) {
+        this.activeMenuIndex = index.toString();
+      } else {
+        this.activeMenuIndex = "0"; // Reset if not found
+      }
     },
 
     viewSession(session_id){

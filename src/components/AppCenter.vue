@@ -43,7 +43,7 @@
     </div>
   </div>
   <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
-    <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }">
+    <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
       <el-input
               autofocus=true
               type="textarea"
@@ -51,7 +51,7 @@
               placeholder="按下Ctrl+Enter提交..."
               v-model="content_in">
       </el-input>
-      <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()">发送</el-button>
+      <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">发送</el-button>
     </div>
   </div>
 
@@ -614,5 +614,11 @@ export default {
   border-style: dotted; /* 改为虚线 */
   border-color:rgba(0, 0, 0, 0.1);   /* 改为红色, 你可以替换成任何你想要的颜色 */
   border-width: 1px;   /* 设置虚线的粗细，可以根据需要调整 */
+}
+::v-deep .el-textarea__inner{
+  border: 0px #fb7750  solid;
+}
+::v-deep .el-textarea__inner:hover,.el-textarea__inner:focus{
+  border: 0px #fb7750  solid;
 }
 </style>
