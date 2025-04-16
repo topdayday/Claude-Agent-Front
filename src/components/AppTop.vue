@@ -110,7 +110,6 @@ export default {
 
   .top-center{
     flex: 1;
-    font-weight: bold;
     text-align: left;
     margin-top: 2px;
     margin-left:10px;

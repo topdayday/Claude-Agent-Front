@@ -19,6 +19,7 @@
                  @selectModel="selectModel"
                  @addConversation="addConversation"
                  :selectedModel.sync="selectedModel"
+                 :scrollBottom="scrollBottom"
                  :llmsModelInfo.sync="llmsModelInfo" />
     </div>
     <div class="" v-if="token">
@@ -71,6 +72,7 @@ export default {
       showMember:false,
       selectedModel:0,
       smallWidth:false,
+      scrollBottom:false,
       showLeftMenu:localStorage.getItem('showLeftMenu')==='false'?false:true,
       windowWidth: window.innerWidth,  
       llmsModelInfo:[],
@@ -83,6 +85,7 @@ export default {
     this.token=localStorage.getItem('token');
     // 监听窗口大小变化事件
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('scroll', this.checkScrollBottom);
     // 初始检查窗口宽度
     this.checkWidth();
   },
@@ -91,6 +94,25 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods:{
+    throttle(func, delay) {
+        let lastCall = 0;
+        return function(...args) {
+        const now = new Date().getTime();
+        if (now - lastCall < delay) return;
+        lastCall = now;
+        func.apply(this, args);
+      };
+    },
+    checkScrollBottom() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      if (scrollTop + windowHeight >= documentHeight - 20) {
+        this.scrollBottom=true;
+      }else{
+         this.scrollBottom=false;
+      }
+    },
     addConversation(data){
       this.$refs.leftMenu.addConversation(data);
     },
@@ -111,6 +133,7 @@ export default {
       // 当窗口大小变化时更新窗口宽度，并检查是否需要隐藏 div
       this.windowWidth = window.innerWidth;
       this.checkWidth();
+      this.checkScrollBottom();
     },
     checkWidth() {
       // 检查当前窗口宽度是否小于 500px，并更新 isHidden 的值

@@ -42,15 +42,22 @@
       </div>
     </div>
   </div>
-  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage">
+  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
       <el-input
               autofocus=true
               type="textarea"
+              ref="textarea_in"
               :autosize="{ minRows: 2, maxRows: 20}"
               placeholder="按下Ctrl+Enter提交..."
               v-model="content_in">
       </el-input>
+       <!-- 自定义清空按钮 -->
+    <i
+      v-if="content_in"
+      class="el-icon-circle-close clear-btn"
+      @click="clearContent"
+    ></i>
       <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">发送</el-button>
     </div>
   </div>
@@ -65,7 +72,7 @@ import {del_conversation} from '@/utils/request';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,
+    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,scrollBottom:Boolean,
   },
   comments:{
 
@@ -100,19 +107,17 @@ export default {
       this.$emit('selectModel',model_type)
     },
   },
-  computed:{
-    sent_status_ico(){
-      return this.sent_status===0?'el-icon-upload2':'el-icon-loading';
-    },
-    showIndexContent(){
-      return  this.content_his.length===0;
-    },
-  },
   mounted(){
   },
   beforeDestroy() {
   },
   methods:{
+    clearContent() {
+      this.content_in = "";
+      this.$nextTick(() => {
+        this.$refs.textarea_in.focus(); // 清空后自动聚焦
+      });
+    },
     splitContent(content){
       if(content){
         return content.split('<br>');
@@ -333,7 +338,7 @@ export default {
   box-shadow:
           0 2px 5px rgba(0,0,0,0.1),
           inset 0 1px 0 rgba(255,255,255,0.1);
-  max-width: 85%;
+  max-width: 96%;
   margin: auto;
   margin-bottom:40px;
   padding: 10px 10px 10px 2px;
@@ -550,7 +555,7 @@ export default {
 
 
 ::v-deep  pre {
-  background-color: rgba(0,0,0,0.7);  /* 设置背景颜色 */
+  background-color: #181d28;  /* 设置背景颜色 */
   padding: 10px;  /* 设置内边距 */
   font-family: 'Courier New', monospace;  /* 设置字体 */
   overflow: auto;  /* 如果内容超出容器，出现滚动条 */
@@ -621,4 +626,29 @@ export default {
 ::v-deep .el-textarea__inner:hover,.el-textarea__inner:focus{
   border: 0px #fb7750  solid;
 }
+
+/* 外层容器（根据实际类名调整） */
+::v-deep .el-textarea__inner {
+  /* 确保滚动条可见 */
+  overflow-y: auto !important;
+}
+
+/* 滚动条整体样式 */
+::v-deep .el-textarea__inner::-webkit-scrollbar {
+  width: 2px; /* 垂直滚动条宽度 */
+  height: 8px; /* 水平滚动条高度（可选） */
+}
+
+/* 滚动条滑块 */
+::v-deep .el-textarea__inner::-webkit-scrollbar-thumb {
+  background: #f5f5f5; /* 滑块颜色 */
+  border-radius: 4px; /* 圆角 */
+}
+
+/* 滚动条轨道 */
+::v-deep .el-textarea__inner::-webkit-scrollbar-track {
+  background: #ffffff; /* 轨道背景色 */
+  border-radius: 4px; /* 圆角 */
+}
+
 </style>
