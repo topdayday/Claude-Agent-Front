@@ -88,6 +88,9 @@ export default {
     window.addEventListener('scroll', this.checkScrollBottom);
     // 初始检查窗口宽度
     this.checkWidth();
+    setTimeout(() => {  
+      this.checkScrollBottom();
+    }, 1000);
   },
   beforeDestroy() {
     // 在组件销毁前移除事件监听，避免内存泄漏

@@ -97,14 +97,16 @@ export default {
     session_id(){
       this.currentSession();
     },
-    showIndexContent(){
-      this.load_model_type();
-    },
     selectedModel(selectedModel){
       this.selectType(selectedModel);
     },
     model_type(model_type){
       this.$emit('selectModel',model_type)
+    },
+  },
+  computed:{
+    showIndexContent(){
+      return !this.content_his || this.content_his.length===0;
     },
   },
   mounted(){
