@@ -13,7 +13,7 @@
           </div>
     </div>
   <div class="content-warp"  v-loading="loading">
-    <div class="content" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
+    <div :class="smallWidth?'content-small':'content'" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
       <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除</button>
       <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
       <div class="content-human-warp">
@@ -168,25 +168,42 @@ export default {
     },
     sendMessage(){
       if( this.sent_status === 1){
+        this.$notify({
+          title: '提示',
+          message: '请稍后再试...',
+          type: 'warning'
+        });
         return ;
       }
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
-      if(!token || !session_id || !this.content_in.length){
-        return
+      if(!token || !session_id){
+        this.$notify({
+          title: '提示',
+          message: '请先登录...',
+          type: 'warning'
+        });
+        return ;
       }
-      if (this.content_in.trim().length===0){
-        return
+      if (!this.content_in||this.content_in.trim().length===0){
+        this.$notify({
+          title: '提示',
+          message: '请输入对话内容...',
+          type: 'warning'
+        });
+        return ;
       }
       let local_model_type=localStorage.getItem('model_type')
       if(local_model_type){
         this.model_type=Number(local_model_type);
       }else{
-        this.model_type=0;
+        this.model_type=2;
       }
       this.sent_status = 1;
+      this.loading=true;
       assistant(token,session_id,this.content_in.trim(),this.model_type).then(data => {
         this.sent_status = 0;
+        this.loading=false;
         this.scrollToBottom();
         if(data){
           this.content_his.push(data);
@@ -196,6 +213,7 @@ export default {
           }
         }
       }) .catch(error => {
+        this.loading=false;
         console.error(error);
         this.sent_status = 0;
       });
@@ -329,22 +347,84 @@ export default {
 </script>
 
 <style scoped>
+  /* 自定义 loading 样式 */
+  ::v-deep .el-loading-mask {
+    background-color: rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+  }
+
+  ::v-deep .el-loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  ::v-deep .el-loading-spinner .circular {
+    width: 42px;
+    height: 42px;
+    animation: loading-rotate 2s linear infinite;
+  }
+
+  ::v-deep .el-loading-spinner .path {
+    stroke: #fb7750;
+    stroke-width: 3;
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    animation: loading-dash 1.5s ease-in-out infinite;
+  }
+
+  @keyframes loading-rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loading-dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -40px;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -120px;
+    }
+  }
+
   .codehilite{
     display: flex; justify-content: flex-end;
   }
 
-.content{
+.content-base {
   background-color: #fcfcfc;
   border: 1px solid #fdfdfd;
   border-bottom: 2px solid rgba(0,0,0,0.1);
   box-shadow:
           0 2px 5px rgba(0,0,0,0.1),
           inset 0 1px 0 rgba(255,255,255,0.1);
-  max-width: 96%;
   margin: auto;
-  margin-bottom:40px;
+  margin-bottom: 40px;
   padding: 10px 10px 10px 2px;
+}
 
+.content {
+  composes: content-base;
+  max-width: calc(100vw - 260px);
+}
+
+.content-small {
+  composes: content-base;
+  max-width: 96%;
 }
 .content-warp{
   padding:0 4px;
