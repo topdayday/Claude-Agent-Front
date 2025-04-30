@@ -14,8 +14,10 @@
     </div>
   <div class="content-warp"  v-loading="loading">
     <div :class="smallWidth?'content-small':'content'" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
-      <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除</button>
-      <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
+      <div class="button-wrapper">
+        <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除</button>
+        <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
+      </div>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!smallWidth">
           <div class="circle"><span style="margin-left: -1px;"   @click="installCopyCode(item.id)">你</span></div>
@@ -276,17 +278,17 @@ export default {
         const copy = document.createElement("button")
         copy.innerHTML = "复制代码"
         copy.style.cssText = `
-        color: white;
         box-sizing: border-box;
         transition: 0.2s ease-out;
         cursor: pointer;
         user-select: none;
-        background: #409EFF;;
-        border: 1px solid rgba(0, 0, 0, 0);
         padding: 5px 10px;
         font-size: 0.8em;
         border-radius: 0 0.15rem;
         line-height:20px;
+        background-color: #fb7750  ;
+        border: 1px solid  #fb7750 ;
+        color: #fff;
       `;
         copy.classList.add("btn-code");
         copy.addEventListener("click", this.handleCopyClick);
@@ -587,19 +589,19 @@ export default {
   font-style: italic;
 }
 .btn_edit{
-  color: white;
   box-sizing: border-box;
   transition: 0.2s ease-out;
   cursor: pointer;
   user-select: none;
-  background: #409EFF;
-  border: 0px solid rgba(0, 0, 0, 0);
   padding: 4px 10px;
   font-size: 14px;
   border-radius: 0.15rem 0.15rem;
   float: right;
   margin-left: 8px;
   line-height: 20px;
+  background-color: #fb7750  ;
+  border: 1px solid  #fb7750 ;
+  color: #fff;
 }
 
 .btn_sent{
@@ -731,6 +733,13 @@ export default {
 ::v-deep .el-textarea__inner::-webkit-scrollbar-track {
   background: #ffffff; /* 轨道背景色 */
   border-radius: 4px; /* 圆角 */
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 </style>
