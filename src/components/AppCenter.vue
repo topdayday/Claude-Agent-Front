@@ -44,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom">
+  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showIndexContent">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
       <el-input
               autofocus=true
