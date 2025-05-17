@@ -108,7 +108,7 @@ export default {
   },
   computed:{
     showIndexContent(){
-      return !this.content_his || this.content_his.length===0;
+      return (!this.content_his || this.content_his.length===0)||(document.body.scrollHeight < document.documentElement.clientHeight);
     },
   },
   mounted(){

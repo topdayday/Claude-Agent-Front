@@ -1,7 +1,13 @@
 import axios from "axios";
 import { MessageBox } from "element-ui";
+
+// Create axios instance with timeout
+const instance = axios.create({
+    timeout: 60000, //  60 seconds timeout
+});
+
 let server_url = '/'
-//server_url = 'http://127.0.0.1:80/';
+// server_url = 'http://127.0.0.1:8000/';
 let base_url = server_url + 'cnaude';
 
 export function login_out() {
@@ -11,7 +17,7 @@ export function login_out() {
 }
 
 export function get_captcha() {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/get_captcha/',
         data: {},
@@ -34,7 +40,7 @@ export function get_captcha() {
 
 
 export function member_login(loginData) {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/login/',
         data: {
@@ -61,7 +67,7 @@ export function member_login(loginData) {
 
 
 export function member_register(loginData) {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/register/',
         data: {
@@ -93,7 +99,7 @@ export function member_register(loginData) {
 
 
 export function list_session(token,session_id) {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/list_session/',
         data: {
@@ -122,7 +128,7 @@ export function list_session(token,session_id) {
 
 
 export function assistant(token,session_id, content_in,model_type) {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/assistant/',
         data: {
@@ -155,7 +161,7 @@ export function assistant(token,session_id, content_in,model_type) {
 
 
 export function latest_session(token,page_number) {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/latest_session/',
         data: {
@@ -185,7 +191,7 @@ export function latest_session(token,page_number) {
 
 
 export function del_conversation(token,c_id) {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/del_conversation/',
         data: {
@@ -215,7 +221,7 @@ export function del_conversation(token,c_id) {
 
 
 export function del_session(token,session_id) {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/del_session/',
         data: {
@@ -244,7 +250,7 @@ export function del_session(token,session_id) {
 
 
 export function generate_session(token) {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/generate_session/',
         data: {
@@ -273,7 +279,7 @@ export function generate_session(token) {
 
 
 export function member_info(token) {
-    return axios({
+    return instance({
         method: 'POST',
         url: base_url+'/member_info/',
         data: {
@@ -301,7 +307,7 @@ export function member_info(token) {
 
 
 export function member_edit(token,loginData) {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/member_edit/',
         data: {
@@ -332,7 +338,7 @@ export function member_edit(token,loginData) {
 }
 
 export function list_llm() {
-    return axios({
+    return instance({
         method: 'POST',
         url:base_url+'/list_llm/',
         data: {
