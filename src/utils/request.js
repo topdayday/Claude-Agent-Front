@@ -3,7 +3,7 @@ import { MessageBox } from "element-ui";
 
 // Create axios instance with timeout
 const instance = axios.create({
-    timeout: 60000, //  60 seconds timeout
+    timeout: 600000, //  60 seconds timeout
 });
 
 let server_url = '/'

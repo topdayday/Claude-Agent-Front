@@ -44,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showIndexContent">
+  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showIndexContent||showScrollHeight">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
       <el-input
               autofocus=true
@@ -108,8 +108,11 @@ export default {
   },
   computed:{
     showIndexContent(){
-      return (!this.content_his || this.content_his.length===0)||(document.body.scrollHeight < document.documentElement.clientHeight);
+      return !this.content_his || this.content_his.length===0;
     },
+    showScrollHeight(){
+      return document.body.scrollHeight < document.documentElement.clientHeight;
+    }
   },
   mounted(){
   },
@@ -159,7 +162,10 @@ export default {
         this.loading=false;
         this.editable=false;
         this.content_his= data;
-        this.scrollToBottom();
+        if(this.content_his&&this.content_his.length>0){
+          let lastItem = this.content_his[this.content_his.length-1];
+          this.selectType(lastItem.model_type)
+        }
       }) .catch(error => {
         this.loading=false;
         console.error(error);
@@ -212,6 +218,9 @@ export default {
           this.content_in='';
           if(this.content_his.length===1){
             this.$emit('addConversation',data);
+            localStorage.setItem('session_id',session_id);
+            this.$emit('update:session_id', session_id); // 发出事件通知父组件
+            this.currentSession();
           }
         }
       }) .catch(error => {
@@ -527,7 +536,7 @@ export default {
 
 
 .card_item{
-  min-width: 300px;
+  min-width: 200px;
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
@@ -551,7 +560,7 @@ export default {
 
 .selected_box {
   position: relative; /* 让图标相对于这个元素定位 */
-  background-color: rgb(188,206,251);
+  background-color: rgba(0, 0, 0, .2);
   color: darkblue;
   border: 1px solid rgb(198,190,238);
   box-shadow:
