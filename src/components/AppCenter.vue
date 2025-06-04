@@ -220,7 +220,6 @@ export default {
             this.$emit('addConversation',data);
             localStorage.setItem('session_id',session_id);
             this.$emit('update:session_id', session_id); // 发出事件通知父组件
-            this.currentSession();
           }
         }
       }) .catch(error => {

@@ -44,7 +44,11 @@ export default {
   created() {
       this.latestSession();
   },
-
+  watch:{
+    session_id(){
+      this.setActiveIndex()
+    },
+  },
   methods:{
     handleClose(){
       this.show=false;
