@@ -32,7 +32,8 @@ export function get_captcha() {
         }else{
             MessageBox.alert('请求失败(get_captcha)','提示')
         }
-    }).catch(()=>{
+    }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('发送请求图片验证码失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -59,7 +60,8 @@ export function member_login(loginData) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('发送登录请求失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -91,7 +93,8 @@ export function member_register(loginData) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('发送注册请求失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -120,7 +123,8 @@ export function list_session(token,session_id) {
             }else if(response.data.code===1){
                 alert( response.data.data);
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('请求历史数据失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -152,9 +156,14 @@ export function assistant(token,session_id, content_in,model_type) {
                 MessageBox.alert( response.data.data,'提示');
                 return '';
             }
-        }).catch(()=>{
-            MessageBox.alert('发送请求失败,请联系管理员！','提示')
-            throw new Error('请求失败'); // 如果需要，可以在这里抛出一个错误
+        }).catch((e)=>{
+            console.error(e);
+            if(e.status===524){
+                MessageBox.alert('发送请求超时,请稍后刷新页面查看！','提示')
+            }else{
+                MessageBox.alert('发送请求失败,请联系管理员！','提示')
+                throw new Error('请求失败'); // 如果需要，可以在这里抛出一个错误
+            }
         });
 }
 
@@ -182,7 +191,8 @@ export function latest_session(token,page_number) {
         }else if(response.data.code===1){
             MessageBox.alert( response.data.data,'提示');
         }
-    }).catch(()=>{
+    }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('请求查找当前会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
     });
@@ -212,7 +222,8 @@ export function del_conversation(token,c_id) {
         }else if(response.data.code===1){
             MessageBox.alert( response.data.data);
         }
-    }).catch(()=>{
+    }).catch((e)=>{
+        console.error(e);
         MessageBox.alert('请求删除对话失败,请联系管理员！','提示')
         throw new Error('请求失败');
     });
@@ -242,7 +253,8 @@ export function del_session(token,session_id) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data);
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('请求删除会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -270,7 +282,8 @@ export function generate_session(token) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('请求新会话失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -299,7 +312,8 @@ export function member_info(token) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('请求用户信息失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -331,7 +345,8 @@ export function member_edit(token,loginData) {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('修改用户资料失败,请联系管理员！','提示')
             throw new Error('请求失败');
         });
@@ -355,7 +370,8 @@ export function list_llm() {
             }else if(response.data.code===1){
                 MessageBox.alert( response.data.data,'提示');
             }
-        }).catch(()=>{
+        }).catch((e)=>{
+            console.error(e);
             MessageBox.alert('获取模型列表失败,请联系管理员！','提示')
             throw new Error('获取模型列表失败');
         });

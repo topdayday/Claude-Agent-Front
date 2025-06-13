@@ -37,8 +37,8 @@
         </div>
 
         <div class="content-assistant">
-          <div v-if="item.reason_out" v-html="item.reason_out"  :id="item.id+'_reason'"  ></div>
-          <div v-if="item.content_out" v-html="item.content_out"  :id="item.id"  ></div>
+          <div v-if="item.reason_out" v-html="md.render(item.reason_out)"  :id="item.id+'_reason'"  ></div>
+          <div v-if="item.content_out" v-html="md.render(item.content_out)"  :id="item.id"  ></div>
           <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div>
         </div>
       </div>
@@ -71,6 +71,8 @@
 import {list_session} from  '@/utils/request.js';
 import {assistant} from  '@/utils/request.js';
 import {del_conversation} from '@/utils/request';
+import MarkdownIt from 'markdown-it';
+
 export default {
   name: 'AppCenter',
   props: {
@@ -88,6 +90,7 @@ export default {
       model_type:0,
       editable:false,
       loading:false,
+      md:new MarkdownIt(),
     }
   },
   created(){
