@@ -72,6 +72,8 @@ import {list_session} from  '@/utils/request.js';
 import {assistant} from  '@/utils/request.js';
 import {del_conversation} from '@/utils/request';
 import MarkdownIt from 'markdown-it';
+import mditHighlightjs from 'markdown-it-highlightjs';
+import 'highlight.js/styles/github.css';
 
 export default {
   name: 'AppCenter',
@@ -90,7 +92,16 @@ export default {
       model_type:0,
       editable:false,
       loading:false,
-      md:new MarkdownIt(),
+      md:new MarkdownIt()
+                .use(mditHighlightjs, {
+                  // highlight.js 的可选配置:
+                  auto: true,         // 自动检测语言 (如果围栏代码块没有指定语言)
+                  code: true,         // 是否包装代码块 (默认 true)
+                  // register: { languageName: function }, // 注册自定义语言
+                  // inline: false,   // 是否高亮行内代码 `code` (通常不需要，除非你有特定需求)
+                  // hljs: hljs // 可以传入自定义的 hljs 实例
+                }),
+
     }
   },
   created(){
@@ -441,6 +452,7 @@ export default {
 }
 .content-warp{
   padding:0 4px;
+  text-align: left;
 }
 .circle {
   width: 24px;
@@ -649,7 +661,7 @@ export default {
 }
 
 
-::v-deep  pre {
+::v-deep  pre_bak {
   background-color: #181d28;  /* 设置背景颜色 */
   padding: 10px;  /* 设置内边距 */
   font-family: 'Courier New', monospace;  /* 设置字体 */
