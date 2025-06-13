@@ -15,8 +15,8 @@
   <div class="content-warp"  v-loading="loading">
     <div :class="smallWidth?'content-small':'content'" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
       <div class="button-wrapper">
-        <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除</button>
-        <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制</button>
+        <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除对话</button>
+        <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制对话</button>
       </div>
       <div class="content-human-warp">
         <div class="content-human-icon" v-if="!smallWidth">
@@ -295,7 +295,7 @@ export default {
         return;
       }
       this.editable=true;
-      const highlights = parent.querySelectorAll(".codehilite")
+      const highlights = parent.querySelectorAll("pre")
       highlights.forEach(div => {
         const copy = document.createElement("button")
         copy.innerHTML = "复制代码"
@@ -304,13 +304,15 @@ export default {
         transition: 0.2s ease-out;
         cursor: pointer;
         user-select: none;
-        padding: 5px 10px;
         font-size: 0.8em;
         border-radius: 0 0.15rem;
         line-height:20px;
-        background-color: #fb7750  ;
-        border: 1px solid  #fb7750 ;
+        background-color: rgba(0,0,0,0.2)  ;
+        border: 0px solid  rgba(0,0,0,0.5) ;
         color: #fff;
+        float: right;
+        margin-right: 10px;
+        margin-top: 4px;
       `;
         copy.classList.add("btn-code");
         copy.addEventListener("click", this.handleCopyClick);
@@ -342,7 +344,7 @@ export default {
       const parent = document.getElementById('content_'+id);
       const { children } =parent;
       let { innerText } = Array.from(children)[1]
-      if(innerText == '复制'){
+      if(innerText == '复制对话'){
         let { innerText } = Array.from(children)[3]
         this.copyToClipboard(innerText)
       }else{
@@ -456,14 +458,14 @@ export default {
 }
 .circle {
   width: 24px;
-  height: 24px;
-  background-color: black;
+  height:24px;
+  background-color: rgb(0, 0, 0,0.7);
   border-radius: 50%;
   color: white;
+  padding-right: 2px;
   text-align: center;
   font-size: 16px;
-  margin-left: 5px;
-  margin-right: 8px;
+
 }
 
 .content-human-warp{
@@ -616,15 +618,16 @@ export default {
   transition: 0.2s ease-out;
   cursor: pointer;
   user-select: none;
-  padding: 4px 10px;
   font-size: 14px;
   border-radius: 0.15rem 0.15rem;
-  float: right;
-  margin-left: 8px;
   line-height: 20px;
-  background-color: #fb7750  ;
-  border: 1px solid  #fb7750 ;
+
+  background-color: rgba(0,0,0,0.2)  ;
+  border: 0px solid  rgba(0,0,0,0.5) ;
   color: #fff;
+  float: right;
+  margin-right: 10px;
+  margin-top: 4px;
 }
 
 .btn_sent{
@@ -760,9 +763,9 @@ export default {
 
 .button-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 </style>
