@@ -2,47 +2,55 @@
 <div class="content-main">
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
-      <span class="card_sense" ></span>
-    <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3>
-          <div  class="card_contains">
-            <div   v-for="model in llmsModelInfo" :key="model.modelId" 
-               v-bind:class="{selected_box:model_type===model.modelId, card_item:true,}"  @click="selectType(model.modelId)">
-              <i v-if="model_type===model.modelId" class="selected-icon">✓已选</i>
-              <h4 class="gmat-headline-4 gradient gradient-1">{{model.name}}</h4>
+    <!-- <span class="card_sense" ></span> -->
+    <!-- <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3> -->
+    <div  class="card_contains">
+      <div   v-for="model in llmsModelInfo" :key="model.modelId" 
+          v-bind:class="{selected_box:model_type===model.modelId, card_item:true,}"  @click="selectType(model.modelId)">
+        <i v-if="model_type===model.modelId" class="selected-icon">✓已选</i>
+        <h4 class="gmat-headline-4 gradient gradient-1">{{model.name}}</h4>
+      </div>
+    </div>
+  </div>
+  <div class="content-warp"  v-loading="loading">
+    <el-collapse  v-model="activeNames"  style="width: 100%;">
+      <el-collapse-item v-for="(item, index) in content_his" :key="index"  
+       :id="'content_'+item.id" 
+       :name="item.id"
+       style="padding: 6px;"
+       :title="showInfo(item.model_type,item.create_time)">
+          <div class="button-wrapper">
+            <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除对话</button>
+            <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制对话</button>
+          </div>
+          <div class="content-human-warp">
+            <div class="content-human-icon" v-if="!smallWidth">
+              <div class="circle"><span style="margin-left: -1px;"   @click="installCopyCode(item.id)"><svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="shrink-0 group"><path class="group-hover:-translate-x-[0.5px] transition group-active:translate-x-0" fill-rule="evenodd" clip-rule="evenodd" d="M9 2C5.96243 2 3.5 4.46243 3.5 7.5C3.5 8.66827 3.86369 9.75009 4.48403 10.6404C4.6225 10.8391 4.59862 11.1085 4.42735 11.2798L2.70711 13H9C12.0376 13 14.5 10.5376 14.5 7.5C14.5 4.46243 12.0376 2 9 2ZM2.5 7.5C2.5 3.91015 5.41015 1 9 1C12.5898 1 15.5 3.91015 15.5 7.5C15.5 11.0899 12.5898 14 9 14H1.5C1.29777 14 1.11545 13.8782 1.03806 13.6913C0.960669 13.5045 1.00345 13.2894 1.14645 13.1464L3.43405 10.8588C2.84122 9.87838 2.5 8.72844 2.5 7.5Z"></path><path class="group-hover:translate-x-[0.5px] transition group-active:translate-x-0" fill-rule="evenodd" clip-rule="evenodd" d="M16.2996 9.64015C16.5527 9.52951 16.8474 9.64493 16.9581 9.89794C17.0204 10.0405 17.0778 10.1857 17.13 10.3334C17.3698 11.0117 17.5 11.7412 17.5 12.5C17.5 13.7284 17.1588 14.8784 16.5659 15.8588L18.8535 18.1464C18.9965 18.2894 19.0393 18.5045 18.9619 18.6913C18.8845 18.8782 18.7022 19 18.5 19H11C8.59344 19 6.493 17.6919 5.36988 15.7504C5.23161 15.5113 5.31329 15.2055 5.55232 15.0672C5.79135 14.9289 6.09721 15.0106 6.23548 15.2496C7.18721 16.8949 8.96484 18 11 18H17.2929L15.5726 16.2798C15.4014 16.1085 15.3775 15.8391 15.516 15.6404C16.1363 14.7501 16.5 13.6683 16.5 12.5C16.5 11.8563 16.3896 11.2394 16.1872 10.6666C16.143 10.5418 16.0946 10.4191 16.0419 10.2986C15.9312 10.0456 16.0466 9.75079 16.2996 9.64015Z"></path></svg></span></div>
+            </div>
+            <div class="content-human">
+              <div style="margin-bottom: 10px;" v-for="(content_in,index) in splitContent(item.content_in) " :key="index">
+                {{content_in}}
+              </div>
+              <!-- <div  class="content-info" style="text-align: left;float: left;">{{showInfo(-1,item.create_time)}}</div> -->
             </div>
           </div>
-    </div>
-  <div class="content-warp"  v-loading="loading">
-    <div :class="smallWidth?'content-small':'content'" v-for="(item, index) in content_his" :key="index" :id="'content_'+item.id">
-      <div class="button-wrapper">
-        <button @click="delConversation(item.id)" v-if="editable&&index>0" class="btn_edit">删除对话</button>
-        <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制对话</button>
-      </div>
-      <div class="content-human-warp">
-        <div class="content-human-icon" v-if="!smallWidth">
-          <div class="circle"><span style="margin-left: -1px;"   @click="installCopyCode(item.id)">你</span></div>
-        </div>
-        <div class="content-human">
-          <div style="margin-bottom: 10px;" v-for="(content_in,index) in splitContent(item.content_in) " :key="index">
-            {{content_in}}
+    
+          <div class="content-assistant-warp">
+            <div class="content-assistant-icon"  v-if="!smallWidth"  @click="installCopyCode(item.id)">
+              <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
+            </div>
+    
+            <div class="content-assistant">
+              <div v-if="item.reason_out" v-html="md.render(item.reason_out)"  :id="item.id+'_reason'"  ></div>
+              <div v-if="item.content_out" v-html="md.render(item.content_out)"  :id="item.id"  ></div>
+              <!-- <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div> -->
+            </div>
           </div>
-          <div  class="content-info" style="text-align: left;float: left;">{{showInfo(-1,item.create_time)}}</div>
-        </div>
-      </div>
-
-      <div class="content-assistant-warp">
-        <div class="content-assistant-icon"  v-if="!smallWidth"  @click="installCopyCode(item.id)">
-          <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z"></path></svg>
-        </div>
-
-        <div class="content-assistant">
-          <div v-if="item.reason_out" v-html="md.render(item.reason_out)"  :id="item.id+'_reason'"  ></div>
-          <div v-if="item.content_out" v-html="md.render(item.content_out)"  :id="item.id"  ></div>
-          <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div>
-        </div>
-      </div>
-    </div>
+      
+      </el-collapse-item>
+    </el-collapse>
+  
   </div>
   <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showScrollHeight">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
@@ -94,6 +102,7 @@ export default {
       loading:false,
       showScrollHeight:false,
       scrollBottom:false,
+      activeNames:[],
       md:new MarkdownIt()
                 .use(mditHighlightjs, {
                   // highlight.js 的可选配置:
@@ -124,13 +133,16 @@ export default {
       this.$emit('selectModel',model_type)
     },
     content_his(val){
-      let showIndexContent= (!val )|| !val.length===0;
+      this.activeNames=[];
+      let showIndexContent= (!val )|| val.length===0;
       if(showIndexContent){
         this.showScrollHeight = showIndexContent
         this.$forceUpdate()
         return
       }
-
+      val.forEach(item=>{ 
+        this.activeNames.push(item.id);
+      })
       this.$nextTick(() => {
         let showScrollHeight= document.body.scrollHeight < document.documentElement.clientHeight;
         this.showScrollHeight=showScrollHeight
@@ -492,6 +504,7 @@ export default {
 .content-warp{
   padding:0 4px;
   text-align: left;
+  width: 98%;
 }
 .circle {
   width: 24px;
@@ -589,7 +602,7 @@ export default {
 
 
 .card_item{
-  min-width: 200px;
+  width: 100%;
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
@@ -679,7 +692,13 @@ export default {
     border-color: #fb8d6d;
     color: #fff;
 }
-
+.main-right{
+  width: 100%;
+}
+.card_contains{
+  margin-left: calc(100vw/2 -  260px);
+  margin-top: 10%;
+}
 
 /* 表格的样式 */
 ::v-deep  table {
