@@ -2,12 +2,12 @@
   <div class="top">
     <div v-bind:class="{top_left:showLeftMenu, top_left_hide:!showLeftMenu,}" v-if="!smallWidth">
       <el-button @click="changLeftMenu(false)" v-if="showLeftMenu"
-                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;width: 90px;" icon="el-icon-d-arrow-left"  size="small"></el-button>
+                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;" icon="el-icon-d-arrow-left"  size="small"></el-button>
       <el-button @click="changLeftMenu(true)"  v-else
-                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;width: 90px;" icon="el-icon-d-arrow-right" size="small"></el-button>
+                 style="border: 0px;background-color: rgba(0,0,0,0);height: 35px;" icon="el-icon-d-arrow-right" size="small"></el-button>
     </div>
     <div class="top-center">
-      <el-select  v-model="model_type" placeholder="请选择模型">
+      <el-select  v-model="model_type" placeholder="请选择模型" style="max-width:90px;">
         <el-option
             v-for="model in llmsModelInfo"
             :key="model.modelId"
