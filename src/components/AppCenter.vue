@@ -44,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showIndexContent||showScrollHeight">
+  <div :class="(smallWidth||!showLeftMenu)?'fixed-bottom-hiden':'fixed-bottom'" v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom||showScrollHeight">
     <div v-bind:class="{ send_message:true, send_message_min: !smallWidth }"   style="border: 2px #fb7750  solid;background-color:#fff;">
       <el-input
               autofocus=true
@@ -60,7 +60,7 @@
       class="el-icon-circle-close clear-btn"
       @click="clearContent"
     ></i>
-      <el-button  class="btn_sent" type="primary" :icon="sent_status_ico" @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">发送</el-button>
+      <el-button  class="btn_sent" type="primary"  @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">发送</el-button>
     </div>
   </div>
 
@@ -78,7 +78,7 @@ import 'highlight.js/styles/github.css';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,scrollBottom:Boolean,
+    session_id: String,selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,editable:Boolean,
   },
   comments:{
 
@@ -90,8 +90,10 @@ export default {
       content_in:'',
       sent_status: 0,
       model_type:0,
-      editable:false,
+      // editable:false,
       loading:false,
+      showScrollHeight:false,
+      scrollBottom:false,
       md:new MarkdownIt()
                 .use(mditHighlightjs, {
                   // highlight.js 的可选配置:
@@ -107,11 +109,13 @@ export default {
   created(){
     this.currentSession();
     this.load_model_type();
+    window.addEventListener('resize', this.checkScrollBottom);
+    window.addEventListener('scroll', this.checkScrollBottom);
   },
 
   watch:{
     session_id(){
-      this.currentSession();
+      this.currentSession()
     },
     selectedModel(selectedModel){
       this.selectType(selectedModel);
@@ -119,20 +123,52 @@ export default {
     model_type(model_type){
       this.$emit('selectModel',model_type)
     },
+    content_his(val){
+      let showIndexContent= (!val )|| !val.length===0;
+      if(showIndexContent){
+        this.showScrollHeight = showIndexContent
+        this.$forceUpdate()
+        return
+      }
+
+      this.$nextTick(() => {
+        let showScrollHeight= document.body.scrollHeight < document.documentElement.clientHeight;
+        this.showScrollHeight=showScrollHeight
+        this.$forceUpdate()
+      })
+    }
   },
   computed:{
     showIndexContent(){
-      return !this.content_his || this.content_his.length===0;
+      let showIndexContent= !this.content_his || this.content_his.length===0;
+      return showIndexContent
     },
-    showScrollHeight(){
-      return document.body.scrollHeight < document.documentElement.clientHeight;
-    }
   },
   mounted(){
   },
   beforeDestroy() {
   },
   methods:{
+    changeEditable(editable){
+      this.$emit('update:editable', editable);
+    },
+    checkScrollBottom() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      if (scrollTop + windowHeight >= documentHeight - 20) {
+        this.scrollBottom=true;
+      }else{
+        this.scrollBottom=false;
+      }
+    },
+  
+    scrollToBottom() {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    },
     clearContent() {
       this.content_in = "";
       this.$nextTick(() => {
@@ -170,16 +206,21 @@ export default {
     },
     currentSession() {
       this.loading=true;
+      this.scrollBottom=false
       let token=localStorage.getItem('token');
       let session_id=localStorage.getItem('session_id');
       list_session(token,session_id).then(data => {
         this.loading=false;
-        this.editable=false;
+        this.changeEditable(false);
         this.content_his= data;
+      
         if(this.content_his&&this.content_his.length>0){
           let lastItem = this.content_his[this.content_his.length-1];
           this.selectType(lastItem.model_type)
         }
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 500);
       }) .catch(error => {
         this.loading=false;
         console.error(error);
@@ -226,7 +267,7 @@ export default {
       assistant(token,session_id,this.content_in.trim(),this.model_type).then(data => {
         this.sent_status = 0;
         this.loading=false;
-        this.scrollToBottom();
+       
         if(data){
           this.content_his.push(data);
           this.content_in='';
@@ -241,11 +282,6 @@ export default {
         console.error(error);
         this.sent_status = 0;
       });
-    },
-    scrollToBottom() {
-      this.$nextTick(() => {
-        window.scrollTo(0, document.body.scrollHeight);
-      })
     },
 
     delConversation(c_id){
@@ -276,7 +312,7 @@ export default {
     },
     installCopyCode(id){
       if(this.editable){
-        this.editable=false;
+        this.changeEditable(false)
         const parent = document.getElementById(id);
         const btnCodes = document.querySelectorAll(".btn-code");
         for (const btnCode of btnCodes) {
@@ -294,7 +330,8 @@ export default {
         parent.removeAttribute('showCopy');
         return;
       }
-      this.editable=true;
+      // this.editable=true;
+      this.changeEditable(true)
       const highlights = parent.querySelectorAll("pre")
       highlights.forEach(div => {
         const copy = document.createElement("button")

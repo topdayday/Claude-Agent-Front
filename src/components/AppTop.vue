@@ -18,8 +18,11 @@
     </div>
     <div class="top-right">
       <div class="top-button-contains">
+        <el-button  class="top-button el-icon-upload2"    @click="scrollToTop()"></el-button>
+        <el-button  class="top-button el-icon-download"    @click="scrollToBottom()"></el-button>
+        <el-button  class="top-button el-icon-edit-outline"    @click="changeEditable()"></el-button>
         <el-button  class="top-button el-icon-plus"    @click="newSession()"></el-button>
-        <el-button  class="top-button el-icon-notebook-2"    @click="setDrawer()"></el-button>
+        <el-button  class="top-button el-icon-time"    @click="setDrawer()"></el-button>
         <el-button  class="top-button el-icon-user"    @click="setMember()"></el-button>
         <el-button  class="top-button el-icon-close"    @click="loginOut()"></el-button>
       </div>
@@ -33,7 +36,7 @@ import {generate_session} from "@/utils/request";
 export default {
   name: 'AppTop',
   props: {
-    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,
+    showDrawer: Boolean, session_id: String,token:String,showMember:Boolean,editable:Boolean,
     selectedModel:Number,smallWidth:Boolean,showLeftMenu:Boolean,llmsModelInfo:Array,
   },
   data(){
@@ -58,9 +61,25 @@ export default {
     }
   },
   methods:{
-    toTop(){
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // 平滑滚动到顶部
+ 
+    changeEditable(){
+      this.$emit('update:editable', !this.editable);
     },
+
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
+
+    scrollToBottom() {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    },
+
     changLeftMenu(val){
       this.$emit('setLeftMenu', val);
     },
