@@ -2,9 +2,7 @@
 <div class="content-main">
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
   <div class="main-right" v-if="showIndexContent">
-    <!-- <span class="card_sense" ></span> -->
-    <!-- <h3 v-if="!smallWidth" class="card_start"><span style="color: darkred;font-weight: bold;font-size: 22px;">T2Day</span></h3> -->
-    <div  class="card_contains">
+   <div  class="card_contains">
       <div   v-for="model in llmsModelInfo" :key="model.modelId" 
           v-bind:class="{selected_box:model_type===model.modelId, card_item:true,}"  @click="selectType(model.modelId)">
         <i v-if="model_type===model.modelId" class="selected-icon">✓已选</i>
@@ -12,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="content-warp"  v-loading="loading">
+  <div class="content-warp" v-if="!showIndexContent" v-loading="loading">
     <el-collapse  v-model="activeNames"  style="width: 100%;">
       <el-collapse-item v-for="(item, index) in content_his" :key="index"  
        :id="'content_'+item.id" 
@@ -602,7 +600,7 @@ export default {
 
 
 .card_item{
-  width: 100%;
+  width: 150px;
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
@@ -693,11 +691,14 @@ export default {
     color: #fff;
 }
 .main-right{
-  width: 100%;
+ 
 }
 .card_contains{
-  margin-left: calc(100vw/2 -  260px);
-  margin-top: 10%;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh;
 }
 
 /* 表格的样式 */
