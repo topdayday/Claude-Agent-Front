@@ -356,7 +356,7 @@ export default {
         line-height:20px;
         background-color: rgba(0,0,0,0.2)  ;
         border: 0px solid  rgba(0,0,0,0.5) ;
-        color: #fff;
+        color: #000;
         float: right;
         margin-right: 10px;
         margin-top: 4px;
@@ -564,10 +564,10 @@ export default {
   padding-top: 36px;
   width: 100vw;
   display: flex;
-  justify-content: center;
 }
 .main_left{
   min-width: 260px;
+  flex-shrink: 0; 
 }
 .main_left_hide{
   min-width: 0px;
@@ -672,7 +672,7 @@ export default {
 
   background-color: rgba(0,0,0,0.2)  ;
   border: 0px solid  rgba(0,0,0,0.5) ;
-  color: #fff;
+  color: #000;
   float: right;
   margin-right: 10px;
   margin-top: 4px;
