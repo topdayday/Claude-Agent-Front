@@ -1,7 +1,7 @@
 <template>
 <div class="content-main">
   <div v-bind:class="{main_left:showLeftMenu,main_left_hide:!showLeftMenu}" v-if="!smallWidth"></div>
-  <div class="main-right" v-if="showIndexContent">
+  <div class="main-right-card" v-if="showIndexContent" v-loading="loading">
    <div  class="card_contains">
       <div   v-for="model in llmsModelInfo" :key="model.modelId" 
           v-bind:class="{selected_box:model_type===model.modelId, card_item:true,}"  @click="selectType(model.modelId)">
@@ -66,7 +66,9 @@
       class="el-icon-circle-close clear-btn"
       @click="clearContent"
     ></i>
-      <el-button  class="btn_sent" type="primary"  @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">发送</el-button>
+      <el-button  :disabled="sent_status==1" class="btn_sent" type="primary"  @click="sendMessage()" style="border: none;margin:0;border-radius:0px;">
+        {{sent_status==1?'发送中...':'发送'}} 
+      </el-button>
     </div>
   </div>
 
@@ -690,8 +692,8 @@ export default {
     border-color: #fb8d6d;
     color: #fff;
 }
-.main-right{
- 
+.main-right-card{
+  width: 100%;
 }
 .card_contains{
   display: flex; 
