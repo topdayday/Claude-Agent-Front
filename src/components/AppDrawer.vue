@@ -87,7 +87,7 @@ export default {
       latest_session(token,this.pageNumber).then(data => {
         this.conversation_list= data;
         this.loading=false;
-        console.log('latest_session:',data);
+        // console.log('latest_session:',data);
       }) .catch(error => {
         console.error(error);
         _this.loading=false;

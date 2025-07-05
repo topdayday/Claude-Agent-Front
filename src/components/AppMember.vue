@@ -89,7 +89,7 @@ export default {
         // this.memberData.password=''
         // this.memberData.new_password=''
         // this.memberData.new_password1=''
-        console.log('captcha:',data);
+        // console.log('captcha:',data);
       }) .catch(error => {
         console.error(error); // 如果发生错误，会打印错误信息
       });
@@ -105,7 +105,7 @@ export default {
           member_edit(token,this.memberData).then(data => {
             if(Object.keys(data).length>0){
               MessageBox.alert('修改成功！','提示')
-              console.log(data)
+              // console.log(data)
               this.closeDg('memberForm')
             }
           }) .catch(error => {

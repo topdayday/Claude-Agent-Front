@@ -140,14 +140,20 @@ export default {
         this.$forceUpdate()
         return
       }
-      val.forEach(item=>{ 
-        this.activeNames.push(item.id);
-      })
+      // val.forEach(item=>{ 
+      //   this.activeNames.push(item.id);
+      // })
+      if(val.length > 0){
+        this.activeNames.push(val[val.length-1].id);
+      }
       this.$nextTick(() => {
         let showScrollHeight= document.body.scrollHeight < document.documentElement.clientHeight;
         this.showScrollHeight=showScrollHeight
         this.$forceUpdate()
       })
+      setTimeout(() => {
+          this.scrollToBottom();
+        }, 500);
     }
   },
   computed:{
