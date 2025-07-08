@@ -159,7 +159,8 @@ export function assistant(token,session_id, content_in,model_type) {
         }).catch((e)=>{
             console.error(e);
             if(e.status===524){
-                MessageBox.alert('发送请求超时,请稍后刷新页面查看！','提示')
+                return null;
+                // MessageBox.alert('发送请求超时,请稍后刷新页面查看！','提示')
             }else{
                 MessageBox.alert('发送请求失败,请联系管理员！','提示')
                 throw new Error('请求失败'); // 如果需要，可以在这里抛出一个错误

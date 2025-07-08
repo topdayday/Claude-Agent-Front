@@ -81,7 +81,12 @@ import {assistant} from  '@/utils/request.js';
 import {del_conversation} from '@/utils/request';
 import MarkdownIt from 'markdown-it';
 import mditHighlightjs from 'markdown-it-highlightjs';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/default.css';
+// import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/dark.css';
+// import 'highlight.js/styles/vs.css';
+
+ 
 
 export default {
   name: 'AppCenter',
@@ -112,6 +117,7 @@ export default {
                   // inline: false,   // 是否高亮行内代码 `code` (通常不需要，除非你有特定需求)
                   // hljs: hljs // 可以传入自定义的 hljs 实例
                 }),
+      timer:null,
 
     }
   },
@@ -122,6 +128,13 @@ export default {
     window.addEventListener('scroll', this.checkScrollBottom);
   },
 
+  beforeDestroy(){
+    if(this.timer){
+      clearInterval(this.timer);
+    }
+    window.removeEventListener('resize', this.checkScrollBottom);
+    window.removeEventListener('scroll', this.checkScrollBottom);
+  },
   watch:{
     session_id(){
       this.currentSession()
@@ -164,8 +177,7 @@ export default {
   },
   mounted(){
   },
-  beforeDestroy() {
-  },
+
   methods:{
     changeEditable(editable){
       this.$emit('update:editable', editable);
@@ -244,6 +256,24 @@ export default {
         console.error(error);
       });
     },
+
+    refreshSession(token,session_id) {
+      let oldLength=this.content_his.length;
+      if(this.timer){
+        clearInterval(this.timer);
+      }
+      this.timer=setInterval(() => {
+      list_session(token,session_id).then(data => {
+        if(data.length>oldLength){
+          this.currentSession();
+          clearInterval(this.timer);
+        }
+        }).catch(error => {
+          console.error(error);
+        });
+      }, 5000);
+    },
+
     selectType(model_type){
       this.model_type=model_type;
     },
@@ -284,8 +314,7 @@ export default {
       this.loading=true;
       assistant(token,session_id,this.content_in.trim(),this.model_type).then(data => {
         this.sent_status = 0;
-        this.loading=false;
-       
+        this.loading=false;      
         if(data){
           this.content_his.push(data);
           this.content_in='';
@@ -294,6 +323,8 @@ export default {
             localStorage.setItem('session_id',session_id);
             this.$emit('update:session_id', session_id); // 发出事件通知父组件
           }
+        }else{
+          this.refreshSession(token,session_id);
         }
       }) .catch(error => {
         this.loading=false;
@@ -612,7 +643,7 @@ export default {
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
-  border: 1px solid #fdfdfd;
+  border: 1px solid #dedede;
   border-radius: 10px;
   box-shadow:
           0 2px 5px rgba(0,0,0,0.1),
