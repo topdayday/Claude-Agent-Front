@@ -740,58 +740,7 @@ export default {
   height: 100vh;
 }
 
-/* 表格的样式 */
-::v-deep  table {
-  width: 100%; /* 表格宽度为100% */
-  border-collapse: collapse; /* 边框合并为一个 */
-}
-
-
-/* 表头的样式 */
-::v-deep  th {
-  background-color: #f2f2f2; /* 背景颜色为浅灰色 */
-  color: black; /* 文字颜色为黑色 */
-  padding: 8px; /* 内边距为8像素 */
-}
-
-/* 表格行的样式 */
-::v-deep  tr:nth-child(even) {
-  background-color: #f2f2f2; /* 偶数行的背景颜色为浅灰色 */
-}
-
-
-::v-deep  pre_bak {
-  background-color: #181d28;  /* 设置背景颜色 */
-  padding: 10px;  /* 设置内边距 */
-  font-family: 'Courier New', monospace;  /* 设置字体 */
-  overflow: auto;  /* 如果内容超出容器，出现滚动条 */
-  text-align: left;
-  color: white;
-  margin-bottom: 6px;
-}
-::v-deep  p{
-    text-align: left;
-  }
-::v-deep  li{
-  text-align: left;
-  margin: 0 20px;
-  min-height: 36px;
-}
-
-::v-deep  ul{
-  padding: 10px; /* 内边距 */
-  background-color: #fafafa; /* 背景色 */
-  /*border-bottom: 1px solid #ccc; !* 底部边框 *!*/
-  /*border-top: 1px solid #ccc; !* 底部边框 *!*/
-  list-style-type: square; /* 可以是 circle、disc、square、decimal、lower-roman、upper-roman 等 */
-}
-::v-deep  ol{
-  padding: 10px; /* 内边距 */
-  background-color: #f8f8f8; /* 背景色 */
-  /*border-bottom: 1px solid #ccc; !* 底部边框 *!*/
-  /*border-top: 1px solid #ccc; !* 底部边框 *!*/
-  list-style-type: decimal; /* 可以是 circle、disc、square、decimal、lower-roman、upper-roman 等 */
-}
+ 
 
 /* 未访问链接的样式 */
 ::v-deep  a:link {
@@ -862,6 +811,32 @@ export default {
   justify-content: right;
   gap: 8px;
   margin-top: 10px;
+}
+
+::v-deep table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+  border: 0px solid #ddd;
+}
+
+::v-deep th,
+::v-deep td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+::v-deep th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+  color: #444;
+  text-align: center;
+}
+
+::v-deep tr:nth-child(even) {
+  background-color: #f8f8f8;
 }
 
 </style>
