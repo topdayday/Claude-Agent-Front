@@ -187,6 +187,11 @@ export default {
     model_type(model_type) {
       this.$emit('selectModel', model_type)
     },
+    attachments_his(){
+      setTimeout(() => {
+           this.$forceUpdate()
+          }, 500);
+    },
     content_his(val) {
       this.activeNames = [];
       let showIndexContent = (!val) || val.length === 0;
@@ -194,21 +199,20 @@ export default {
         this.showScrollHeight = showIndexContent
         this.$forceUpdate()
         return
+      }else{
+          if (val.length > 0) {
+          this.activeNames.push(val[val.length - 1].id);
+          }
+          this.$nextTick(() => {
+            let showScrollHeight = document.body.scrollHeight < document.documentElement.clientHeight;
+            this.showScrollHeight = showScrollHeight
+            this.$forceUpdate()
+          })
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 500);
       }
-      // val.forEach(item=>{ 
-      //   this.activeNames.push(item.id);
-      // })
-      if (val.length > 0) {
-        this.activeNames.push(val[val.length - 1].id);
-      }
-      this.$nextTick(() => {
-        let showScrollHeight = document.body.scrollHeight < document.documentElement.clientHeight;
-        this.showScrollHeight = showScrollHeight
-        this.$forceUpdate()
-      })
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 500);
+
     }
   },
   computed: {
@@ -368,7 +372,10 @@ export default {
           this.sent_status = 0;
           this.loading = false;
           if (data) {
-            this.content_his.push(data);
+            this.content_his.push(data.data);
+            if(data.attachments&&data.attachments.length>0){
+              this.attachments_his.push(...data.attachments);
+            }
             this.content_in = '';
             this.clearAttachments();
             if (this.content_his.length === 1) {
@@ -1095,7 +1102,7 @@ export default {
 
 .clear-btn {
   position: absolute;
-  right: 50px;
+  right: 5px;
   bottom: 18px;
   cursor: pointer;
   color: #6c757d;
