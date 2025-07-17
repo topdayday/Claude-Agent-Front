@@ -77,14 +77,19 @@
       <div v-bind:class="{ send_message: true, send_message_min: !smallWidth }"
         style="border: 2px #fb7750  solid;background-color:#fff;">
         <!-- 附件显示区域 -->
-        <div v-if="attachments.length > 0" class="attachments-preview">
+        <div v-if="attachments.length > 0 && !smallWidth" class="attachments-preview">
           <div v-for="(file, index) in attachments" :key="index" class="attachment-item">
             <span class="attachment-name">{{ file.name }}</span>
             <span class="attachment-size">({{ formatFileSize(file.size) }})</span>
             <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
           </div>
         </div>
-
+        <div v-if="attachments.length > 0 && smallWidth" class="attachments-preview">
+          <div v-for="(file, index) in attachments" :key="index" class="attachment-item">
+            <span class="attachment-name">{{ index+1 }}</span>
+            <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
+          </div>
+        </div>
         <div class="input-container">
           <!-- 附件上传按钮 -->
           <div class="upload-container" v-if="model_type === 1 || model_type === 2">
