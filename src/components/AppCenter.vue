@@ -2,12 +2,39 @@
   <div class="content-main">
     <div v-bind:class="{ main_left: showLeftMenu, main_left_hide: !showLeftMenu }" v-if="!smallWidth"></div>
     <div class="main-right-card" v-if="showIndexContent" v-loading="loading">
-      <div class="card_contains">
-        <div v-for="model in llmsModelInfo" :key="model.modelId"
-          v-bind:class="{ selected_box: model_type === model.modelId, card_item: true, }"
-          @click="selectType(model.modelId)">
-          <i v-if="model_type === model.modelId" class="selected-icon">✓已选</i>
-          <h4 class="gmat-headline-4 gradient gradient-1">{{ model.name }}</h4>
+      <div class="model-selection-container">
+        <div class="model-selection-header">
+          <h2 class="selection-title">选择AI模型</h2>
+          <p class="selection-subtitle">请选择一个AI模型开始对话</p>
+        </div>
+        <div class="model-cards-grid">
+          <div v-for="model in llmsModelInfo" :key="model.modelId"
+            :class="['model-card', { 'model-card--selected': model_type === model.modelId }]"
+            @click="selectType(model.modelId)">
+            <div class="model-card__header">
+              <div class="model-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                  <path d="M2 17L12 22L22 17" />
+                  <path d="M2 12L12 17L22 12" />
+                </svg>
+              </div>
+              <div v-if="model_type === model.modelId" class="model-card__check">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" />
+                </svg>
+              </div>
+            </div>
+            <div class="model-card__content">
+              <h3 class="model-card__title">{{ model.name }}</h3>
+              <p class="model-card__description">智能对话助手</p>
+            </div>
+            <div class="model-card__footer">
+              <span class="model-card__status">
+                {{ model_type === model.modelId ? '已选择' : '点击选择' }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -908,6 +935,206 @@ export default {
   width: 100%;
 }
 
+/* 新的模型选择容器样式 */
+.model-selection-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.model-selection-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.selection-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.selection-subtitle {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 400;
+}
+
+.model-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.model-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.model-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #fb7750, #ff9a7b);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.model-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: #fb7750;
+}
+
+.model-card:hover::before {
+  transform: scaleX(1);
+}
+
+.model-card--selected {
+  border-color: #fb7750;
+  background: linear-gradient(135deg, #fff5f3 0%, #ffffff 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(251, 119, 80, 0.1), 0 4px 6px -2px rgba(251, 119, 80, 0.05);
+}
+
+.model-card--selected::before {
+  transform: scaleX(1);
+}
+
+.model-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.model-card__icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.model-card:hover .model-card__icon {
+  transform: scale(1.1);
+}
+
+.model-card__check {
+  width: 32px;
+  height: 32px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  animation: checkmark-appear 0.3s ease-out;
+}
+
+@keyframes checkmark-appear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.model-card__content {
+  margin-bottom: 20px;
+}
+
+.model-card__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.model-card__description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.model-card__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.model-card__status {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fb7750;
+  padding: 8px 16px;
+  background: rgba(251, 119, 80, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.model-card--selected .model-card__status {
+  background: #fb7750;
+  color: white;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .model-selection-container {
+    padding: 20px 16px;
+  }
+
+  .selection-title {
+    font-size: 24px;
+  }
+
+  .model-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .model-card {
+    padding: 20px;
+  }
+}
+
+/* 保留原有的样式作为备用 */
 .card_contains {
   display: flex;
   flex-direction: column;
@@ -1088,6 +1315,10 @@ export default {
   background-color: #f8f8f8;
 }
 
+::v-deep  .el-collapse-item__header{
+  background-color: rgba(250, 119, 80,0.1) ;
+  padding-left: 4px;;
+}
 /* 附件相关样式 */
 .attachments-preview {
   padding: 8px 12px;
@@ -1204,5 +1435,5 @@ export default {
 .clear-btn:hover {
   color: #fb7750;
 }
+
 </style>
- 
