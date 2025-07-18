@@ -385,7 +385,7 @@ export default {
             this.content_in = '';
             this.clearAttachments();
             if (this.content_his.length === 1) {
-              this.$emit('addConversation', data);
+              this.$emit('addConversation', data.data);
               localStorage.setItem('session_id', session_id);
               this.$emit('update:session_id', session_id); // 发出事件通知父组件
             }
@@ -410,7 +410,7 @@ export default {
             this.content_in = '';
             this.clearAttachments();
             if (this.content_his.length === 1) {
-              this.$emit('addConversation', data);
+              this.$emit('addConversation', data.data);
               localStorage.setItem('session_id', session_id);
               this.$emit('update:session_id', session_id); // 发出事件通知父组件
             }
