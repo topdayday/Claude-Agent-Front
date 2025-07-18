@@ -1,33 +1,55 @@
 <template>
   <div>
-    <div class="content-main" id="login_index">
-      <h1 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">T2Day AI</h1>
-      <h2 class="index_title" v-bind:class="{index_title:smallWidth,index_title_min:smallWidth }">集成主流AI大模型</h2>
-      <div  class="card_contains">
-
-        <div  class="card_item">
-          <ol style="background-color: rgba(255, 255, 255, 0.0);border: 0px; padding-left: 20px;">
-            <li v-for="item in llmsModelInfo" :key="item.modelId">{{item.name}}</li>
-          </ol>
+    <div class="login-main" id="login_index">
+      <!-- 主标题区域 -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <h1 class="main-title" :class="{ 'mobile': smallWidth }">
+            <i class="el-icon-cpu title-icon"></i>
+            T2Day AI
+          </h1>
+          <h2 class="sub-title" :class="{ 'mobile': smallWidth }">
+            集成主流AI大模型，智能对话新体验
+          </h2>
+          <div class="feature-tags">
+            <span class="tag">智能对话</span>
+            <span class="tag">多模型支持</span>
+            <span class="tag">高效便捷</span>
+          </div>
         </div>
-        <!-- <div>
-            <div  v-bind:class="{card_item:true ,hidden: smallWidth}">
-             <h3 class="gmat-headline-4 gradient gradient-1">DeepSeek</h3>
-            </div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">Gemini</h3>
-            </div>
-        </div>
-       <div>     
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">Claude</h3>
-            </div>
-            <div  v-bind:class="{card_item:true,hidden: smallWidth }">
-              <h3 class="gmat-headline-4 gradient gradient-1">QWen</h3>
-            </div>
-        </div> -->
       </div>
-      <div><el-button target="#" class="product_price" @click="showForm()">注册/登录</el-button></div>
+
+      <!-- 模型展示区域 -->
+      <div class="models-showcase">
+        <div class="models-header">
+          <i class="el-icon-star-on"></i>
+          <span>支持的AI模型</span>
+        </div>
+        <div class="models-grid">
+          <div 
+            v-for="item in llmsModelInfo" 
+            :key="item.modelId" 
+            class="model-card">
+            <div class="model-icon">
+              <i class="el-icon-cpu"></i>
+            </div>
+            <div class="model-name">{{ item.name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 登录按钮区域 -->
+      <div class="login-action">
+        <el-button 
+          class="login-btn" 
+          type="primary" 
+          size="large"
+          @click="showForm()">
+          <i class="el-icon-user"></i>
+          开始使用 - 注册/登录
+        </el-button>
+        <p class="login-hint">立即体验智能AI对话服务</p>
+      </div>
     </div>
     <el-dialog
             title="用户登录"
@@ -54,7 +76,7 @@
                   <el-input v-model="loginData.invite_code"  placeholder="注册请输入邀请码，登录无需"></el-input>
                 </el-form-item>
                 <el-form-item  label="">
-                  <div class="login-container">
+                  <div class="login-container-botton">
                     <el-button type="primary" @click="registerForm('loginForm')">注册</el-button>
                     <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
                   </div>
@@ -177,131 +199,364 @@
 </script>
 
 <style scoped>
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-  }
+/* 主登录页面容器 */
+.login-main {
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(251, 119, 80, 0.1) 0%, 
+    rgba(253, 253, 248, 0.95) 30%, 
+    rgba(251, 119, 80, 0.05) 70%,
+    rgba(253, 253, 248, 0.9) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
 
+.login-main::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(251, 119, 80, 0.05) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 主标题区域 */
+.hero-section {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.main-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-title.mobile {
+  font-size: 2.5rem;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title-icon {
+  color: #fb7750;
+  font-size: 3rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.sub-title {
+  font-size: 1.3rem;
+  color: #666;
+  margin-bottom: 30px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.sub-title.mobile {
+  font-size: 1.1rem;
+}
+
+.feature-tags {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: linear-gradient(135deg, #fb7750, #fb8d6d);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.3);
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4);
+}
+
+/* 模型展示区域 */
+.models-showcase {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 50px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(251, 119, 80, 0.2);
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  width: 100%;
+}
+
+.models-header {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.models-header i {
+  color: #fb7750;
+  font-size: 1.4rem;
+}
+
+.models-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.model-card {
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.05), rgba(255, 255, 255, 0.8));
+  border: 1px solid rgba(251, 119, 80, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.model-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(251, 119, 80, 0.2);
+  border-color: #fb7750;
+}
+
+.model-icon {
+  margin-bottom: 12px;
+}
+
+.model-icon i {
+  font-size: 2rem;
+  color: #fb7750;
+}
+
+.model-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* 登录按钮区域 */
+.login-action {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  border: none !important;
+  border-radius: 25px !important;
+  padding: 15px 40px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(251, 119, 80, 0.4) !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.login-btn:hover,
+.login-btn:focus {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(251, 119, 80, 0.5) !important;
+  background: linear-gradient(135deg, #fb8d6d, #fba088) !important;
+}
+
+.login-btn i {
+  font-size: 1.2rem;
+}
+
+.login-hint {
+  margin-top: 15px;
+  color: #666;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+/* 登录表单对话框样式 */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, 
+    rgba(251, 119, 80, 0.05) 0%, 
+    rgba(253, 253, 248, 0.95) 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-container-botton {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.login-form {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(251, 119, 80, 0.2);
+}
+
+.captcha {
+  margin-bottom: 20px;
+}
+
+.captcha img {
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 119, 80, 0.3);
+  transition: all 0.3s ease;
+}
+
+.captcha img:hover {
+  border-color: #fb7750;
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.3);
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Element UI 组件样式覆盖 */
+::v-deep .el-form-item__label {
+  color: #2c3e50 !important;
+  font-weight: 600 !important;
+}
+
+::v-deep .el-input__inner {
+  border: 1px solid rgba(251, 119, 80, 0.3) !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+::v-deep .el-input__inner:focus {
+  border-color: #fb7750 !important;
+  box-shadow: 0 0 0 2px rgba(251, 119, 80, 0.2) !important;
+}
+
+::v-deep .el-button--primary {
+  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+::v-deep .el-button--primary:hover,
+::v-deep .el-button--primary:focus {
+  background: linear-gradient(135deg, #fb8d6d, #fba088) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4) !important;
+}
+
+::v-deep .el-dialog {
+  border-radius: 0px !important;
+  overflow: hidden !important;
+}
+
+::v-deep .el-dialog__header {
+  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  color: white !important;
+  padding: 20px !important;
+}
+
+::v-deep .el-dialog__title {
+  font-weight: 600 !important;
+  font-size: 1.2rem !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .login-main {
+    padding: 20px 10px;
+  }
+  
+  .models-showcase {
+    padding: 30px 20px;
+    margin-bottom: 40px;
+  }
+  
+  .models-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .model-card {
+    padding: 15px;
+  }
+  
+  .login-btn {
+    padding: 12px 30px !important;
+    font-size: 1rem !important;
+  }
+  
   .login-form {
-    width: 400px;
+    padding: 30px 20px;
   }
-  .login-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .captcha img {
-    vertical-align: middle;
-    cursor: pointer;
-  }
+}
 
-  .flex-container {
-    display: flex;
-    align-items: center; /* 垂直居中 */
-    gap: 10px; /* 子元素之间的间距，根据需要调整 */
+@media (max-width: 480px) {
+  .feature-tags {
+    flex-direction: column;
+    align-items: center;
   }
-
-
-  .content{
-    background-color: #fcfcfc;
-    border: 1px solid #fdfdfd;
-    box-shadow:
-            0 2px 5px rgba(0,0,0,0.1),
-            inset 0 1px 0 rgba(255,255,255,0.1);
-    max-width: 780px;
-    margin: auto;
-    margin-bottom:40px;
-    padding: 10px ;
+  
+  .models-grid {
+    grid-template-columns: 1fr;
   }
-
-  .content-human{
-    margin: auto;
-    max-width: 780px;
-    background-color: #fdfdfd;
-    text-align: left;
-    padding-bottom: 10px;
-  }
-  .content-assistant{
-    margin: auto;
-    max-width: 780px;
-    background-color: #fcfcfc;
-    border-top: 1px dotted #d4d4d4;
-  }
-  .content-main{
-    padding-bottom: 36px;
-    padding-top: 36px;
-  }
-  .fixed-bottom {
-    position: fixed;
-    bottom: 10px;
-    width: 100%;
-    z-index: 999;
-    margin: 2px auto;
-    max-width: 804px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .btn_sent{
-    padding: 9px;
-    min-height: 54px;
-    min-width: 96px;
-  }
-
-  .containt_txt{
-    text-align: left;
-    padding-left: 20px;
-  }
-
-
-  .card_contains{
-    display: flex;
-    justify-content:center;
-    padding: 0px 50px;
-    margin-top:50px;
-  }
-
-  .card_item{
-    max-width: 400px;
-    min-width: 200px;
-    background-color: white;
-    margin: 20px 3px;
-    /*padding: 50px 100px;*/
-    border: 1px solid #fdfdfd;
-    border-radius: 10px;
-    box-shadow:
-            0 2px 5px rgba(0,0,0,0.1),
-            inset 0 1px 0 rgba(255,255,255,0.1);
-
-  }
-  .card_item_max{
-    padding: 30px 5px ;
-  }
-  .index_title{
-     margin-top: 100px;
-   }
-  .index_title_min{
-    margin-top: 10px;
-  }
-  .hidden {
-    display: none; /* 或者使用其他隐藏样式，如 visibility: hidden; */
-  }
-  ::v-deep  p{
-    text-align: left;
-  }
-  ::v-deep  li{
-    text-align: left;
-    list-style-type: decimal; /* 可以是 circle、disc、square、decimal、lower-roman、upper-roman 等 */
-    text-align: left;
-    margin: 0 40px;
-    min-height: 36px;
-  }
-
-  ::v-deep  ul{
-    padding: 10px; /* 内边距 */
-    background-color: #f5f5f5; /* 背景色 */
-    border-bottom: 1px solid #ccc; /* 底部边框 */
-    border-top: 1px solid #ccc; /* 底部边框 */
-  }
-
+}
 </style>
