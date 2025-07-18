@@ -121,7 +121,7 @@ export function list_session(token, session_id) {
             } else if (response.data.code === 0) {
                 return response.data;
             } else if (response.data.code === 1) {
-                alert(response.data.data);
+                alert(response.data);
             }
         }).catch((e) => {
             console.error(e);
@@ -151,7 +151,7 @@ export function assistant(token, session_id, content_in, model_type) {
                 MessageBox.alert(response.data.data, '提示');
                 login_out();
             } else if (response.data.code === 0) {
-                return response.data.data;
+                return response.data;
             } else if (response.data.code === 1) {
                 MessageBox.alert(response.data.data, '提示');
                 return '';
@@ -408,7 +408,7 @@ export function assistant_with_attachments(token, session_id, content_in, model_
                 MessageBox.alert(response.data.data, '提示');
                 login_out();
             } else if (response.data.code === 0) {
-                return response.data.data;
+                return response.data;
             } else if (response.data.code === 1) {
                 MessageBox.alert(response.data.data, '提示');
                 return '';

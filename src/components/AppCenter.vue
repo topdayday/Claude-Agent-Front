@@ -15,9 +15,16 @@
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
           style="padding: 6px;" :title="showInfo(item.model_type, item.create_time)">
-          <div class="button-wrapper">
-            <button @click="delConversation(item.id)" v-if="editable && index > 0" class="btn_edit">删除对话</button>
-            <button @click="handleCopyConversation(item.id)" v-if="editable" class="btn_edit">复制对话</button>
+          <div class="conversation-actions" v-if="editable">
+            <el-button @click="handleCopyConversation(item.id)" type="text" size="small" class="action-btn copy-btn">
+              <i class="el-icon-document-copy"></i>
+              复制对话
+            </el-button>
+            <el-button @click="delConversation(item.id)" v-if="index > 0" type="text" size="small"
+              class="action-btn delete-btn">
+              <i class="el-icon-delete"></i>
+              删除对话
+            </el-button>
           </div>
           <div class="content-human-warp">
             <div class="content-human-icon" v-if="!smallWidth">
@@ -43,7 +50,7 @@
               <div class="content-info" style="text-align: left;float: left;">
                 <div class="attachments-display">
                   <span class="attachment-item-display" v-for="(attachement, i) in getAttachments(item.id)" :key="i"
-                    @click="downloadAttachmentAction(attachement.id,attachement.file_name,attachement.mime_type)">
+                    @click="downloadAttachmentAction(attachement.id, attachement.file_name, attachement.mime_type)">
                     <i class="el-icon-paperclip"></i>
                     {{ attachement.file_name }}
                   </span>
@@ -86,7 +93,7 @@
         </div>
         <div v-if="attachments.length > 0 && smallWidth" class="attachments-preview">
           <div v-for="(file, index) in attachments" :key="index" class="attachment-item">
-            <span class="attachment-name">{{ index+1 }}</span>
+            <span class="attachment-name">{{ index + 1 }}</span>
             <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
           </div>
         </div>
@@ -116,9 +123,7 @@
 </template>
 
 <script>
-import { list_session } from '@/utils/request.js';
-import { assistant } from '@/utils/request.js';
-import { del_conversation, assistant_with_attachments, downloadAttachment } from '@/utils/request';
+import { list_session, del_conversation, assistant_with_attachments, downloadAttachment, assistant } from '@/utils/request';
 import MarkdownIt from 'markdown-it';
 import mditHighlightjs from 'markdown-it-highlightjs';
 import 'highlight.js/styles/default.css';
@@ -187,11 +192,11 @@ export default {
     model_type(model_type) {
       this.$emit('selectModel', model_type)
     },
-    attachments_his(){
-      setTimeout(() => {
-           this.$forceUpdate()
-          }, 500);
-    },
+    // attachments_his(){
+    //   setTimeout(() => {
+    //        this.$forceUpdate()
+    //       }, 500);
+    // },
     content_his(val) {
       this.activeNames = [];
       let showIndexContent = (!val) || val.length === 0;
@@ -199,20 +204,21 @@ export default {
         this.showScrollHeight = showIndexContent
         this.$forceUpdate()
         return
-      }else{
-          if (val.length > 0) {
-          this.activeNames.push(val[val.length - 1].id);
-          }
-          this.$nextTick(() => {
-            let showScrollHeight = document.body.scrollHeight < document.documentElement.clientHeight;
-            this.showScrollHeight = showScrollHeight
-            this.$forceUpdate()
-          })
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 500);
       }
-
+      // val.forEach(item=>{ 
+      //   this.activeNames.push(item.id);
+      // })
+      if (val.length > 0) {
+        this.activeNames.push(val[val.length - 1].id);
+      }
+      this.$nextTick(() => {
+        let showScrollHeight = document.body.scrollHeight < document.documentElement.clientHeight;
+        this.showScrollHeight = showScrollHeight
+        this.$forceUpdate()
+      })
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 500);
     }
   },
   computed: {
@@ -225,11 +231,11 @@ export default {
   },
 
   methods: {
-    downloadAttachmentAction(id,file_name,mime_type) {
-      downloadAttachment(id,file_name,mime_type);
+    downloadAttachmentAction(id, file_name, mime_type) {
+      downloadAttachment(id, file_name, mime_type);
     },
     getAttachments(conversationId) {
-      return this.attachments_his.filter(item => item.conversation_id = conversationId)
+      return this.attachments_his.filter(item => item.conversation_id === conversationId)
     },
     changeEditable(editable) {
       this.$emit('update:editable', editable);
@@ -317,7 +323,7 @@ export default {
       }
       this.timer = setInterval(() => {
         list_session(token, session_id).then(data => {
-          if (data.length > oldLength) {
+          if (data.data.length > oldLength) {
             this.currentSession();
             clearInterval(this.timer);
           }
@@ -373,7 +379,7 @@ export default {
           this.loading = false;
           if (data) {
             this.content_his.push(data.data);
-            if(data.attachments&&data.attachments.length>0){
+            if (data.attachments && data.attachments.length > 0) {
               this.attachments_his.push(...data.attachments);
             }
             this.content_in = '';
@@ -397,7 +403,10 @@ export default {
           this.sent_status = 0;
           this.loading = false;
           if (data) {
-            this.content_his.push(data);
+            this.content_his.push(data.data);
+            if (data.attachments && data.attachments.length > 0) {
+              this.attachments_his.push(...data.attachments);
+            }
             this.content_in = '';
             this.clearAttachments();
             if (this.content_his.length === 1) {
@@ -986,11 +995,71 @@ export default {
   /* 圆角 */
 }
 
-.button-wrapper {
+/* 对话操作按钮样式 */
+.conversation-actions {
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
+  align-items: center;
   gap: 8px;
-  margin-top: 10px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: rgba(251, 119, 80, 0.05);
+  border-radius: 6px;
+  border-left: 3px solid #fb7750;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px !important;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.copy-btn {
+  color: #409eff !important;
+  background-color: rgba(64, 158, 255, 0.1);
+}
+
+.copy-btn:hover {
+  background-color: rgba(64, 158, 255, 0.2) !important;
+  border-color: #409eff !important;
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  color: #f56c6c !important;
+  background-color: rgba(245, 108, 108, 0.1);
+}
+
+.delete-btn:hover {
+  background-color: rgba(245, 108, 108, 0.2) !important;
+  border-color: #f56c6c !important;
+  transform: translateY(-1px);
+}
+
+.action-btn i {
+  font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .conversation-actions {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .action-btn {
+    padding: 4px 8px !important;
+    font-size: 12px;
+  }
+
+  .action-btn span {
+    display: none;
+  }
 }
 
 ::v-deep table {
@@ -1059,88 +1128,81 @@ export default {
   margin-left: 8px;
   cursor: pointer;
   color: #dc3545;
-  font-size: 14px;
-  padding: 2px;
 }
 
 .attachment-remove:hover {
   color: #c82333;
 }
 
-.input-container {
-  display: flex;
-  align-items: flex-end;
-  flex: 1;
-  position: relative;
-}
-
-.upload-container {
-  margin-left: 8px;
-  margin-bottom: 8px;
-}
-
-.btn_attachment {
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
-  color: #fff !important;
-  width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-}
-
-.btn_attachment:hover,
-.btn_attachment:focus {
-  background-color: #5a6268 !important;
-  border-color: #545b62 !important;
-}
-
-.btn_attachment:disabled {
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
-  opacity: 0.6 !important;
-}
-
-.clear-btn {
-  position: absolute;
-  right: 5px;
-  bottom: 18px;
-  cursor: pointer;
-  color: #6c757d;
-  font-size: 16px;
-  z-index: 10;
-}
-
-.clear-btn:hover {
-  color: #495057;
-}
-
-/* 附件显示样式 */
+/* 附件显示样式优化 */
 .attachments-display {
-  display: flex;
-  gap: 8px;
-  margin-top: 5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.attachments-display:hover {
-  opacity: 0.8;
-  transform: translateY(-1px);
+  margin-top: 8px;
 }
 
 .attachment-item-display {
   display: inline-flex;
   align-items: center;
-  padding: 2px 6px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 3px;
+  gap: 4px;
+  padding: 4px 8px;
+  margin: 2px 4px 2px 0;
+  background-color: rgba(251, 119, 80, 0.1);
+  border: 1px solid rgba(251, 119, 80, 0.3);
+  border-radius: 4px;
   font-size: 12px;
-  color: #666;
+  color: #fb7750;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.attachment-item-display:hover {
+  background-color: rgba(251, 119, 80, 0.2);
+  border-color: #fb7750;
+  transform: translateY(-1px);
 }
 
 .attachment-item-display i {
-  margin-right: 4px;
   font-size: 12px;
 }
+
+/* 输入区域样式优化 */
+.input-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.upload-container {
+  margin-right: 8px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 8px;
+}
+
+.btn_attachment {
+  background-color: rgba(251, 119, 80, 0.1) !important;
+  border-color: #fb7750 !important;
+  color: #fb7750 !important;
+}
+
+.btn_attachment:hover {
+  background-color: rgba(251, 119, 80, 0.2) !important;
+  border-color: #fb8d6d !important;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  cursor: pointer;
+  color: #c0c4cc;
+  font-size: 16px;
+  z-index: 10;
+  transition: color 0.2s ease;
+}
+
+.clear-btn:hover {
+  color: #fb7750;
+}
 </style>
+ 
