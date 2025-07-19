@@ -5,7 +5,6 @@
                :showDrawer.sync="showDrawer"
                :showMember.sync="showMember"
                :session_id.sync="session_id"
-               :editable.sync="editable"
                :token.sync="token"
                :selectedModel.sync="selectedModel"
                :showLeftMenu.sync="showLeftMenu"
@@ -17,7 +16,6 @@
       <AppCenter :smallWidth.sync="smallWidth"
                  :session_id.sync="session_id"
                  :showLeftMenu.sync="showLeftMenu"
-                 :editable.sync="editable"
                  @selectModel="selectModel"
                  @addConversation="addConversation"
                  :selectedModel.sync="selectedModel"
@@ -76,7 +74,6 @@ export default {
       showLeftMenu:localStorage.getItem('showLeftMenu')==='false'?false:true,
       windowWidth: window.innerWidth,  
       llmsModelInfo:[],
-      editable:false,
     }
   },
   created(){

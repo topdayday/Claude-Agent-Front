@@ -75,7 +75,12 @@ export default {
     this.latestSession();
   },
   watch: {
-    session_id() {
+    session_id(val) {
+      if(!val){
+        let targetSessionId = localStorage.getItem('session_id');
+        this.conversation_list = this.conversation_list.filter(item=>item.session_id!=targetSessionId)
+        localStorage.removeItem('session_id');
+      }
       this.setActiveIndex()
     },
   },
@@ -182,7 +187,7 @@ export default {
 
 /* 侧边栏头部 */
 .sidebar-header {
-  padding: 20px 16px 16px;
+  padding: 10px 16px 16px 20px;;
   border-bottom: 1px solid #f1f5f9;
   background: white;
   flex-shrink: 0;

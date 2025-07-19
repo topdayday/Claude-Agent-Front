@@ -41,23 +41,26 @@
     <div class="content-warp" v-if="!showIndexContent" v-loading="loading">
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
-          style="padding: 6px;" :title="showInfo(item.model_type, item.create_time)">
-          <div class="conversation-actions" v-if="editable">
-            <el-button @click="handleCopyConversation(item.id)" type="text" size="small" class="action-btn copy-btn">
-              <i class="el-icon-document-copy"></i>
-              复制对话
-            </el-button>
-            <el-button @click="delConversation(item.id)" v-if="index > 0" type="text" size="small"
-              class="action-btn delete-btn">
-              <i class="el-icon-delete"></i>
-              删除对话
-            </el-button>
-          </div>
+          style="padding: 6px;">
+          <template slot="title">
+            <div class="collapse-header">
+              <span class="collapse-title">{{ showInfo(item.model_type, item.create_time) }}</span>
+              <div class="header-actions">
+                <el-button @click.stop="handleCopyConversation(item.id)" type="text" size="small"
+                  class="header-btn copy-btn">
+                  <i class="el-icon-document-copy"></i>
+                </el-button>
+                <el-button @click.stop="delConversation(item.id)" type="text" size="small"
+                  class="header-btn delete-btn">
+                  <i class="el-icon-delete"></i>
+                </el-button>
+              </div>
+            </div>
+          </template>
           <div class="content-human-warp">
             <div class="content-human-icon" v-if="!smallWidth">
-              <div class="circle"><span style="margin-left: -1px;" @click="installCopyCode(item.id)"><svg width="18"
-                    height="18" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                    class="shrink-0 group">
+              <div class="circle"><span style="margin-left: -1px;"><svg width="18" height="18" viewBox="0 0 20 20"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="shrink-0 group">
                     <path class="group-hover:-translate-x-[0.5px] transition group-active:translate-x-0"
                       fill-rule="evenodd" clip-rule="evenodd"
                       d="M9 2C5.96243 2 3.5 4.46243 3.5 7.5C3.5 8.66827 3.86369 9.75009 4.48403 10.6404C4.6225 10.8391 4.59862 11.1085 4.42735 11.2798L2.70711 13H9C12.0376 13 14.5 10.5376 14.5 7.5C14.5 4.46243 12.0376 2 9 2ZM2.5 7.5C2.5 3.91015 5.41015 1 9 1C12.5898 1 15.5 3.91015 15.5 7.5C15.5 11.0899 12.5898 14 9 14H1.5C1.29777 14 1.11545 13.8782 1.03806 13.6913C0.960669 13.5045 1.00345 13.2894 1.14645 13.1464L3.43405 10.8588C2.84122 9.87838 2.5 8.72844 2.5 7.5Z">
@@ -87,7 +90,7 @@
           </div>
 
           <div class="content-assistant-warp">
-            <div class="content-assistant-icon" v-if="!smallWidth" @click="installCopyCode(item.id)">
+            <div class="content-assistant-icon" v-if="!smallWidth">
               <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z">
@@ -98,7 +101,6 @@
             <div class="content-assistant">
               <div v-if="item.reason_out" v-html="md.render(item.reason_out)" :id="item.id + '_reason'"></div>
               <div v-if="item.content_out" v-html="md.render(item.content_out)" :id="item.id"></div>
-              <!-- <div class="content-info">{{showInfo(item.model_type,item.create_time)}}</div> -->
             </div>
           </div>
 
@@ -106,8 +108,22 @@
       </el-collapse>
 
     </div>
-    <div :class="(smallWidth || !showLeftMenu) ? 'fixed-bottom-hiden' : 'fixed-bottom'"
-      v-on:keydown.ctrl.enter="sendMessage" v-if="scrollBottom || showScrollHeight">
+    <!-- 收缩状态的小圆点 -->
+    <div v-if="isInputCollapsed" :class="(smallWidth || !showLeftMenu) ? 'collapsed-dot-hiden' : 'collapsed-dot'"
+      @click="toggleInputCollapse">
+      <div class="dot-icon">
+        <i class="el-icon-edit"></i>
+      </div>
+    </div>
+
+    <!-- 完整的输入框 -->
+    <div v-if="!isInputCollapsed" :class="(smallWidth || !showLeftMenu) ? 'fixed-bottom-hiden' : 'fixed-bottom'"
+      v-on:keydown.ctrl.enter="sendMessage">
+      <!-- 收缩按钮 -->
+      <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
+        <i class="el-icon-minus"></i>
+      </div>
+
       <div v-bind:class="{ send_message: true, send_message_min: !smallWidth }"
         style="border: 2px #fb7750  solid;background-color:#fff;">
         <!-- 附件显示区域 -->
@@ -141,7 +157,7 @@
 
         <el-button :disabled="sent_status == 1" class="btn_sent" type="primary" @click="sendMessage()"
           style="border: none;margin:0;border-radius:0px;">
-          {{ sent_status == 1 ? '发送中...' : '发送' }}
+          {{ sent_status == 1 ? '>>>' : '发送' }}
         </el-button>
       </div>
     </div>
@@ -163,7 +179,7 @@ import 'highlight.js/styles/default.css';
 export default {
   name: 'AppCenter',
   props: {
-    session_id: String, selectedModel: Number, smallWidth: Boolean, showLeftMenu: Boolean, llmsModelInfo: Array, editable: Boolean,
+    session_id: String, selectedModel: Number, smallWidth: Boolean, showLeftMenu: Boolean, llmsModelInfo: Array,
   },
   comments: {
 
@@ -176,12 +192,10 @@ export default {
       content_in: '',
       sent_status: 0,
       model_type: 0,
-      // editable:false,
       loading: false,
-      showScrollHeight: false,
-      scrollBottom: false,
       activeNames: [],
       attachments: [], // 附件列表
+      isInputCollapsed: false, // 输入框收缩状态
       md: new MarkdownIt()
         .use(mditHighlightjs, {
           // highlight.js 的可选配置:
@@ -198,16 +212,12 @@ export default {
   created() {
     this.currentSession();
     this.load_model_type();
-    window.addEventListener('resize', this.checkScrollBottom);
-    window.addEventListener('scroll', this.checkScrollBottom);
   },
 
   beforeDestroy() {
     if (this.timer) {
       clearInterval(this.timer);
     }
-    window.removeEventListener('resize', this.checkScrollBottom);
-    window.removeEventListener('scroll', this.checkScrollBottom);
   },
   watch: {
     session_id() {
@@ -228,7 +238,6 @@ export default {
       this.activeNames = [];
       let showIndexContent = (!val) || val.length === 0;
       if (showIndexContent) {
-        this.showScrollHeight = showIndexContent
         this.$forceUpdate()
         return
       }
@@ -239,8 +248,6 @@ export default {
         this.activeNames.push(val[val.length - 1].id);
       }
       this.$nextTick(() => {
-        let showScrollHeight = document.body.scrollHeight < document.documentElement.clientHeight;
-        this.showScrollHeight = showScrollHeight
         this.$forceUpdate()
       })
       setTimeout(() => {
@@ -255,6 +262,8 @@ export default {
     },
   },
   mounted() {
+    // 监听DOM变化，为新生成的代码块添加复制按钮
+    this.observeCodeBlocks();
   },
 
   methods: {
@@ -264,19 +273,8 @@ export default {
     getAttachments(conversationId) {
       return this.attachments_his.filter(item => item.conversation_id === conversationId)
     },
-    changeEditable(editable) {
-      this.$emit('update:editable', editable);
-    },
-    checkScrollBottom() {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      if (scrollTop + windowHeight >= documentHeight - 20) {
-        this.scrollBottom = true;
-      } else {
-        this.scrollBottom = false;
-      }
-    },
+
+
 
     scrollToBottom() {
       window.scrollTo({
@@ -321,12 +319,10 @@ export default {
     },
     currentSession() {
       this.loading = true;
-      this.scrollBottom = false
       let token = localStorage.getItem('token');
       let session_id = localStorage.getItem('session_id');
       list_session(token, session_id).then(data => {
         this.loading = false;
-        this.changeEditable(false);
         this.content_his = data.data;
         this.attachments_his = data.attachments;
 
@@ -461,15 +457,19 @@ export default {
         let token = localStorage.getItem('token');
         del_conversation(token, c_id).then(data => {
           if (data) {
-            const div = document.querySelector('#content_' + c_id);
-            if (div) {
-              div.remove();
-              this.$notify({
-                title: '提示',
-                message: '对话已删除！',
-                type: 'success'
-              });
+            this.content_his = this.content_his.filter(item => item.id !== c_id);
+            if (this.content_his.length == 0) {
+              this.$emit('update:session_id', null); // 发出事件通知父组件
             }
+            // const div = document.querySelector('#content_' + c_id);
+            // if (div) {
+            //   div.remove();
+            //   this.$notify({
+            //     title: '提示',
+            //     message: '对话已删除！',
+            //     type: 'success'
+            //   });
+            // }
           }
         }).catch(error => {
           console.error(error);
@@ -478,53 +478,7 @@ export default {
       });
 
     },
-    installCopyCode(id) {
-      if (this.editable) {
-        this.changeEditable(false)
-        const parent = document.getElementById(id);
-        const btnCodes = document.querySelectorAll(".btn-code");
-        for (const btnCode of btnCodes) {
-          btnCode.parentElement.removeChild(btnCode);
-        }
-        parent.removeAttribute('showCopy');
-        return;
-      }
-      const parent = document.getElementById(id);
-      if (parent.hasAttribute('showCopy')) {
-        const btnCodes = document.querySelectorAll(".btn-code");
-        for (const btnCode of btnCodes) {
-          btnCode.parentElement.removeChild(btnCode);
-        }
-        parent.removeAttribute('showCopy');
-        return;
-      }
-      // this.editable=true;
-      this.changeEditable(true)
-      const highlights = parent.querySelectorAll("pre")
-      highlights.forEach(div => {
-        const copy = document.createElement("button")
-        copy.innerHTML = "复制代码"
-        copy.style.cssText = `
-        box-sizing: border-box;
-        transition: 0.2s ease-out;
-        cursor: pointer;
-        user-select: none;
-        font-size: 0.8em;
-        border-radius: 0 0.15rem;
-        line-height:20px;
-        background-color: rgba(0,0,0,0.2)  ;
-        border: 0px solid  rgba(0,0,0,0.5) ;
-        color: #000;
-        float: right;
-        margin-right: 10px;
-        margin-top: 4px;
-      `;
-        copy.classList.add("btn-code");
-        copy.addEventListener("click", this.handleCopyClick);
-        div.append(copy)
-      })
-      parent.setAttribute('showCopy', 'true');
-    },
+
 
     copyToClipboard(str) {
       const el = document.createElement("textarea")
@@ -545,26 +499,11 @@ export default {
         document.getSelection().addRange(selected)
       }
     },
+
     handleCopyConversation(id) {
       const parent = document.getElementById('content_' + id);
       const { children } = parent;
       let { innerText } = Array.from(children)[1]
-      if (innerText == '复制对话') {
-        let { innerText } = Array.from(children)[3]
-        this.copyToClipboard(innerText)
-      } else {
-        let { innerText } = Array.from(children)[2]
-        this.copyToClipboard(innerText)
-      }
-      this.$notify({
-        title: '提示',
-        message: '内容已复制成功！',
-        type: 'success'
-      });
-    },
-    handleCopyClick(evt) {
-      const { children } = evt.target.parentElement
-      const { innerText } = Array.from(children)[0]
       this.copyToClipboard(innerText)
       this.$notify({
         title: '提示',
@@ -624,6 +563,153 @@ export default {
 
     clearAttachments() {
       this.attachments = [];
+    },
+
+    // 代码块复制功能相关方法
+    observeCodeBlocks() {
+      // 使用 MutationObserver 监听 DOM 变化
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                this.addCopyButtonsToCodeBlocks(node);
+              }
+            });
+          }
+        });
+      });
+
+      // 开始观察
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      // 为已存在的代码块添加复制按钮
+      this.$nextTick(() => {
+        this.addCopyButtonsToCodeBlocks(document.body);
+      });
+    },
+
+    addCopyButtonsToCodeBlocks(container) {
+      // 查找所有代码块
+      const codeBlocks = container.querySelectorAll('pre code, .hljs');
+
+      codeBlocks.forEach((codeBlock) => {
+        // 避免重复添加按钮
+        if (codeBlock.parentElement.querySelector('.code-copy-btn')) {
+          return;
+        }
+
+        const pre = codeBlock.tagName === 'CODE' ? codeBlock.parentElement : codeBlock;
+
+        // 确保是 pre 标签
+        if (pre.tagName !== 'PRE') {
+          return;
+        }
+
+        // 设置相对定位
+        pre.style.position = 'relative';
+
+        // 创建复制按钮
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">复制</span>
+        `;
+
+        // 添加点击事件
+        copyBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.copyCodeToClipboard(codeBlock, copyBtn);
+        });
+
+        // 将按钮添加到代码块容器
+        pre.appendChild(copyBtn);
+      });
+    },
+
+    copyCodeToClipboard(codeElement, button) {
+      // 获取代码文本
+      const codeText = codeElement.textContent || codeElement.innerText;
+
+      // 使用现代 Clipboard API 或回退到旧方法
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(codeText).then(() => {
+          this.showCopySuccess(button);
+        }).catch(() => {
+          this.fallbackCopyToClipboard(codeText, button);
+        });
+      } else {
+        this.fallbackCopyToClipboard(codeText, button);
+      }
+    },
+
+    fallbackCopyToClipboard(text, button) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        this.showCopySuccess(button);
+      } catch (err) {
+        console.error('复制失败:', err);
+        this.$notify({
+          title: '复制失败',
+          message: '无法复制代码到剪贴板',
+          type: 'error'
+        });
+      }
+
+      document.body.removeChild(textArea);
+    },
+
+    showCopySuccess(button) {
+      const originalHTML = button.innerHTML;
+      button.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20,6 9,17 4,12"></polyline>
+        </svg>
+        <span class="copy-text">已复制</span>
+      `;
+      button.classList.add('copied');
+
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.classList.remove('copied');
+      }, 2000);
+
+      this.$notify({
+        title: '复制成功',
+        message: '代码已复制到剪贴板',
+        type: 'success'
+      });
+    },
+
+    // 切换输入框收缩状态
+    toggleInputCollapse() {
+      this.isInputCollapsed = !this.isInputCollapsed;
+
+      // 如果展开输入框，自动聚焦到文本框
+      if (!this.isInputCollapsed) {
+        this.$nextTick(() => {
+          if (this.$refs.textarea_in) {
+            this.$refs.textarea_in.focus();
+          }
+        });
+      }
     }
 
   },
@@ -783,7 +869,7 @@ export default {
 
 .content-main {
   padding-bottom: 46px;
-  padding-top: 36px;
+  padding-top: 46px;
   width: 100vw;
   display: flex;
 }
@@ -817,6 +903,72 @@ export default {
   max-width: 804px;
   left: calc(50vw);
   transform: translateX(-50%);
+}
+
+/* 收缩状态的小圆点样式 */
+.collapsed-dot {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collapsed-dot-hiden {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #fb7750, #fb8d6d);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4);
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.dot-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(251, 119, 80, 0.6);
+}
+
+/* 收缩按钮样式 */
+.collapse-toggle-btn {
+  position: absolute;
+  top: -35px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(251, 119, 80, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  opacity: 0.7;
+}
+
+.collapse-toggle-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background: rgba(251, 119, 80, 1);
 }
 
 .containt_txt {
@@ -996,9 +1148,343 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #fb7750, #ff9a7b);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.model-card:hover::before,
+.model-card--selected::before {
+  opacity: 1;
+}
+
+.model-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.model-card--selected {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+}
+
+.model-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.model-card__icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.model-card__check {
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.model-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.model-card__description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.model-card__status {
+  font-size: 12px;
+  font-weight: 500;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.model-card--selected .model-card__status {
+  color: #10b981;
+}
+
+/* 折叠面板头部样式 */
+.collapse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.collapse-title {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+}
+
+.header-actions {
+  display: flex;
+  gap: 2px;
+  opacity: 1;
+}
+
+.header-btn {
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  height: 28px !important;
+  line-height: 1.2 !important;
+  border-radius: 4px !important;
+  border: 1px solid #dcdfe6 !important;
+  background-color: #fff !important;
+  color: #606266 !important;
+  transition: all 0.2s ease !important;
+}
+
+.header-btn:hover {
+  background-color: #f5f7fa !important;
+  border-color: #c0c4cc !important;
+  color: #409eff !important;
+}
+
+.header-btn.copy-btn:hover {
+  background-color: #e8f4fd !important;
+  border-color: #409eff !important;
+  color: #409eff !important;
+}
+
+.header-btn.delete-btn:hover {
+  background-color: #fef0f0 !important;
+  border-color: #f56c6c !important;
+  color: #f56c6c !important;
+}
+
+/* 代码复制按钮样式 */
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #586069;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-2px);
+}
+
+.code-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #0366d6;
+  color: #0366d6;
+  transform: translateY(0);
+}
+
+.code-copy-btn.copied {
+  background: rgba(40, 167, 69, 0.1);
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.code-copy-btn .copy-text {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* 当鼠标悬停在代码块上时显示复制按钮 */
+pre:hover .code-copy-btn {
+  opacity: 1;
+}
+
+/* 代码块基础样式优化 */
+pre {
+  position: relative;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+/* 行内代码样式 */
+code {
+  background: rgba(175, 184, 193, 0.2);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 85%;
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+  pre {
+    background: #161b22;
+    border-color: #30363d;
+    color: #e6edf3;
+  }
+
+  .code-copy-btn {
+    background: rgba(22, 27, 34, 0.9);
+    border-color: #30363d;
+    color: #7d8590;
+  }
+
+  .code-copy-btn:hover {
+    background: rgba(22, 27, 34, 0.95);
+    border-color: #58a6ff;
+    color: #58a6ff;
+  }
+
+  code {
+    background: rgba(110, 118, 129, 0.4);
+  }
+}
+
+
+.header-btn.delete-btn:hover {
+  background-color: #fef0f0 !important;
+  border-color: #f56c6c !important;
+  color: #f56c6c !important;
+}
+
+.header-btn i {
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.model-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.model-card:hover::before,
+.model-card--selected::before {
+  opacity: 1;
+}
+
+.model-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.model-card--selected {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+}
+
+.model-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.model-card__icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.model-card__check {
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.model-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.model-card__description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.model-card__status {
+  font-size: 12px;
+  font-weight: 500;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.model-card--selected .model-card__status {
+  color: #10b981;
+}
+
+/* 折叠面板头部样式 */
+.collapse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.collapse-title {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
 }
 
 .model-card:hover {
@@ -1192,6 +1678,162 @@ export default {
   border: 0px #fb7750 solid;
 }
 
+/* 代码复制按钮样式 - 融入你的设计风格 */
+::v-deep .code-copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(251, 119, 80, 0.1);
+  border: 1px solid rgba(251, 119, 80, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #fb7750;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.95);
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.1);
+}
+
+::v-deep .code-copy-btn:hover {
+  background: #fb7750;
+  border-color: #fb7750;
+  color: white;
+  transform: translateY(0) scale(1);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
+}
+
+::v-deep .code-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+  transform: translateY(0) scale(1);
+}
+
+::v-deep .code-copy-btn .copy-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* 当鼠标悬停在代码块上时显示复制按钮 */
+::v-deep pre:hover .code-copy-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 代码块基础样式优化 - 匹配你的界面风格 */
+::v-deep pre {
+  position: relative;
+  background: #fcfcfc;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-family: 'SFMono-Regular', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+::v-deep pre:hover {
+  border-color: rgba(251, 119, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.1);
+}
+
+::v-deep pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+/* 行内代码样式 - 匹配你的主题色 */
+::v-deep code {
+  background: rgba(251, 119, 80, 0.1);
+  color: #fb7750;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: 'SFMono-Regular', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+  font-size: 85%;
+  font-weight: 500;
+  border: 1px solid rgba(251, 119, 80, 0.15);
+}
+
+/* 语法高亮颜色调整 */
+::v-deep .hljs {
+  background: #fcfcfc !important;
+  color: #333 !important;
+}
+
+::v-deep .hljs-keyword,
+::v-deep .hljs-selector-tag,
+::v-deep .hljs-literal,
+::v-deep .hljs-section,
+::v-deep .hljs-link {
+  color: #fb7750 !important;
+}
+
+::v-deep .hljs-string,
+::v-deep .hljs-title,
+::v-deep .hljs-name,
+::v-deep .hljs-type,
+::v-deep .hljs-attribute,
+::v-deep .hljs-symbol,
+::v-deep .hljs-bullet,
+::v-deep .hljs-built_in,
+::v-deep .hljs-addition,
+::v-deep .hljs-variable,
+::v-deep .hljs-template-tag,
+::v-deep .hljs-template-variable {
+  color: #2d8659 !important;
+}
+
+::v-deep .hljs-comment,
+::v-deep .hljs-quote,
+::v-deep .hljs-deletion,
+::v-deep .hljs-meta {
+  color: #999 !important;
+  font-style: italic;
+}
+
+::v-deep .hljs-number,
+::v-deep .hljs-regexp,
+::v-deep .hljs-literal {
+  color: #0066cc !important;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  ::v-deep .code-copy-btn {
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  ::v-deep .code-copy-btn .copy-text {
+    display: none;
+  }
+
+  ::v-deep pre {
+    padding: 16px;
+    font-size: 13px;
+  }
+}
+
 /* 外层容器（根据实际类名调整） */
 ::v-deep .el-textarea__inner {
   /* 确保滚动条可见 */
@@ -1315,10 +1957,28 @@ export default {
   background-color: #f8f8f8;
 }
 
-::v-deep  .el-collapse-item__header{
-  background-color: rgba(250, 119, 80,0.1) ;
-  padding-left: 4px;;
+::v-deep .el-collapse-item__header {
+  padding-left: 4px;
+  background: rgba(251, 119, 80, 0.1) !important;
+  border: 1px solid rgba(251, 119, 80, 0.2) !important;
+  color: #fb7750 !important;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1);
 }
+
+::v-deep .el-collapse-item__header:hover {
+  background: rgba(251, 119, 80, 0.15) !important;
+  border-color: rgba(251, 119, 80, 0.4) !important;
+  box-shadow: 0 4px 8px rgba(251, 119, 80, 0.2);
+  transform: translateY(-1px);
+}
+
+::v-deep .el-collapse-item__header:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.15);
+}
+
 /* 附件相关样式 */
 .attachments-preview {
   padding: 8px 12px;
@@ -1405,6 +2065,7 @@ export default {
 
 .upload-container {
   margin-right: 8px;
+  margin-left: 2px;
   display: flex;
   align-items: flex-end;
   padding-bottom: 8px;
@@ -1424,7 +2085,7 @@ export default {
 .clear-btn {
   position: absolute;
   right: 8px;
-  top: 8px;
+  bottom: 20px;
   cursor: pointer;
   color: #c0c4cc;
   font-size: 16px;
@@ -1435,5 +2096,4 @@ export default {
 .clear-btn:hover {
   color: #fb7750;
 }
-
 </style>

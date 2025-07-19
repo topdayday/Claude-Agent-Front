@@ -44,12 +44,6 @@
             <path d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z" />
           </svg>
         </button>
-        <button class="action-btn" @click="changeEditable()" title="编辑模式" :class="{ 'action-btn--active': editable }">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z" />
-          </svg>
-        </button>
         <button class="action-btn action-btn--primary" @click="newSession()" title="新建对话">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -110,11 +104,6 @@ export default {
     }
   },
   methods: {
-
-    changeEditable() {
-      this.$emit('update:editable', !this.editable);
-    },
-
     scrollToTop() {
       window.scrollTo({
         top: 0,
@@ -191,11 +180,11 @@ export default {
 }
 
 .toggle-btn {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   background: rgba(251, 119, 80, 0.1);
   border: 1px solid rgba(251, 119, 80, 0.2);
-  border-radius: 6px;
+  border-radius: 14px;
   color: #fb7750;
   cursor: pointer;
   display: flex;
@@ -233,7 +222,7 @@ export default {
   padding: 8px 12px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-  min-width: 200px;
+  max-width: 120px;
 }
 
 .model-selector:hover {
@@ -259,12 +248,12 @@ export default {
   gap: 4px;
   background: rgba(248, 250, 252, 0.8);
   border-radius: 8px;
-  padding: 4px;
+  padding: 4px 1px;
   border: 1px solid #e2e8f0;
 }
 
 .action-btn {
-  width: 36px;
+  width: 30px;
   height: 36px;
   background: transparent;
   border: none;
