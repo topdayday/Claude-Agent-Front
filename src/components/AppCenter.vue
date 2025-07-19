@@ -18,16 +18,37 @@
                   <path d="M2 17L12 22L22 17" />
                   <path d="M2 12L12 17L22 12" />
                 </svg>
+
               </div>
-              <div v-if="model_type === model.modelId" class="model-card__check">
+              <div v-if="model.multimodal >= 1" class="multimodal-badge multimodal-badge--multimodal">
+                <svg class="multimodal-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.6" />
+                  <path d="M2 17L12 22L22 17" />
+                  <path d="M2 12L12 17L22 12" opacity="0.8" />
+                  <circle cx="8" cy="8" r="2" fill="#4CAF50" />
+                  <circle cx="16" cy="16" r="2" fill="#2196F3" />
+                </svg>
+                <span class="multimodal-text">多模态</span>
+              </div>
+              <div v-else class="multimodal-badge multimodal-badge--conversation">
+                <svg class="multimodal-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.6" />
+                  <path d="M2 17L12 22L22 17" />
+                  <path d="M2 12L12 17L22 12" opacity="0.8" />
+                  <circle cx="8" cy="8" r="2" fill="#4CAF50" />
+                  <circle cx="16" cy="16" r="2" fill="#2196F3" />
+                </svg>
+                <span class="multimodal-text">多轮对话</span>
+              </div>
+              <!-- <div v-if="model_type === model.modelId" class="model-card__check">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" />
                 </svg>
-              </div>
+              </div> -->
             </div>
             <div class="model-card__content">
-              <h3 class="model-card__title">{{ model.name }}</h3>
-              <p class="model-card__description">智能对话助手</p>
+              <h3 class="model-card__title">{{ model.name + '-' + model.ver }}</h3>
+              <p class="model-card__description">{{ model.desc }}</p>
             </div>
             <div class="model-card__footer">
               <span class="model-card__status">
@@ -142,7 +163,7 @@
         </div>
         <div class="input-container">
           <!-- 附件上传按钮 -->
-          <div class="upload-container" v-if="model_type === 1 || model_type === 2">
+          <div class="upload-container" v-if="showAttachments(model_type)">
             <input type="file" ref="fileInput" @change="handleFileSelect" multiple accept="*/*"
               style="display: none;" />
             <el-button class="btn_attachment" @click="$refs.fileInput.click()" :disabled="sent_status == 1"
@@ -170,6 +191,7 @@ import { list_session, del_conversation, assistant_with_attachments, downloadAtt
 import MarkdownIt from 'markdown-it';
 import mditHighlightjs from 'markdown-it-highlightjs';
 import 'highlight.js/styles/default.css';
+
 // import 'highlight.js/styles/github.css';
 // import 'highlight.js/styles/dark.css';
 // import 'highlight.js/styles/vs.css';
@@ -710,7 +732,12 @@ export default {
           }
         });
       }
-    }
+    },
+
+    showAttachments(model_type){
+      const model_info = this.llmsModelInfo.find(item => item.modelId === model_type);
+      return model_info && model_info.multimodal > 0;
+    },
 
   },
 }
@@ -982,13 +1009,87 @@ export default {
   background-color: white;
   margin: 10px;
   /*padding: 50px 100px;*/
-  border: 1px solid #dedede;
-  border-radius: 10px;
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
+  border: 1px solid #eee;
 }
+
+/* 多模态徽章基础样式 */
+.multimodal-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  z-index: 10;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 多模态样式 (multimodal >= 1) */
+.multimodal-badge--multimodal {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.multimodal-badge--multimodal:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
+}
+
+.multimodal-badge--multimodal .multimodal-icon {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* 多轮对话样式 (multimodal < 1) */
+.multimodal-badge--conversation {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.multimodal-badge--conversation:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+  background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+}
+
+.multimodal-badge--conversation .multimodal-icon {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.multimodal-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  transition: all 0.2s ease;
+}
+
+.multimodal-text {
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+/* 确保模型卡片有相对定位以支持绝对定位的徽章 */
+.model-card {
+  position: relative;
+}
+
+/* 调整模型卡片头部样式以适应徽章 */
+.model-card__header {
+  position: relative;
+  padding-right: 80px;
+  /* 为徽章留出空间 */
+}
+
 
 .card_item_max {
   padding: 20px;

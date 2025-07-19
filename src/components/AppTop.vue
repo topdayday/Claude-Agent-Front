@@ -17,7 +17,7 @@
     </div>
 
     <!-- 中间模型选择区域 -->
-    <div class="header-center">
+    <div :class="smallWidth?'header-center-min':'header-center'">
       <div class="model-selector">
         <svg class="model-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2L2 7L12 12L22 7L12 2Z" />
@@ -210,6 +210,14 @@ export default {
   justify-content: flex-start;
   align-items: center;
   padding: 0 20px;
+}
+
+.header-center-min {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 2px;
 }
 
 .model-selector {

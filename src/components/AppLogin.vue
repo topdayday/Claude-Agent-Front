@@ -12,8 +12,8 @@
             集成主流AI大模型，智能对话新体验
           </h2>
           <div class="feature-tags">
-            <span class="tag">智能对话</span>
-            <span class="tag">多模型支持</span>
+            <span class="tag">多轮对话</span>
+            <span class="tag">多模态支持</span>
             <span class="tag">高效便捷</span>
           </div>
         </div>
@@ -31,9 +31,11 @@
             :key="item.modelId" 
             class="model-card">
             <div class="model-icon">
-              <i class="el-icon-cpu"></i>
+              <i class="el-icon-cpu">  
+                <span class="model-desc">{{ item.name + '-' + item.ver }}</span>
+             </i>
             </div>
-            <div class="model-name">{{ item.name }}</div>
+            <div class="model-name">{{item.desc}}</div>
           </div>
         </div>
       </div>
@@ -365,7 +367,14 @@
   box-shadow: 0 8px 25px rgba(251, 119, 80, 0.2);
   border-color: #fb7750;
 }
-
+.model-desc {
+  color: #fb7750;
+  font-size: 16px;
+  padding: 10px 0px 10px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 .model-icon {
   margin-bottom: 12px;
 }
