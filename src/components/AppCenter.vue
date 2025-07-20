@@ -193,7 +193,6 @@
         }">
           <span v-if="sent_status == 1" class="sending-animation">
             <i class="el-icon-loading sending-icon"></i>
-            发送中
           </span>
           <span v-else>发送</span>
         </el-button>
@@ -1195,9 +1194,10 @@ export default {
 .btn_sent {
   margin-right: 4px;
   min-height: 54px;
-  background-color: #fb7750;
+  background-color: rgba(251, 119, 80, 0.5);
   border-color: #fb7750;
   color: #fff;
+  opacity: 0.5;
 }
 
 .btn_sent:hover,

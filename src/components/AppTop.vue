@@ -17,7 +17,7 @@
     </div>
 
     <!-- 中间模型选择区域 -->
-    <div :class="smallWidth?'header-center-min':'header-center'">
+    <div :class="smallWidth ? 'header-center-min':'header-center'">
       <div class="model-selector">
         <svg class="model-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2L2 7L12 12L22 7L12 2Z" />
@@ -39,7 +39,7 @@
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>
         </button>
-        <button class="action-btn" @click="setDrawer()" >
+        <button class="action-btn" @click="setDrawer()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20Z" />
@@ -199,13 +199,21 @@ export default {
   border-radius: 8px;
   padding: 8px 12px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   max-width: 120px;
+  position: relative;
 }
 
 .model-selector:hover {
   border-color: #fb7750;
-  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1);
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.15);
+  transform: translateY(-1px);
+}
+
+.model-selector:focus-within {
+  border-color: #fb7750;
+  box-shadow: 0 0 0 3px rgba(251, 119, 80, 0.1), 0 2px 8px rgba(251, 119, 80, 0.15);
+  transform: translateY(-1px);
 }
 
 .model-icon {
@@ -324,36 +332,153 @@ export default {
 :deep(.model-select .el-select__caret) {
   color: #64748b !important;
   font-size: 14px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 :deep(.model-select .el-select__caret:hover) {
   color: #fb7750 !important;
+  transform: scale(1.1) !important;
 }
 
-/* 下拉框样式 */
+:deep(.model-select.is-focus .el-select__caret) {
+  color: #fb7750 !important;
+  transform: rotate(180deg) !important;
+}
+
+:deep(.model-select .el-input.is-focus .el-select__caret) {
+  color: #fb7750 !important;
+  transform: rotate(180deg) !important;
+}
+
+/* 下拉框样式优化 */
 :deep(.el-select-dropdown) {
   border: 1px solid #e2e8f0 !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  margin-top: 4px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  margin-top: 8px !important;
+  background: white !important;
+  backdrop-filter: blur(10px) !important;
+  overflow: hidden !important;
+  animation: dropdown-appear 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+:deep(.el-select-dropdown .el-scrollbar) {
+  max-height: 280px !important;
 }
 
 :deep(.el-select-dropdown .el-select-dropdown__item) {
   color: #374151 !important;
   font-weight: 500 !important;
-  padding: 8px 12px !important;
-  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  padding: 12px 16px !important;
+  margin: 0 8px !important;
+  border-radius: 8px !important;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+:deep(.el-select-dropdown .el-select-dropdown__item:first-child) {
+  margin-top: 8px !important;
+}
+
+:deep(.el-select-dropdown .el-select-dropdown__item:last-child) {
+  margin-bottom: 8px !important;
 }
 
 :deep(.el-select-dropdown .el-select-dropdown__item:hover) {
-  background: rgba(251, 119, 80, 0.1) !important;
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.08) 0%, rgba(251, 119, 80, 0.12) 100%) !important;
   color: #fb7750 !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1) !important;
 }
 
 :deep(.el-select-dropdown .el-select-dropdown__item.selected) {
-  background: rgba(251, 119, 80, 0.15) !important;
+  background: transparent !important;
   color: #fb7750 !important;
   font-weight: 600 !important;
+  border: 2px solid #fb7750 !important;
+  padding: 10px 14px !important;
+  position: relative !important;
+}
+
+:deep(.el-select-dropdown .el-select-dropdown__item.selected::after) {
+  content: '✓' !important;
+  position: absolute !important;
+  right: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #fb7750 !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+}
+
+/* 下拉框出现动画 */
+@keyframes dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 下拉框空状态样式 */
+:deep(.el-select-dropdown .el-select-dropdown__empty) {
+  padding: 20px !important;
+  color: #9ca3af !important;
+  text-align: center !important;
+  font-size: 14px !important;
+}
+
+/* 下拉框加载状态 */
+:deep(.el-select-dropdown .el-select-dropdown__loading) {
+  padding: 20px !important;
+  text-align: center !important;
+  color: #fb7750 !important;
+}
+
+/* 选择框激活状态 */
+:deep(.model-select.is-focus) {
+  border-color: #fb7750 !important;
+}
+
+:deep(.model-select.is-focus .el-input__inner) {
+  color: #fb7750 !important;
+}
+
+/* 下拉框分组样式（如果有分组的话） */
+:deep(.el-select-group__title) {
+  color: #6b7280 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 8px 16px 4px !important;
+  margin: 0 !important;
+}
+
+/* 下拉框滚动条样式 */
+:deep(.el-select-dropdown .el-scrollbar__wrap) {
+  overflow-x: hidden !important;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__bar) {
+  right: 2px !important;
+  border-radius: 4px !important;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__thumb) {
+  background: rgba(251, 119, 80, 0.3) !important;
+  border-radius: 4px !important;
+}
+
+:deep(.el-select-dropdown .el-scrollbar__thumb:hover) {
+  background: rgba(251, 119, 80, 0.5) !important;
 }
 
 /* 响应式设计 */
