@@ -68,7 +68,7 @@
               <span class="collapse-title">{{ showInfo(item.model_type, item.create_time) }}</span>
               <div class="header-actions">
                 <el-button @click.stop="handleCopyConversation(item.id)" type="text" size="small"
-                  class="header-btn copy-btn">
+                  class="header-btn delete-btn">
                   <i class="el-icon-document-copy"></i>
                 </el-button>
                 <el-button @click.stop="delConversation(item.id)" type="text" size="small"
@@ -141,7 +141,7 @@
     <div v-if="!isInputCollapsed" :class="(smallWidth || !showLeftMenu) ? 'fixed-bottom-hiden' : 'fixed-bottom'"
       v-on:keydown.ctrl.enter="sendMessage">
       <!-- 收缩按钮容器 -->
-      <div class="collapse-buttons-container">      
+      <div class="collapse-buttons-container">
         <div class="collapse-toggle-btn" @click="scrollToTop" title="回到顶部">
           <i class="el-icon-top"></i>
         </div>
@@ -184,9 +184,18 @@
           <i v-if="content_in" class="el-icon-circle-close clear-btn" @click="clearContent"></i>
         </div>
 
-        <el-button :disabled="sent_status == 1" class="btn_sent" type="primary" @click="sendMessage()"
-          style="border: none;margin:0;border-radius:0px;">
-          {{ sent_status == 1 ? '>>>' : '发送' }}
+        <el-button :disabled="sent_status == 1" class="btn_sent" type="primary" @click="sendMessage()" :style="{
+          border: 'none',
+          margin: '0',
+          borderRadius: '0px',
+          opacity: sent_status == 1 ? '0.6' : '1',
+          transition: 'opacity 0.3s ease'
+        }">
+          <span v-if="sent_status == 1" class="sending-animation">
+            <i class="el-icon-loading sending-icon"></i>
+            发送中
+          </span>
+          <span v-else>发送</span>
         </el-button>
       </div>
     </div>
@@ -486,7 +495,7 @@ export default {
 
     delConversation(c_id) {
       this.$confirm('你确定要删除该对话吗？', '提示', {
-        cancelButtonText: '退出',
+        cancelButtonText: '取消',
         confirmButtonText: '确定',
         type: 'warning'
       }).then(() => {
@@ -1003,7 +1012,7 @@ export default {
   font-size: 14px;
   transition: all 0.3s ease;
   z-index: 1001;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .collapse-toggle-btn:hover {
@@ -2261,7 +2270,7 @@ code {
     right: 5px;
     top: -130px;
   }
-  
+
   .collapse-toggle-btn {
     width: 32px;
     height: 32px;
@@ -2269,17 +2278,211 @@ code {
   }
 }
 
-/* 调试样式 - 临时添加边框确保可见 */
-.collapse-buttons-container {
-  /* border: 2px solid red !important; */
-}
-
-.collapse-toggle-btn {
-  /* border: 2px solid blue !important; */
-}
-
+ 
 
 .clear-btn:hover {
   color: #fb7750;
+}
+
+/* 发送按钮动画样式 */
+.sending-animation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sending-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 发送按钮状态样式 */
+.btn_sent {
+  transition: all 0.3s ease;
+}
+
+.btn_sent:disabled {
+  cursor: not-allowed;
+}
+
+/* 折叠面板头部样式优化 */
+.collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.08) 0%, rgba(251, 119, 80, 0.12) 100%);
+  border: 1px solid rgba(251, 119, 80, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.collapse-header:hover {
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.12) 0%, rgba(251, 119, 80, 0.18) 100%);
+  border-color: rgba(251, 119, 80, 0.35);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.15);
+  transform: translateY(-1px);
+}
+
+.collapse-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fb7750;
+  letter-spacing: 0.3px;
+  margin-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.collapse-header:hover .header-actions {
+  opacity: 1;
+}
+
+/* 头部按钮样式优化 */
+.header-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+  border: 1px solid transparent !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(4px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-btn:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.header-btn:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.header-btn i {
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+/* 复制按钮特定样式 */
+.copy-btn {
+  color: #409eff !important;
+  border-color: rgba(64, 158, 255, 0.2) !important;
+}
+
+.copy-btn:hover {
+  background: rgba(64, 158, 255, 0.1) !important;
+  border-color: #409eff !important;
+  color: #409eff !important;
+}
+
+.copy-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* 删除按钮特定样式 */
+.delete-btn {
+  color: #f56c6c !important;
+  border-color: rgba(245, 108, 108, 0.2) !important;
+}
+
+.delete-btn:hover {
+  background: rgba(245, 108, 108, 0.1) !important;
+  border-color: #f56c6c !important;
+  color: #f56c6c !important;
+}
+
+.delete-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .collapse-header {
+    padding: 6px 10px;
+  }
+
+  .collapse-title {
+    font-size: 13px;
+    margin-right: 8px;
+  }
+
+  .header-btn {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .header-btn i {
+    font-size: 12px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+}
+
+/* 确保按钮在折叠面板中正确显示 */
+::v-deep .el-collapse-item__header .collapse-header {
+  margin: 0;
+}
+
+/* 优化折叠面板整体样式以匹配新的头部设计 */
+::v-deep .el-collapse-item {
+  border: none !important;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+::v-deep .el-collapse-item__header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  line-height: normal !important;
+}
+
+::v-deep .el-collapse-item__arrow {
+  display: none !important;
+}
+
+::v-deep .el-collapse-item__wrap {
+  border: none !important;
+  background: #fff;
+}
+
+::v-deep .el-collapse-item__content {
+  padding: 16px !important;
+  background: #fff;
+  border-top: 1px solid rgba(251, 119, 80, 0.1);
 }
 </style>

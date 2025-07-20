@@ -34,19 +34,19 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <button class="action-btn action-btn--primary" @click="newSession()" title="新建对话">
+        <button class="action-btn action-btn--primary" @click="newSession()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>
         </button>
-        <button class="action-btn" @click="setDrawer()" title="历史记录">
+        <button class="action-btn" @click="setDrawer()" >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20Z" />
             <path d="M12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" />
           </svg>
         </button>
-        <button class="action-btn" @click="setMember()" title="用户设置">
+        <button class="action-btn" @click="setMember()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
