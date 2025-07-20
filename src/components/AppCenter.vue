@@ -140,9 +140,17 @@
     <!-- 完整的输入框 -->
     <div v-if="!isInputCollapsed" :class="(smallWidth || !showLeftMenu) ? 'fixed-bottom-hiden' : 'fixed-bottom'"
       v-on:keydown.ctrl.enter="sendMessage">
-      <!-- 收缩按钮 -->
-      <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
-        <i class="el-icon-minus"></i>
+      <!-- 收缩按钮容器 -->
+      <div class="collapse-buttons-container">      
+        <div class="collapse-toggle-btn" @click="scrollToTop" title="回到顶部">
+          <i class="el-icon-top"></i>
+        </div>
+        <div class="collapse-toggle-btn" @click="scrollToBottom" title="滚动底部">
+          <i class="el-icon-bottom"></i>
+        </div>
+        <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
+          <i class="el-icon-minus"></i>
+        </div>
       </div>
 
       <div v-bind:class="{ send_message: true, send_message_min: !smallWidth }"
@@ -301,6 +309,12 @@ export default {
     scrollToBottom() {
       window.scrollTo({
         top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    },
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
         behavior: 'smooth'
       });
     },
@@ -734,7 +748,7 @@ export default {
       }
     },
 
-    showAttachments(model_type){
+    showAttachments(model_type) {
       const model_info = this.llmsModelInfo.find(item => item.modelId === model_type);
       return model_info && model_info.multimodal > 0;
     },
@@ -830,7 +844,7 @@ export default {
 .content-warp {
   padding: 0 4px;
   text-align: left;
-  width: 98%;
+  width: 96%;
 }
 
 .circle {
@@ -2193,6 +2207,77 @@ code {
   z-index: 10;
   transition: color 0.2s ease;
 }
+
+.clear-btn:hover {
+  color: #909399;
+}
+
+/* 收缩按钮容器样式 */
+.collapse-buttons-container {
+  position: absolute;
+  top: -140px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1001;
+  pointer-events: auto;
+}
+
+/* 收缩按钮样式 */
+.collapse-toggle-btn {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(251, 119, 80, 0.95);
+  border: 1px solid #fb7750;
+  border-radius: 8px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(251, 119, 80, 0.4);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+  position: relative;
+}
+
+.collapse-toggle-btn:hover {
+  background-color: #fb7750;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4);
+}
+
+.collapse-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3);
+}
+
+/* 确保按钮在小屏幕上也能显示 */
+@media (max-width: 768px) {
+  .collapse-buttons-container {
+    right: 5px;
+    top: -130px;
+  }
+  
+  .collapse-toggle-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+/* 调试样式 - 临时添加边框确保可见 */
+.collapse-buttons-container {
+  /* border: 2px solid red !important; */
+}
+
+.collapse-toggle-btn {
+  /* border: 2px solid blue !important; */
+}
+
 
 .clear-btn:hover {
   color: #fb7750;

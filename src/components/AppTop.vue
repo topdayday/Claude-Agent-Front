@@ -34,16 +34,6 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <button class="action-btn" @click="scrollToTop()" title="回到顶部">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M7.41 15.41L12 10.83L16.59 15.41L18 14L12 8L6 14L7.41 15.41Z" />
-          </svg>
-        </button>
-        <button class="action-btn" @click="scrollToBottom()" title="滚动到底部">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z" />
-          </svg>
-        </button>
         <button class="action-btn action-btn--primary" @click="newSession()" title="新建对话">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -60,12 +50,6 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
-          </svg>
-        </button>
-        <button class="action-btn action-btn--danger" @click="loginOut()" title="退出登录">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" />
           </svg>
         </button>
       </div>
@@ -104,20 +88,6 @@ export default {
     }
   },
   methods: {
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    },
-
-    scrollToBottom() {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-    },
-
     changLeftMenu(val) {
       this.$emit('setLeftMenu', val);
     },

@@ -27,7 +27,9 @@
                   :session_id.sync="session_id" />
     </div>
     <div class=""  v-if="token">
-      <AppMember :showMember.sync="showMember" />
+      <AppMember  :showMember.sync="showMember" 
+                  :session_id.sync="session_id"
+                  :token.sync="token"/>
     </div>
     <div class=""  v-if="!token">
       <AppLogin :smallWidth.sync="smallWidth"
@@ -134,7 +136,6 @@ export default {
   },
   watch:{
     session_id(){
-      // alert('session_id:'+ this.session_id)
     },
     token(){
       // alert('token:'+ this.token)

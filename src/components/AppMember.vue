@@ -157,6 +157,22 @@
                   </div>
                 </div>
               </form>
+
+              <!-- 危险操作区域 -->
+              <div class="danger-zone">
+                <div class="danger-header">
+                  <h4 class="danger-title">切换账号</h4>
+                </div>
+                <div class="danger-actions">
+                  <button class="btn btn--danger" @click="handleLogout">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" />
+                    </svg>
+                    <span>退出系统</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -192,7 +208,7 @@ import { MessageBox } from "element-ui";
 export default {
   name: 'AppMember',
   props: {
-    showMember: Boolean,
+    showMember: Boolean, session_id: String, token: String,
   },
   data() {
     return {
@@ -268,8 +284,25 @@ export default {
         console.error(error);
       });
     },
+    handleLogout() {
+      MessageBox.confirm('确定要退出系统吗？', '确认退出', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.closeDg();
+        this.loginOut();
+        MessageBox.alert('已成功退出系统！', '提示');
+      }).catch(() => {
+        // 用户取消退出
+        console.log('cancel')
+      });
+    },
+    loginOut() {
+      this.$emit('update:token', null);
+      this.$emit('update:session_id', null);
+    },
   },
-
 };
 </script>
 
@@ -466,6 +499,59 @@ export default {
 
 .nav-item svg {
   flex-shrink: 0;
+}
+
+/* 危险操作区域 */
+.danger-zone {
+  margin-top: 40px;
+  padding: 24px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+}
+
+.danger-header {
+  margin-bottom: 16px;
+}
+
+.danger-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.danger-title::before {
+  content: "⚠️";
+  font-size: 14px;
+}
+
+.danger-description {
+  font-size: 14px;
+  color: #991b1b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.danger-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn--danger {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+  border: 1px solid #dc2626;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+.btn--danger:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
 }
 
 /* 右侧内容区域 */
