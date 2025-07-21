@@ -431,14 +431,14 @@ function isImageFile(mimeType, fileName) {
     if (mimeType && mimeType.startsWith('image/')) {
         return true;
     }
-    
+
     // 通过文件扩展名检查
     if (fileName) {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
         const ext = fileName.toLowerCase().substring(fileName.lastIndexOf('.'));
         return imageExtensions.includes(ext);
     }
-    
+
     return false;
 }
 
@@ -446,7 +446,6 @@ function isImageFile(mimeType, fileName) {
 function showImagePreview(imageUrl, fileName) {
     // 创建遮罩层
     const overlay = document.createElement('div');
-    console.log('==========>>>')
     overlay.style.cssText = `
         position: fixed;
         top: 0;
@@ -460,7 +459,7 @@ function showImagePreview(imageUrl, fileName) {
         align-items: center;
         cursor: pointer;
     `;
-    
+
     // 创建图片容器
     const container = document.createElement('div');
     container.style.cssText = `
@@ -472,7 +471,7 @@ function showImagePreview(imageUrl, fileName) {
         padding: 20px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     `;
-    
+
     // 创建关闭按钮
     const closeBtn = document.createElement('button');
     closeBtn.innerHTML = '×';
@@ -487,7 +486,7 @@ function showImagePreview(imageUrl, fileName) {
         color: #666;
         z-index: 10000;
     `;
-    
+
     // 创建文件名标题
     const title = document.createElement('div');
     title.textContent = fileName || '图片预览';
@@ -497,7 +496,7 @@ function showImagePreview(imageUrl, fileName) {
         font-weight: bold;
         color: #333;
     `;
-    
+
     // 创建图片元素
     const img = document.createElement('img');
     img.src = imageUrl;
@@ -507,7 +506,7 @@ function showImagePreview(imageUrl, fileName) {
         display: block;
         margin: 0 auto;
     `;
-    
+
     // 创建下载按钮
     const downloadBtn = document.createElement('button');
     downloadBtn.textContent = '下载图片';
@@ -521,7 +520,7 @@ function showImagePreview(imageUrl, fileName) {
         border-radius: 4px;
         cursor: pointer;
     `;
-    
+
     // 组装元素
     container.appendChild(closeBtn);
     container.appendChild(title);
@@ -529,17 +528,17 @@ function showImagePreview(imageUrl, fileName) {
     container.appendChild(downloadBtn);
     overlay.appendChild(container);
     document.body.appendChild(overlay);
-    
+
     // 事件处理
     const closePreview = () => {
         document.body.removeChild(overlay);
     };
-    
+
     closeBtn.onclick = closePreview;
     overlay.onclick = (e) => {
         if (e.target === overlay) closePreview();
     };
-    
+
     downloadBtn.onclick = (e) => {
         e.stopPropagation();
         // 触发实际下载
@@ -551,7 +550,7 @@ function showImagePreview(imageUrl, fileName) {
         link.click();
         document.body.removeChild(link);
     };
-    
+
     // ESC键关闭
     const handleKeydown = (e) => {
         if (e.key === 'Escape') {
@@ -573,7 +572,6 @@ export function downloadAttachment(id, fileName, mimeType) {
     const downloadUrl = `${base_url}/download_attachment/${id}/?token=${encodeURIComponent(token)}`;
     // 检查是否为图片文件
     if (isImageFile(mimeType, fileName)) {
-        console.log('isImageFile',111)
         // 如果是图片，显示预览
         showImagePreview(downloadUrl, fileName);
         return Promise.resolve();
@@ -582,14 +580,14 @@ export function downloadAttachment(id, fileName, mimeType) {
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.style.display = 'none';
-        
+
         // 添加到DOM并触发点击
         document.body.appendChild(link);
         link.click();
-        
+
         // 清理DOM
         document.body.removeChild(link);
-        
+
         return Promise.resolve();
     }
 }

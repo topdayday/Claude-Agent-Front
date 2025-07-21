@@ -1,7 +1,8 @@
 <template>
   <div class="content-main">
     <div v-bind:class="{ main_left: showLeftMenu, main_left_hide: !showLeftMenu }" v-if="!smallWidth"></div>
-    <div class="main-right-card" v-if="showIndexContent" v-loading="loading">
+    <div class="main-right-card" v-if="showIndexContent" v-loading="loading"
+      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : '加载中...'">
       <div class="model-selection-container">
         <div class="model-selection-header">
           <h2 class="selection-title">选择AI模型</h2>
@@ -59,7 +60,8 @@
         </div>
       </div>
     </div>
-    <div class="content-warp" v-if="!showIndexContent" v-loading="loading">
+    <div class="content-warp" v-if="!showIndexContent" v-loading="loading"
+      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : '加载中...'">
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
           style="padding: 6px;">
@@ -145,11 +147,11 @@
         <div class="collapse-toggle-btn" @click="scrollToTop" title="回到顶部">
           <i class="el-icon-top"></i>
         </div>
-        <div class="collapse-toggle-btn" @click="scrollToBottom" title="滚动底部">
-          <i class="el-icon-bottom"></i>
-        </div>
         <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
           <i class="el-icon-minus"></i>
+        </div>
+        <div class="collapse-toggle-btn" @click="scrollToBottom" title="滚动底部">
+          <i class="el-icon-bottom"></i>
         </div>
       </div>
 
@@ -244,6 +246,7 @@ export default {
           // hljs: hljs // 可以传入自定义的 hljs 实例
         }),
       timer: null,
+      countdown: 0, // 倒计时秒数
 
     }
   },
@@ -385,17 +388,41 @@ export default {
 
     refreshSession(token, session_id) {
       let oldLength = this.content_his.length;
+      this.countdown = 180; // 180秒倒计时
+
       if (this.timer) {
         clearInterval(this.timer);
       }
+
       this.timer = setInterval(() => {
         list_session(token, session_id).then(data => {
           if (data.data.length > oldLength) {
+            this.loading = false;
+            this.countdown = 0;
             this.currentSession();
+            this.content_in = '';
+            this.clearAttachments();
             clearInterval(this.timer);
+          } else {
+            this.countdown -= 5; // 每5秒减少5秒
+
+            // 180秒后如果还没有新数据，关闭loading
+            if (this.countdown <= 0) {
+              this.loading = false;
+              this.countdown = 0;
+              clearInterval(this.timer);
+              this.$notify({
+                title: '提示',
+                message: '响应超时，请重试',
+                type: 'warning'
+              });
+            }
           }
         }).catch(error => {
           console.error(error);
+          this.loading = false;
+          this.countdown = 0;
+          clearInterval(this.timer);
         });
       }, 5000);
     },
@@ -443,8 +470,8 @@ export default {
       if (this.attachments.length > 0) {
         assistant_with_attachments(token, session_id, this.content_in.trim(), this.model_type, this.attachments).then(data => {
           this.sent_status = 0;
-          this.loading = false;
           if (data) {
+            this.loading = false;
             this.content_his.push(data.data);
             if (data.attachments && data.attachments.length > 0) {
               this.attachments_his.push(...data.attachments);
@@ -468,8 +495,8 @@ export default {
         // 没有附件，直接发送文本消息
         assistant(token, session_id, this.content_in.trim(), this.model_type).then(data => {
           this.sent_status = 0;
-          this.loading = false;
           if (data) {
+            this.loading = false;
             this.content_his.push(data.data);
             if (data.attachments && data.attachments.length > 0) {
               this.attachments_his.push(...data.attachments);
@@ -797,6 +824,11 @@ export default {
   stroke-dasharray: 90, 150;
   stroke-dashoffset: 0;
   animation: loading-dash 1.5s ease-in-out infinite;
+}
+
+::v-deep .el-loading-text {
+  color: #fb7750;
+  font-weight: 500;
 }
 
 @keyframes loading-rotate {
@@ -2278,7 +2310,7 @@ code {
   }
 }
 
- 
+
 
 .clear-btn:hover {
   color: #fb7750;
@@ -2321,26 +2353,27 @@ code {
   justify-content: space-between;
   width: 100%;
   padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(251, 119, 80, 0.08) 0%, rgba(251, 119, 80, 0.12) 100%);
-  border: 1px solid rgba(251, 119, 80, 0.2);
   border-radius: 8px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(251, 119, 80, 0.1);
   backdrop-filter: blur(8px);
+  background: #fcfcfc;
+  border: 1px solid #e8e8e8;
 }
 
 .collapse-header:hover {
-  background: linear-gradient(135deg, rgba(251, 119, 80, 0.12) 0%, rgba(251, 119, 80, 0.18) 100%);
-  border-color: rgba(251, 119, 80, 0.35);
-  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.15);
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.04) 0%, rgba(251, 119, 80, 0.08) 100%);
+  border: 1px solid rgba(214, 209, 207, 0.7);
+  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.5);
   transform: translateY(-1px);
+  background: #fcfcfc;
 }
 
 .collapse-title {
   flex: 1;
   font-size: 14px;
   font-weight: 500;
-  color: #fb7750;
+  color: #ff9a7a;
   letter-spacing: 0.3px;
   margin-right: 12px;
   overflow: hidden;
