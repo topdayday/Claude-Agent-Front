@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="content-warp" v-if="!showIndexContent" v-loading="loading"
+    <div :class="showLeftMenu&&(!smallWidth) ? 'content-warp-menu' : 'content-warp'" v-if="!showIndexContent" v-loading="loading"
       :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : '加载中...'">
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
@@ -179,8 +179,9 @@
             <el-button class="btn_attachment" @click="$refs.fileInput.click()" :disabled="sent_status == 1"
               icon="el-icon-paperclip" size="small" circle title="上传附件"></el-button>
           </div>
+          <!-- 粘贴提示信息 -->
           <el-input autofocus=true type="textarea" ref="textarea_in" :autosize="{ minRows: 2, maxRows: 20 }"
-            placeholder="按下Ctrl+Enter提交..." v-model="content_in">
+            placeholder="按下Ctrl+Enter提交，或直接粘贴图片..." v-model="content_in">
           </el-input>
           <!-- 自定义清空按钮 -->
           <i v-if="content_in" class="el-icon-circle-close clear-btn" @click="clearContent"></i>
@@ -191,7 +192,6 @@
           margin: '0',
           borderRadius: '0px',
           opacity: sent_status == 1 ? '0.6' : '1',
-          transition: 'opacity 0.3s ease'
         }">
           <span v-if="sent_status == 1" class="sending-animation">
             <i class="el-icon-loading sending-icon"></i>
@@ -269,6 +269,10 @@ export default {
     },
     model_type(model_type) {
       this.$emit('selectModel', model_type)
+      // 当模型类型改变时，重新绑定粘贴事件监听器
+      this.$nextTick(() => {
+        this.addPasteEventListener();
+      });
     },
     // attachments_his(){
     //   setTimeout(() => {
@@ -305,6 +309,12 @@ export default {
   mounted() {
     // 监听DOM变化，为新生成的代码块添加复制按钮
     this.observeCodeBlocks();
+    
+    // 显示粘贴图片功能提示
+    this.showPasteImageTip();
+    
+    // 手动添加粘贴事件监听器到输入框
+    this.addPasteEventListener();
   },
 
   methods: {
@@ -615,6 +625,208 @@ export default {
       });
     },
 
+    // 处理粘贴事件，支持图片粘贴
+    handlePaste(event) {
+      // 防止重复处理
+      if (event._processed) {
+        console.log('粘贴事件已被处理，跳过');
+        return;
+      }
+      
+      console.log('粘贴事件触发', event);
+      console.log('剪贴板数据:', event.clipboardData);
+      
+      const items = event.clipboardData?.items;
+      if (!items) {
+        console.log('没有剪贴板数据');
+        return;
+      }
+
+      console.log('剪贴板项目数量:', items.length);
+      for (let i = 0; i < items.length; i++) {
+        console.log(`项目 ${i}:`, items[i].type);
+      }
+
+      let hasImage = false;
+      let processedImage = false;
+      
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        
+        // 检查是否是图片类型
+        if (item.type.indexOf('image') !== -1) {
+          hasImage = true;
+          const file = item.getAsFile();
+          
+          if (file && !processedImage) {
+            try {
+              // 为粘贴的图片生成文件名
+              const timestamp = new Date().getTime();
+              const extension = this.getImageExtension(file.type);
+              const fileName = `screenshot_${timestamp}.${extension}`;
+              
+              // 创建新的File对象，包含文件名
+              const renamedFile = new File([file], fileName, { type: file.type });
+              
+              // 检查文件大小
+              const maxSize = 10 * 1024 * 1024;
+              if (renamedFile.size > maxSize) {
+                this.$notify({
+                  title: '图片过大',
+                  message: `粘贴的图片超过10MB限制，请压缩后重试`,
+                  type: 'warning',
+                  duration: 3000
+                });
+                return;
+              }
+              
+              // 检查是否支持该图片格式
+              if (!this.isSupportedImageType(file.type)) {
+                this.$notify({
+                  title: '不支持的图片格式',
+                  message: `请使用 JPG、PNG、GIF、WebP 或 BMP 格式的图片`,
+                  type: 'warning',
+                  duration: 3000
+                });
+                return;
+              }
+              
+              // 添加到附件列表
+              this.attachments.push(renamedFile);
+              
+                             // 阻止默认粘贴行为
+               event.preventDefault();
+               
+               // 标记事件已被处理，防止重复触发
+               event._processed = true;
+               
+               this.$notify({
+                 title: '截图已添加',
+                 message: `成功添加截图: ${fileName} (${this.formatFileSize(renamedFile.size)})`,
+                 type: 'success',
+                 duration: 2000
+               });
+               
+               processedImage = true;
+               
+               // 只处理第一个图片，避免重复
+               break;
+            } catch (error) {
+              console.error('处理粘贴图片时出错:', error);
+              this.$notify({
+                title: '处理失败',
+                message: '粘贴图片时出现错误，请重试',
+                type: 'error',
+                duration: 3000
+              });
+            }
+          }
+        }
+      }
+      
+      // 如果没有图片，允许正常的文本粘贴
+      if (!hasImage) {
+        return;
+      }
+    },
+
+    // 检查是否支持该图片类型
+    isSupportedImageType(mimeType) {
+      const supportedTypes = [
+        'image/jpeg',
+        'image/jpg', 
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'image/bmp'
+      ];
+      return supportedTypes.includes(mimeType);
+    },
+
+    // 显示粘贴图片功能提示
+    showPasteImageTip() {
+      // 延迟显示提示，确保用户已经看到界面
+      // setTimeout(() => {
+      //   if (this.showAttachments(this.model_type)) {
+      //     this.$notify({
+      //       title: '新功能提示',
+      //       message: '现在支持截图后直接粘贴图片了！按 Ctrl+V 即可粘贴截图',
+      //       type: 'info',
+      //       duration: 5000,
+      //       showClose: true
+      //     });
+      //   }
+      // }, 2000);
+    },
+
+    // 手动添加粘贴事件监听器
+    addPasteEventListener() {
+      this.$nextTick(() => {
+        if (this.$refs.textarea_in) {
+          const textareaElement = this.$refs.textarea_in.$el || this.$refs.textarea_in;
+          if (textareaElement) {
+            // 查找实际的 textarea 元素
+            const textarea = textareaElement.querySelector('textarea') || textareaElement;
+            if (textarea) {
+              // 检查是否已经绑定了事件监听器
+              if (textarea._pasteListenerBound) {
+                console.log('粘贴事件监听器已存在，跳过重复绑定');
+                return;
+              }
+              
+              // 移除之前的事件监听器，避免重复绑定
+              textarea.removeEventListener('paste', this.handlePaste);
+              // 添加新的事件监听器
+              textarea.addEventListener('paste', this.handlePaste);
+              // 标记已绑定
+              textarea._pasteListenerBound = true;
+              
+              console.log('粘贴事件监听器已添加');
+              console.log('绑定的元素:', textarea);
+              console.log('元素类型:', textarea.tagName);
+            }
+          }
+        }
+        
+        // 移除全局粘贴事件监听器，避免重复触发
+        // 只使用输入框的粘贴事件监听器
+        document.removeEventListener('paste', this.handleGlobalPaste);
+        console.log('已移除全局粘贴事件监听器，避免重复触发');
+      });
+    },
+
+    // 全局粘贴事件处理（已移除，避免重复触发）
+    // handleGlobalPaste(event) {
+    //   // 检查当前焦点是否在输入框上
+    //   const activeElement = document.activeElement;
+    //   const isInTextarea = activeElement && (
+    //     activeElement.tagName === 'TEXTAREA' || 
+    //     activeElement.classList.contains('el-textarea__inner')
+    //   );
+    //   
+    //   if (isInTextarea) {
+    //     console.log('全局粘贴事件：焦点在输入框上，处理粘贴');
+    //     this.handlePaste(event);
+    //     // 标记事件已被处理，防止重复触发
+    //     event._processed = true;
+    //   } else {
+    //     console.log('全局粘贴事件：焦点不在输入框上，忽略');
+    //   }
+    // },
+
+    // 根据MIME类型获取图片扩展名
+    getImageExtension(mimeType) {
+      const extensions = {
+        'image/jpeg': 'jpg',
+        'image/jpg': 'jpg',
+        'image/png': 'png',
+        'image/gif': 'gif',
+        'image/webp': 'webp',
+        'image/bmp': 'bmp'
+      };
+      return extensions[mimeType] || 'png';
+    },
+
     removeAttachment(index) {
       this.attachments.splice(index, 1);
       this.$notify({
@@ -885,6 +1097,11 @@ export default {
   padding: 0 4px;
   text-align: left;
   width: 96%;
+}
+.content-warp-menu {
+  padding: 0 4px;
+  text-align: left;
+  width: calc((100vw - 260px) * 0.96);
 }
 
 .circle {
@@ -1229,7 +1446,6 @@ export default {
   background-color: rgba(251, 119, 80, 0.5);
   border-color: #fb7750;
   color: #fff;
-  opacity: 0.5;
 }
 
 .btn_sent:hover,
@@ -2227,6 +2443,41 @@ code {
   padding-bottom: 8px;
 }
 
+/* 粘贴提示信息样式 */
+.paste-tip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 12px;
+  margin-left: 2px;
+  padding: 4px 8px;
+  background-color: rgba(251, 119, 80, 0.1);
+  border: 1px solid rgba(251, 119, 80, 0.2);
+  border-radius: 12px;
+  font-size: 11px;
+  color: #fb7750;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: help;
+  user-select: none;
+}
+
+.paste-tip:hover {
+  background-color: rgba(251, 119, 80, 0.15);
+  border-color: rgba(251, 119, 80, 0.3);
+  transform: translateY(-1px);
+}
+
+.paste-tip i {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.paste-tip span {
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
 .btn_attachment {
   background-color: rgba(251, 119, 80, 0.1) !important;
   border-color: #fb7750 !important;
@@ -2346,27 +2597,20 @@ code {
   cursor: not-allowed;
 }
 
-/* 折叠面板头部样式优化 */
+/* 折叠面板头部样式优化 - 扁平化设计 */
 .collapse-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.1);
-  backdrop-filter: blur(8px);
-  background: #fcfcfc;
-  border: 1px solid #e8e8e8;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+  background: #fff;
+  margin-bottom: 8px;
 }
 
 .collapse-header:hover {
-  background: linear-gradient(135deg, rgba(251, 119, 80, 0.04) 0%, rgba(251, 119, 80, 0.08) 100%);
-  border: 1px solid rgba(214, 209, 207, 0.7);
-  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.5);
-  transform: translateY(-1px);
-  background: #fcfcfc;
+  border-color: #fff;
 }
 
 .collapse-title {
@@ -2393,30 +2637,27 @@ code {
   opacity: 1;
 }
 
-/* 头部按钮样式优化 */
+/* 头部按钮样式优化 - 扁平化设计 */
 .header-btn {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  height: 28px !important;
   padding: 0 !important;
-  border-radius: 6px !important;
-  border: 1px solid transparent !important;
-  background: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(4px);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px !important;
+  border: 1px solid #fb7750 !important;
+  background: #fff !important;
+  transition: all 0.2s ease !important;
 }
 
 .header-btn:hover {
-  transform: translateY(-2px) scale(1.05) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(251, 119, 80, 0.1) !important;
+  border-color: #fb7750 !important;
 }
 
 .header-btn:active {
-  transform: translateY(0) scale(0.98) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(251, 119, 80, 0.2) !important;
 }
 
 .header-btn i {
@@ -2424,36 +2665,26 @@ code {
   transition: all 0.2s ease;
 }
 
-/* 复制按钮特定样式 */
+/* 复制按钮特定样式 - 扁平化设计 */
 .copy-btn {
-  color: #409eff !important;
-  border-color: rgba(64, 158, 255, 0.2) !important;
+  color: #fb7750 !important;
+  border-color: #fb7750 !important;
 }
 
 .copy-btn:hover {
-  background: rgba(64, 158, 255, 0.1) !important;
-  border-color: #409eff !important;
-  color: #409eff !important;
+  background: rgba(251, 119, 80, 0.1) !important;
+  color: #fb7750 !important;
 }
 
-.copy-btn:hover i {
-  transform: scale(1.1);
-}
-
-/* 删除按钮特定样式 */
+/* 删除按钮特定样式 - 扁平化设计 */
 .delete-btn {
-  color: #f56c6c !important;
-  border-color: rgba(245, 108, 108, 0.2) !important;
+  color: #fb7750 !important;
+  border-color: #fb7750 !important;
 }
 
 .delete-btn:hover {
-  background: rgba(245, 108, 108, 0.1) !important;
-  border-color: #f56c6c !important;
-  color: #f56c6c !important;
-}
-
-.delete-btn:hover i {
-  transform: scale(1.1);
+  background: rgba(251, 119, 80, 0.15) !important;
+  color: #fb7750 !important;
 }
 
 /* 响应式设计 */
@@ -2478,6 +2709,21 @@ code {
 
   .header-actions {
     gap: 4px;
+  }
+
+  /* 小屏幕上的粘贴提示信息 */
+  .paste-tip {
+    margin-right: 8px;
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  .paste-tip span {
+    display: none; /* 在小屏幕上隐藏文字，只显示图标 */
+  }
+
+  .paste-tip i {
+    font-size: 11px;
   }
 }
 
