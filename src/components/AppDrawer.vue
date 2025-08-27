@@ -15,29 +15,18 @@
         <div class="filter-container">
           <div class="filter-item">
             <i class="el-icon-date filter-icon"></i>
-            <el-date-picker
-              v-model="selectedDate"
-              type="date"
-              placeholder="选择日期过滤"
-              format="yyyy/MM/dd"
-              value-format="yyyy-MM-dd"
-              @change="onDateChange"
-              clearable
-              class="date-picker">
+            <el-date-picker v-model="selectedDate" type="date" placeholder="选择日期过滤" format="yyyy/MM/dd"
+              value-format="yyyy-MM-dd" @change="onDateChange" clearable class="date-picker">
             </el-date-picker>
           </div>
           <div class="filter-actions">
-            <el-button 
-              v-if="selectedDate" 
-              @click="clearDateFilter"
-              size="mini"
-              icon="el-icon-refresh-left"
+            <el-button v-if="selectedDate" @click="clearDateFilter" size="mini" icon="el-icon-refresh-left"
               class="clear-btn">
               清除筛选
             </el-button>
           </div>
         </div>
-        
+
         <!-- 表格头部 -->
         <div class="table-header">
           <div class="header-content">对话内容</div>
@@ -455,7 +444,10 @@ export default {
 /* 操作区域 */
 .item-action {
   width: 80px;
-  text-align: center;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .delete-btn {

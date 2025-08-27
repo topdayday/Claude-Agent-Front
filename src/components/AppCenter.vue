@@ -1838,7 +1838,7 @@ export default {
   align-items: center;
   min-height: 100vh;
   padding: 40px 20px;
-  background: var(--color-panel);
+  background: var(--color-bg);
 }
 
 .model-selection-header {
@@ -2236,11 +2236,6 @@ code {
   code {
     background: rgba(255, 255, 255, 0.1);
     color: var(--color-primary);
-  }
-
-  /* 模型选择容器深色主题 */
-  .model-selection-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   }
 
   .selection-title {
