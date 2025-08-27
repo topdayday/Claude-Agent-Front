@@ -12,43 +12,9 @@
           <div v-for="model in llmsModelInfo" :key="model.modelId"
             :class="['model-card', { 'model-card--selected': model_type === model.modelId }]"
             @click="selectType(model.modelId)">
-            <div class="model-card__header">
-              <div class="model-card__icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" />
-                  <path d="M2 17L12 22L22 17" />
-                  <path d="M2 12L12 17L22 12" />
-                </svg>
-
-              </div>
-              <div v-if="model.multimodal >= 1" class="multimodal-badge multimodal-badge--multimodal">
-                <svg class="multimodal-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.6" />
-                  <path d="M2 17L12 22L22 17" />
-                  <path d="M2 12L12 17L22 12" opacity="0.8" />
-                  <circle cx="8" cy="8" r="2" fill="#4CAF50" />
-                  <circle cx="16" cy="16" r="2" fill="#2196F3" />
-                </svg>
-                <span class="multimodal-text">多模态</span>
-              </div>
-              <div v-else class="multimodal-badge multimodal-badge--conversation">
-                <svg class="multimodal-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" opacity="0.6" />
-                  <path d="M2 17L12 22L22 17" />
-                  <path d="M2 12L12 17L22 12" opacity="0.8" />
-                  <circle cx="8" cy="8" r="2" fill="#4CAF50" />
-                  <circle cx="16" cy="16" r="2" fill="#2196F3" />
-                </svg>
-                <span class="multimodal-text">多轮对话</span>
-              </div>
-              <!-- <div v-if="model_type === model.modelId" class="model-card__check">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" />
-                </svg>
-              </div> -->
-            </div>
-            <div class="model-card__content">
-              <h3 class="model-card__title">{{ model.name + '-' + model.ver }}</h3>
+            <div class="model-card__content" >
+              <h3 v-if="model.multimodal >= 1" class="model-card__title">{{ model.name + '-' + model.ver + '-多模态' }}</h3>
+              <h3 v-else class="model-card__title">{{ model.name + '-' + model.ver + '' }}</h3>
               <p class="model-card__description">{{ model.desc }}</p>
             </div>
             <div class="model-card__footer">
@@ -1874,7 +1840,7 @@ export default {
   align-items: center;
   min-height: 100vh;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--color-panel);
 }
 
 .model-selection-header {
@@ -1913,7 +1879,7 @@ export default {
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 2px solid transparent;
+  border: 2px solid var(--color-border);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -1943,7 +1909,6 @@ export default {
 }
 
 .model-card--selected {
-  border-color: var(--color-primary);
   background: var(--color-panel);
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(251, 119, 80, 0.1), 0 4px 6px -2px rgba(251, 119, 80, 0.05);
@@ -1959,7 +1924,7 @@ export default {
 .model-card__icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
+  background: var(--color-primary-weak-4);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -1978,12 +1943,7 @@ export default {
   color: white;
 }
 
-.model-card__title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 8px 0;
-}
+ 
 
 .model-card__description {
   font-size: 14px;
@@ -2002,8 +1962,8 @@ export default {
 }
 
 .model-card--selected .model-card__status {
-  background: var(--color-primary);
-  color: white;
+  background: var(--color-border);
+  color: var(--color-text);
 }
 
 /* 折叠面板头部样式 */
@@ -2303,22 +2263,12 @@ code {
     border-color: #444;
   }
 
-  .model-card--selected {
-    border-color: var(--color-primary);
-    background: var(--color-panel);
-  }
 
-  .model-card__title {
-    color: #e6e6e6;
-  }
 
   .model-card__description {
     color: #999;
   }
 
-  .model-card__footer {
-    border-top-color: #333;
-  }
 
   /* 折叠面板深色主题 */
   .collapse-title {
@@ -2505,7 +2455,7 @@ code {
 }
 
 .model-card--selected {
-  border-color: var(--color-primary);
+  border-color: var(--color-border);
   background: var(--color-panel);
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(251, 119, 80, 0.1), 0 4px 6px -2px rgba(251, 119, 80, 0.05);
@@ -2564,14 +2514,14 @@ code {
 .model-card__title {
   font-size: 20px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--color-text);
   margin: 0 0 8px 0;
   line-height: 1.3;
 }
 
 .model-card__description {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-text);
   margin: 0;
   line-height: 1.5;
 }
@@ -2580,22 +2530,23 @@ code {
   display: flex;
   justify-content: center;
   padding-top: 16px;
-  border-top: 1px solid #f3f4f6;
+  border-top: var(--color-border);
 }
+
 
 .model-card__status {
   font-size: 14px;
   font-weight: 500;
-  color: #fb7750;
+  color: var(--color-primary-weak-4);
   padding: 8px 16px;
-  background: rgba(251, 119, 80, 0.1);
+  background: var(--color-panel);
   border-radius: 20px;
   transition: all 0.3s ease;
 }
 
 .model-card--selected .model-card__status {
-  background: #fb7750;
-  color: white;
+  background: var(--color-primary-weak);  
+  color: var(--color-primary);
 }
 
 /* 响应式设计 */
