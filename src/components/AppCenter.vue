@@ -1134,7 +1134,6 @@ export default {
   position: relative;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
-  max-width: calc(100% - 60px);
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: var(--color-text);
@@ -1191,7 +1190,6 @@ export default {
   position: relative;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
-  max-width: calc(100% - 60px);
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: var(--color-text);
