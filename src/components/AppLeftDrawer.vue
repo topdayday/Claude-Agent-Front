@@ -76,9 +76,9 @@ export default {
   },
   watch: {
     session_id(val) {
-      if(!val){
+      if (!val) {
         let targetSessionId = localStorage.getItem('session_id');
-        this.conversation_list = this.conversation_list.filter(item=>item.session_id!=targetSessionId)
+        this.conversation_list = this.conversation_list.filter(item => item.session_id != targetSessionId)
         localStorage.removeItem('session_id');
       }
       this.setActiveIndex()
@@ -170,8 +170,7 @@ export default {
 .sidebar-container {
   width: 260px;
   height: 100vh;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  border-right: 1px solid #e2e8f0;
+  background: var(--color-panel);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
@@ -181,9 +180,9 @@ export default {
 
 /* 侧边栏头部 */
 .sidebar-header {
-  padding: 10px 16px 16px 20px;;
-  border-bottom: 1px solid #f1f5f9;
-  background: white;
+  padding: 10px 16px 16px 20px;
+  ;
+  background: var(--color-panel);
   flex-shrink: 0;
 }
 
@@ -194,7 +193,7 @@ export default {
   margin-bottom: 16px;
   font-size: 16px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--color-text)
 }
 
 .title-left {
@@ -204,7 +203,7 @@ export default {
 }
 
 .sidebar-icon {
-  color: #fb7750;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -214,9 +213,9 @@ export default {
   align-items: center;
   gap: 4px;
   padding: 6px 10px;
-  background: rgba(251, 119, 80, 0.08);
-  color: #fb7750;
-  border: 1px solid rgba(251, 119, 80, 0.2);
+  background: var(--color-primary-weak);
+  color: var(--color-text);
+  border: 1px solid var(--color-primary-weak-2);
   border-radius: 16px;
   font-size: 12px;
   font-weight: 500;
@@ -226,8 +225,8 @@ export default {
 }
 
 .more-history-btn-header:hover {
-  background: rgba(251, 119, 80, 0.15);
-  border-color: rgba(251, 119, 80, 0.4);
+  background: var(--color-primary-weak-2);
+  border-color: var(--color-primary-weak-3);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(251, 119, 80, 0.2);
 }
@@ -249,8 +248,8 @@ export default {
   justify-content: center;
   gap: 8px;
   padding: 12px 16px;
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
-  color: white;
+  background-color: var(--color-primary-weak);
+  color: var(--color-text);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -261,7 +260,7 @@ export default {
 }
 
 .new-chat-btn:hover {
-  background: linear-gradient(135deg, #ff8d6d 0%, #ffb199 100%);
+  background: linear-gradient(135deg, var(--color-panel) 0%, var(--color-panel) 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(251, 119, 80, 0.3);
 }
@@ -297,13 +296,14 @@ export default {
 }
 
 .conversation-item:hover {
-  background: rgba(251, 119, 80, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   transform: translateX(2px);
+  border-left: 3px solid var(--color-primary);
 }
 
 .conversation-item--active {
-  background: linear-gradient(135deg, rgba(251, 119, 80, 0.1) 0%, rgba(255, 154, 123, 0.08) 100%);
-  border-left: 3px solid #fb7750;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border-left: 3px solid var(--color-primary);
   padding-left: 9px;
 }
 
@@ -339,7 +339,7 @@ export default {
 }
 
 .conversation-item--active .conversation-icon {
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
   color: white;
 }
 
@@ -354,7 +354,7 @@ export default {
 .conversation-text {
   font-size: 14px;
   font-weight: 500;
-  color: #1e293b;
+  color: var(--color-text);
   line-height: 1.4;
   margin-bottom: 4px;
   overflow: hidden;
@@ -364,11 +364,11 @@ export default {
 }
 
 .conversation-item:hover .conversation-text {
-  color: #fb7750;
+  color: var(--color-text);
 }
 
 .conversation-item--active .conversation-text {
-  color: #fb7750;
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -384,7 +384,7 @@ export default {
 }
 
 .conversation-item--active .conversation-time {
-  color: #fb7750;
+  color: var(--color-text-muted);
   opacity: 0.8;
 }
 
@@ -465,6 +465,72 @@ export default {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .sidebar-title {
+    color: #e2e8f0 !important;
+  }
+
+  .conversation-text {
+    color: #e2e8f0 !important;
+  }
+
+  .conversation-item:hover .conversation-text {
+    color: #f0f0f0 !important;
+  }
+
+  .conversation-item--active .conversation-text {
+    color: #f0f0f0 !important;
+  }
+
+  .conversation-time {
+    color: #94a3b8 !important;
+  }
+
+  .conversation-item:hover .conversation-time {
+    color: #b4b8c4 !important;
+  }
+
+  /* 新建对话按钮深色主题 */
+  .new-chat-btn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-600) 100%) !important;
+    box-shadow: 0 2px 8px rgba(251, 119, 80, 0.4) !important;
+  }
+
+  .new-chat-btn:hover {
+    background: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-primary-500) 100%) !important;
+    box-shadow: 0 4px 12px rgba(251, 119, 80, 0.5) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  .new-chat-btn:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
+  }
+
+  /* 更多按钮深色主题 */
+  .more-history-btn-header {
+    background: rgba(251, 119, 80, 0.15) !important;
+    border-color: rgba(251, 119, 80, 0.3) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .more-history-btn-header:hover {
+    background: rgba(251, 119, 80, 0.25) !important;
+    border-color: rgba(251, 119, 80, 0.4) !important;
+    box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
+  }
+
+  /* 对话项悬停效果深色主题优化 */
+  .conversation-item:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .conversation-item--active {
+    background: linear-gradient(135deg, rgba(251, 119, 80, 0.1) 0%, rgba(251, 119, 80, 0.05) 100%) !important;
   }
 }
 </style>

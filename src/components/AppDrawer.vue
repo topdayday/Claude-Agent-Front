@@ -239,10 +239,10 @@ export default {
 }
 
 :deep(.history-drawer .el-drawer__header) {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(253, 253, 248, 0.1));
+  background: var(--color-panel);
   padding: 15px 20px;
   margin-bottom: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--color-border);
 }
 
 :deep(.history-drawer .el-drawer__title) {
@@ -253,7 +253,7 @@ export default {
 
 :deep(.history-drawer .el-drawer__body) {
   padding: 0;
-  background-color: #fdfcf8;
+  background-color: var(--color-panel);
 }
 
 /* 加载状态 */
@@ -297,7 +297,7 @@ export default {
 }
 
 .filter-icon {
-  color: #fb7750;
+  color: var(--color-primary);
   font-size: 16px;
 }
 
@@ -322,16 +322,16 @@ export default {
 
 .clear-btn:hover,
 .clear-btn:focus {
-  background-color: #fb7750;
-  border-color: #fb7750;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
   color: white;
   transform: translateY(-1px);
 }
 
 /* 日期选择器样式定制 */
 :deep(.date-picker .el-input__inner) {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(251, 119, 80, 0.3);
+  background-color: rgba(248, 250, 252, 0.8);
+  border: 1px solid var(--color-primary-weak-3);
   border-radius: 8px;
   color: #2c3e50;
   font-size: 13px;
@@ -341,8 +341,8 @@ export default {
 }
 
 :deep(.date-picker .el-input__inner:focus) {
-  border-color: #fb7750;
-  box-shadow: 0 0 0 2px rgba(251, 119, 80, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-weak-2);
 }
 
 :deep(.date-picker .el-input__inner::placeholder) {
@@ -351,11 +351,11 @@ export default {
 }
 
 :deep(.date-picker .el-input__suffix) {
-  color: #fb7750;
+  color: var(--color-primary);
 }
 
 :deep(.date-picker .el-input__suffix .el-input__icon) {
-  color: #fb7750;
+  color: var(--color-primary);
 }
 
 /* 表格头部 */
@@ -363,10 +363,10 @@ export default {
   display: flex;
   align-items: center;
   padding: 15px 20px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(253, 253, 248, 0.05));
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, var(--color-panel-weak), transparent);
+  border-bottom: 1px solid var(--color-border);
   font-weight: 600;
-  color: #2c3e50;
+  color: #8c8f92;
   font-size: 14px;
 }
 
@@ -395,7 +395,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 15px 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--color-border);
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -406,8 +406,8 @@ export default {
 }
 
 .conversation-item.active {
-  background-color: rgba(251, 119, 80, 0.1);
-  border-left: 4px solid #fb7750;
+  background-color: var(--color-primary-weak);
+  border-left: 4px solid var(--color-primary);
 }
 
 /* 内容区域 */
@@ -422,14 +422,14 @@ export default {
 }
 
 .content-icon {
-  color: #fb7750;
+  color: var(--color-primary);
   margin-right: 8px;
   font-size: 16px;
 }
 
 .content-title {
   font-size: 14px;
-  color: #2c3e50;
+  color: var(--color-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -509,8 +509,8 @@ export default {
 }
 
 .page-btn {
-  background-color: #fb7750;
-  border-color: #fb7750;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
   color: white;
   border-radius: 20px;
   padding: 8px 16px;
@@ -520,8 +520,8 @@ export default {
 
 .page-btn:hover,
 .page-btn:focus {
-  background-color: #fb8d6d;
-  border-color: #fb8d6d;
+  background-color: var(--color-primary-300);
+  border-color: var(--color-primary-300);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
 }

@@ -22,7 +22,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--color-text);
+  background: var(--color-bg);
   width: 100%;
 }
 
@@ -35,6 +36,8 @@ body {
   overscroll-behavior-x: contain; /* 推荐 */
   margin: 0;
   padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 /* 可选，如果需要更强硬禁止拖动手势 */

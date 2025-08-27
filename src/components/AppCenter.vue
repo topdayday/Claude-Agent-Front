@@ -114,7 +114,7 @@
 
           <div class="content-assistant-warp">
             <div class="content-assistant-icon" v-if="!smallWidth">
-              <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M11.54 2H9.09l4.46 12H16L11.54 2ZM4.46 2 0 14h2.5l.9-2.52h4.68L8.99 14h2.5L7.02 2H4.46Zm-.24 7.25 1.52-4.22 1.53 4.22H4.22Z">
                 </path>
@@ -155,49 +155,73 @@
         </div>
       </div>
 
-      <div v-bind:class="{ send_message: true, send_message_min: !smallWidth }"
-        style="border: 2px #fb7750  solid;background-color:#fff;">
+      <div class="gemini-input-container">
         <!-- 附件显示区域 -->
-        <div v-if="attachments.length > 0 && !smallWidth" class="attachments-preview">
-          <div v-for="(file, index) in attachments" :key="index" class="attachment-item">
-            <span class="attachment-name">{{ file.name }}</span>
-            <span class="attachment-size">({{ formatFileSize(file.size) }})</span>
+        <div v-if="attachments.length > 0" class="attachments-preview-gemini">
+          <div v-for="(file, index) in attachments" :key="index" class="attachment-item-gemini">
+            <div class="attachment-content">
+              <i class="el-icon-paperclip attachment-icon"></i>
+              <span class="attachment-name" v-if="!smallWidth">{{ file.name }}</span>
+              <span class="attachment-name" v-else>{{ index + 1 }}</span>
+              <span class="attachment-size" v-if="!smallWidth">({{ formatFileSize(file.size) }})</span>
+            </div>
             <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
           </div>
         </div>
-        <div v-if="attachments.length > 0 && smallWidth" class="attachments-preview">
-          <div v-for="(file, index) in attachments" :key="index" class="attachment-item">
-            <span class="attachment-name">{{ index + 1 }}</span>
-            <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
+        
+        <div class="gemini-input-wrapper">
+          <!-- 左侧按钮组 -->
+          <div class="input-actions-left">
+            <!-- 附件上传按钮 -->
+            <div v-if="showAttachments(model_type)" class="action-button-wrapper">
+              <input type="file" ref="fileInput" @change="handleFileSelect" multiple accept="*/*" style="display: none;" />
+              <button class="gemini-action-btn" @click="$refs.fileInput.click()" :disabled="sent_status == 1" title="上传附件">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="input-container">
-          <!-- 附件上传按钮 -->
-          <div class="upload-container" v-if="showAttachments(model_type)">
-            <input type="file" ref="fileInput" @change="handleFileSelect" multiple accept="*/*"
-              style="display: none;" />
-            <el-button class="btn_attachment" @click="$refs.fileInput.click()" :disabled="sent_status == 1"
-              icon="el-icon-paperclip" size="small" circle title="上传附件"></el-button>
-          </div>
-          <!-- 粘贴提示信息 -->
-          <el-input autofocus=true type="textarea" ref="textarea_in" :autosize="{ minRows: 2, maxRows: 20 }"
-            placeholder="按下Ctrl+Enter提交，或直接粘贴图片..." v-model="content_in">
-          </el-input>
-          <!-- 自定义清空按钮 -->
-          <i v-if="content_in" class="el-icon-circle-close clear-btn" @click="clearContent"></i>
-        </div>
 
-        <el-button :disabled="sent_status == 1" class="btn_sent" type="primary" @click="sendMessage()" :style="{
-          border: 'none',
-          margin: '0',
-          borderRadius: '0px',
-          opacity: sent_status == 1 ? '0.6' : '1',
-        }">
-          <span v-if="sent_status == 1" class="sending-animation">
-            <i class="el-icon-loading sending-icon"></i>
-          </span>
-          <span v-else>发送</span>
-        </el-button>
+          <!-- 输入框 -->
+          <div class="textarea-wrapper">
+            <el-input 
+              autofocus=true 
+              type="textarea" 
+              ref="textarea_in" 
+              :autosize="{ minRows: 1, maxRows: 10 }"
+              placeholder="输入消息..." 
+              v-model="content_in"
+              class="gemini-textarea">
+            </el-input>
+            <!-- 清空按钮 -->
+            <button v-if="content_in" class="clear-button" @click="clearContent" title="清空">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- 发送按钮 -->
+          <div class="send-button-wrapper">
+            <button 
+              :disabled="sent_status == 1 || (!content_in.trim() && attachments.length === 0)" 
+              class="gemini-send-btn" 
+              @click="sendMessage()"
+              :class="{ 'sending': sent_status == 1, 'disabled': !content_in.trim() && attachments.length === 0 }">
+              <span v-if="sent_status == 1" class="sending-animation">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="loading-icon">
+                  <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                </svg>
+              </span>
+              <span v-else>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1031,7 +1055,7 @@ export default {
 }
 
 ::v-deep .el-loading-spinner .path {
-  stroke: #fb7750;
+  stroke: var(--color-primary);
   stroke-width: 3;
   stroke-dasharray: 90, 150;
   stroke-dashoffset: 0;
@@ -1039,7 +1063,7 @@ export default {
 }
 
 ::v-deep .el-loading-text {
-  color: #fb7750;
+  color: var(--color-primary);
   font-weight: 500;
 }
 
@@ -1072,8 +1096,8 @@ export default {
 }
 
 .content-base {
-  background-color: #fcfcfc;
-  border: 1px solid #fdfdfd;
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-border);
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   box-shadow:
     0 2px 5px rgba(0, 0, 0, 0.1),
@@ -1107,58 +1131,419 @@ export default {
 .circle {
   width: 24px;
   height: 24px;
-  background-color: rgb(0, 0, 0, 0.7);
+  background-color: var(--color-panel);
   border-radius: 50%;
-  color: white;
+  color: var(--color-text);
   padding-right: 2px;
   text-align: center;
   font-size: 16px;
-
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* 现代化对话气泡样式 */
 .content-human-warp {
   display: flex;
   width: 100%;
+  margin-bottom: 24px;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .content-human-icon {
-  width: 36px;
-  margin-top: 5px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
 }
 
 .content-human {
-  margin-left: 0px;
-  background-color: #fdfdfd;
-  text-align: left;
-  padding-bottom: 10px;
-  padding-top: 5px;
-  overflow-x: auto;
-  max-width: calc(100vw - 4px);
+  flex: 1;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  max-width: calc(100% - 60px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.content-human:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-weak-2);
+}
+
+/* 用户消息气泡尾巴 */
+.content-human::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 16px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--color-panel);
+  filter: drop-shadow(-1px 0 0 var(--color-border));
 }
 
 .content-assistant-warp {
   display: flex;
+  width: 100%;
+  margin-bottom: 24px;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .content-assistant-icon {
-  width: 36px;
-  margin-top: 18px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-panel);
+  border-radius: 50%;
+  color: var(--color-text);
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.3);
 }
 
 .content-assistant {
-  margin: auto;
-  background-color: #fcfcfc;
-  border-top: 1px dotted #d4d4d4;
   flex: 1;
-  overflow-x: auto;
-  max-width: calc(100vw - 6px);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  max-width: calc(100% - 60px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.content-assistant:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-weak-2);
+}
+
+/* AI 回复气泡尾巴 */
+.content-assistant::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 16px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid var(--color-panel);
+  filter: drop-shadow(-1px 0 0 var(--color-border));
+}
+
+/* Gemini 风格输入容器 */
+.gemini-input-container {
+  background: var(--color-panel);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  max-width: 100%;
+}
+
+.gemini-input-container:hover {
+  border-color: var(--color-primary-weak-2);
+  box-shadow: 0 4px 16px rgba(251, 119, 80, 0.12);
+}
+
+.gemini-input-container:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(251, 119, 80, 0.2);
+}
+
+/* 附件预览区域 - Gemini 风格 */
+.attachments-preview-gemini {
+  padding: 12px 16px 8px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: rgba(251, 119, 80, 0.02);
+}
+
+.attachment-item-gemini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin: 4px 0;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.attachment-item-gemini:hover {
+  background: var(--color-primary-weak);
+  border-color: var(--color-primary-weak-2);
+  transform: translateY(-1px);
+}
+
+.attachment-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.attachment-icon {
+  color: var(--color-primary);
+  font-size: 14px;
+}
+
+.attachment-name {
+  color: var(--color-text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-size {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.attachment-remove {
+  color: #999;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.attachment-remove:hover {
+  color: #f56c6c;
+  background: rgba(245, 108, 108, 0.1);
+}
+
+/* 输入框包装器 */
+.gemini-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  padding: 12px 16px;
+  gap: 12px;
+  min-height: 56px;
+}
+
+/* 左侧操作按钮 */
+.input-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.gemini-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.gemini-action-btn:hover:not(:disabled) {
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.gemini-action-btn:active {
+  transform: scale(0.95);
+}
+
+.gemini-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 输入框区域 */
+.textarea-wrapper {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.gemini-textarea {
+  width: 100%;
+}
+
+.gemini-textarea ::v-deep .el-textarea__inner {
+  border: none !important;
+  background: transparent !important;
+  padding: 8px 40px 8px 0 !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  resize: none !important;
+  box-shadow: none !important;
+  color: var(--color-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.gemini-textarea ::v-deep .el-textarea__inner:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.gemini-textarea ::v-deep .el-textarea__inner::placeholder {
+  color: var(--color-text-secondary) !important;
+  font-size: 16px !important;
+}
+
+/* 清空按钮 */
+.clear-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-text-secondary);
+  color: var(--color-panel);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.clear-button:hover {
+  opacity: 1;
+  background: var(--color-text);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* 发送按钮 */
+.send-button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.gemini-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.gemini-send-btn:hover:not(:disabled):not(.disabled) {
+  background: var(--color-primary-600);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4);
+}
+
+.gemini-send-btn:active:not(:disabled):not(.disabled) {
+  transform: scale(0.95);
+}
+
+.gemini-send-btn.disabled {
+  background: var(--color-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.gemini-send-btn.sending {
+  background: var(--color-primary);
+  cursor: not-allowed;
+}
+
+/* 发送按钮动画 */
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sending-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .gemini-input-wrapper {
+    padding: 8px 12px;
+    gap: 8px;
+    min-height: 48px;
+  }
+  
+  .gemini-action-btn,
+  .gemini-send-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .gemini-textarea ::v-deep .el-textarea__inner {
+    font-size: 14px !important;
+    padding: 6px 36px 6px 0 !important;
+  }
+  
+  .attachments-preview-gemini {
+    padding: 8px 12px 6px 12px;
+  }
+  
+  .attachment-item-gemini {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
 }
 
 .send_message {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .send_message_min {
@@ -1225,7 +1610,7 @@ export default {
 .dot-icon {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #fb7750, #fb8d6d);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1240,7 +1625,7 @@ export default {
 .dot-icon:hover {
   opacity: 1;
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(251, 119, 80, 0.6);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* 收缩按钮样式 */
@@ -1250,7 +1635,7 @@ export default {
   right: 10px;
   width: 30px;
   height: 30px;
-  background: rgba(251, 119, 80, 0.9);
+  background: var(--color-primary-weak-4);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1266,7 +1651,7 @@ export default {
 .collapse-toggle-btn:hover {
   opacity: 1;
   transform: scale(1.1);
-  background: rgba(251, 119, 80, 1);
+  background: var(--color-primary);
 }
 
 .containt_txt {
@@ -1299,7 +1684,6 @@ export default {
   transition: all 0.3s ease;
   z-index: 10;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* 多模态样式 (multimodal >= 1) */
@@ -1332,6 +1716,29 @@ export default {
 
 .multimodal-badge--conversation .multimodal-icon {
   color: rgba(255, 255, 255, 0.95);
+}
+
+/* 深色主题下的多模态徽章优化 */
+@media (prefers-color-scheme: dark) {
+  .multimodal-badge--multimodal {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    border: 1px solid rgba(76, 175, 80, 0.4);
+  }
+
+  .multimodal-badge--multimodal:hover {
+    background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+  }
+
+  .multimodal-badge--conversation {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    border: 1px solid rgba(33, 150, 243, 0.4);
+  }
+
+  .multimodal-badge--conversation:hover {
+    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.5);
+  }
 }
 
 .multimodal-icon {
@@ -1444,7 +1851,7 @@ export default {
   margin-right: 4px;
   min-height: 54px;
   background-color: rgba(251, 119, 80, 0.5);
-  border-color: #fb7750;
+  border-color: var(--color-primary);
   color: #fff;
 }
 
@@ -1502,7 +1909,7 @@ export default {
 }
 
 .model-card {
-  background: white;
+  background: var(--color-panel);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -1536,8 +1943,10 @@ export default {
 }
 
 .model-card--selected {
-  border-color: #667eea;
-  background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
+  border-color: var(--color-primary);
+  background: var(--color-panel);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(251, 119, 80, 0.1), 0 4px 6px -2px rgba(251, 119, 80, 0.05);
 }
 
 .model-card__header {
@@ -1550,7 +1959,7 @@ export default {
 .model-card__icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -1584,15 +1993,17 @@ export default {
 }
 
 .model-card__status {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  color: #667eea;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  padding: 8px 16px;
+  background: var(--color-primary-weak);
+  border-radius: 20px;
 }
 
 .model-card--selected .model-card__status {
-  color: #10b981;
+  background: var(--color-primary);
+  color: white;
 }
 
 /* 折叠面板头部样式 */
@@ -1607,7 +2018,7 @@ export default {
 .collapse-title {
   flex: 1;
   font-size: 14px;
-  color: #333;
+  color: var(--color-text);
 }
 
 .header-actions {
@@ -1623,7 +2034,7 @@ export default {
   line-height: 1.2 !important;
   border-radius: 4px !important;
   border: 1px solid #dcdfe6 !important;
-  background-color: #fff !important;
+  background-color: var(--color-panel) !important;
   color: #606266 !important;
   transition: all 0.2s ease !important;
 }
@@ -1649,36 +2060,39 @@ export default {
 /* 代码复制按钮样式 */
 .code-copy-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e1e4e8;
-  border-radius: 6px;
-  padding: 6px 8px;
+  top: 12px;
+  right: 12px;
+  background: var(--color-primary-weak);
+  border: 1px solid var(--color-primary-weak-2);
+  border-radius: 8px;
+  padding: 8px 12px;
   font-size: 12px;
-  color: #586069;
+  color: var(--color-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
   z-index: 10;
   opacity: 0;
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(0.95);
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.1);
 }
 
 .code-copy-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: #0366d6;
-  color: #0366d6;
-  transform: translateY(0);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: translateY(0) scale(1);
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
 }
 
 .code-copy-btn.copied {
-  background: rgba(40, 167, 69, 0.1);
-  border-color: #28a745;
-  color: #28a745;
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #10b981;
+  transform: translateY(0) scale(1);
 }
 
 .code-copy-btn .copy-text {
@@ -1727,26 +2141,332 @@ code {
 
 /* 深色主题适配 */
 @media (prefers-color-scheme: dark) {
+  /* 用户输入内容深色主题 */
+  .content-human {
+    color: #f0f0f0 !important;
+  }
+
+  /* AI回复内容深色主题 */
+  .content-assistant {
+    color: #e6e6e6 !important;
+  }
+
+  /* AI回复内容中的所有文本元素 */
+  .content-assistant * {
+    color: #e6e6e6 !important;
+  }
+
+  /* 确保markdown渲染的内容在深色主题下可见 */
+  ::v-deep .content-assistant p {
+    color: #e6e6e6 !important;
+  }
+
+  ::v-deep .content-assistant div {
+    color: #e6e6e6 !important;
+  }
+
+  ::v-deep .content-assistant span {
+    color: #e6e6e6 !important;
+  }
+
+  ::v-deep .content-assistant li {
+    color: #e6e6e6 !important;
+  }
+
+  ::v-deep .content-assistant h1,
+  ::v-deep .content-assistant h2,
+  ::v-deep .content-assistant h3,
+  ::v-deep .content-assistant h4,
+  ::v-deep .content-assistant h5,
+  ::v-deep .content-assistant h6 {
+    color: #f0f0f0 !important;
+  }
+
+  ::v-deep .content-assistant td {
+    color: #e6e6e6 !important;
+  }
+
+  ::v-deep .content-assistant th {
+    color: #f0f0f0 !important;
+  }
+
+  /* 折叠面板头部深色主题 */
+  .collapse-header {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: #333;
+  }
+
+  .collapse-header:hover {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-color: var(--color-primary-weak-2);
+  }
+
+  /* Gemini 输入框深色主题 */
+  .gemini-input-container {
+    background: var(--color-panel);
+    border-color: #333;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .gemini-input-container:hover {
+    border-color: var(--color-primary-weak-2);
+    box-shadow: 0 4px 16px rgba(251, 119, 80, 0.2);
+  }
+
+  .gemini-input-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 20px rgba(251, 119, 80, 0.3);
+  }
+
+  .attachments-preview-gemini {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom-color: #333;
+  }
+
+  .attachment-item-gemini {
+    background: var(--color-panel);
+    border-color: #333;
+  }
+
+  .attachment-item-gemini:hover {
+    background: var(--color-primary-weak);
+    border-color: var(--color-primary-weak-2);
+  }
+
+  .gemini-action-btn {
+    color: #999;
+  }
+
+  .gemini-action-btn:hover:not(:disabled) {
+    background: var(--color-primary-weak);
+    color: var(--color-primary);
+  }
+
+  .clear-button {
+    background: #666;
+    color: var(--color-panel);
+  }
+
+  .clear-button:hover {
+    background: #888;
+  }
+
+  .gemini-send-btn.disabled {
+    background: #444;
+    color: #666;
+  }
+
+  /* 代码块深色主题 */
   pre {
-    background: #161b22;
-    border-color: #30363d;
-    color: #e6edf3;
+    background: #1a1a1a;
+    border-color: #333;
+    color: #e6e6e6;
   }
 
   .code-copy-btn {
-    background: rgba(22, 27, 34, 0.9);
-    border-color: #30363d;
-    color: #7d8590;
+    background: rgba(26, 26, 26, 0.9);
+    border-color: #444;
+    color: #999;
   }
 
   .code-copy-btn:hover {
-    background: rgba(22, 27, 34, 0.95);
-    border-color: #58a6ff;
-    color: #58a6ff;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
   }
 
   code {
-    background: rgba(110, 118, 129, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-primary);
+  }
+
+  /* 模型选择容器深色主题 */
+  .model-selection-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+
+  .selection-title {
+    color: #e6e6e6;
+  }
+
+  .selection-subtitle {
+    color: #999;
+  }
+
+  /* 模型卡片深色主题 */
+  .model-card {
+    background: var(--color-panel);
+    border-color: #333;
+  }
+
+  .model-card:hover {
+    border-color: #444;
+  }
+
+  .model-card--selected {
+    border-color: var(--color-primary);
+    background: var(--color-panel);
+  }
+
+  .model-card__title {
+    color: #e6e6e6;
+  }
+
+  .model-card__description {
+    color: #999;
+  }
+
+  .model-card__footer {
+    border-top-color: #333;
+  }
+
+  /* 折叠面板深色主题 */
+  .collapse-title {
+    color: var(--color-primary);
+  }
+
+  /* 附件相关深色主题 */
+  .attachments-preview {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: #333;
+  }
+
+  .attachment-item {
+    background-color: var(--color-panel);
+    border-color: #333;
+  }
+
+  .attachment-name {
+    color: #e6e6e6;
+  }
+
+  .attachment-size {
+    color: #999;
+  }
+
+  .attachment-item-display {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #333;
+    color: #e6e6e6;
+  }
+
+  .attachment-item-display:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: #444;
+  }
+
+  /* 按钮深色主题 */
+  .btn_attachment {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: #333 !important;
+    color: #e6e6e6 !important;
+  }
+
+  .btn_attachment:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: #444 !important;
+  }
+
+  .header-btn {
+    background: var(--color-panel) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .header-btn:hover {
+    background: var(--color-primary-weak) !important;
+  }
+
+  /* 表格深色主题 */
+  table {
+    border-color: #333;
+  }
+
+  th, td {
+    border-color: #333;
+  }
+
+  th {
+    background-color: #2d2d2d;
+    color: #e6e6e6;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  /* 粘贴提示深色主题 */
+  .paste-tip {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #333;
+    color: #e6e6e6;
+  }
+
+  .paste-tip:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: #444;
+  }
+
+  /* 清除按钮深色主题 */
+  .clear-btn {
+    color: #666;
+  }
+
+  .clear-btn:hover {
+    color: var(--color-primary);
+  }
+
+  /* 收缩按钮深色主题 */
+  .collapse-toggle-btn {
+    background-color: var(--color-panel);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .collapse-toggle-btn:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .dot-icon {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-300));
+  }
+
+  /* 语法高亮深色主题优化 */
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-section,
+  .hljs-link {
+    color: #ff6b6b !important;
+  }
+
+  .hljs-string,
+  .hljs-title,
+  .hljs-name,
+  .hljs-type,
+  .hljs-attribute,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-built_in,
+  .hljs-addition,
+  .hljs-variable,
+  .hljs-template-tag,
+  .hljs-template-variable {
+    color: #51cf66 !important;
+  }
+
+  .hljs-comment,
+  .hljs-quote,
+  .hljs-deletion,
+  .hljs-meta {
+    color: #868e96 !important;
+  }
+
+  .hljs-number,
+  .hljs-regexp,
+  .hljs-literal {
+    color: #74c0fc !important;
   }
 }
 
@@ -1785,101 +2505,12 @@ code {
 }
 
 .model-card--selected {
-  border-color: #667eea;
-  background: linear-gradient(135deg, #f8faff 0%, #f1f5ff 100%);
-}
-
-.model-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.model-card__icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.model-card__check {
-  width: 24px;
-  height: 24px;
-  background: #10b981;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.model-card__title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 8px 0;
-}
-
-.model-card__description {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0 0 16px 0;
-  line-height: 1.5;
-}
-
-.model-card__status {
-  font-size: 12px;
-  font-weight: 500;
-  color: #667eea;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.model-card--selected .model-card__status {
-  color: #10b981;
-}
-
-/* 折叠面板头部样式 */
-.collapse-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-right: 10px;
-}
-
-.collapse-title {
-  flex: 1;
-  font-size: 14px;
-  color: #333;
-}
-
-.model-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  border-color: #fb7750;
-}
-
-.model-card:hover::before {
-  transform: scaleX(1);
-}
-
-.model-card--selected {
-  border-color: #fb7750;
-  background: linear-gradient(135deg, #fff5f3 0%, #ffffff 100%);
+  border-color: var(--color-primary);
+  background: var(--color-panel);
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(251, 119, 80, 0.1), 0 4px 6px -2px rgba(251, 119, 80, 0.05);
 }
 
-.model-card--selected::before {
-  transform: scaleX(1);
-}
-
 .model-card__header {
   display: flex;
   justify-content: space-between;
@@ -1890,17 +2521,12 @@ code {
 .model-card__icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  transition: transform 0.3s ease;
-}
-
-.model-card:hover .model-card__icon {
-  transform: scale(1.1);
 }
 
 .model-card__check {
@@ -2005,14 +2631,14 @@ code {
 
 /* 未访问链接的样式 */
 ::v-deep a:link {
-  color: black;
+  color: var(--color-text);
   text-decoration: underline;
   font-size: 16px;
 }
 
 /* 已访问链接的样式，与未访问链接相同 */
 ::v-deep a:visited {
-  color: black;
+  color: var(--color-text);
   text-decoration: underline;
   font-size: 16px;
 }
@@ -2042,12 +2668,12 @@ code {
 }
 
 ::v-deep .el-textarea__inner {
-  border: 0px #fb7750 solid;
+  border: 0px var(--color-primary) solid;
 }
 
 ::v-deep .el-textarea__inner:hover,
 .el-textarea__inner:focus {
-  border: 0px #fb7750 solid;
+  border: 0px var(--color-primary) solid;
 }
 
 /* 代码复制按钮样式 - 融入你的设计风格 */
@@ -2055,12 +2681,12 @@ code {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(251, 119, 80, 0.1);
-  border: 1px solid rgba(251, 119, 80, 0.2);
+  background: var(--color-primary-weak);
+  border: 1px solid var(--color-primary-weak-2);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 12px;
-  color: #fb7750;
+  color: var(--color-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -2074,8 +2700,8 @@ code {
 }
 
 ::v-deep .code-copy-btn:hover {
-  background: #fb7750;
-  border-color: #fb7750;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
   color: white;
   transform: translateY(0) scale(1);
   box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
@@ -2103,8 +2729,8 @@ code {
 /* 代码块基础样式优化 - 匹配你的界面风格 */
 ::v-deep pre {
   position: relative;
-  background: #fcfcfc;
-  border: 1px solid #e8e8e8;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 20px;
   margin: 16px 0;
@@ -2134,8 +2760,8 @@ code {
 
 /* 行内代码样式 - 匹配你的主题色 */
 ::v-deep code {
-  background: rgba(251, 119, 80, 0.1);
-  color: #fb7750;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
   padding: 3px 6px;
   border-radius: 4px;
   font-family: 'SFMono-Regular', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
@@ -2146,8 +2772,8 @@ code {
 
 /* 语法高亮颜色调整 */
 ::v-deep .hljs {
-  background: #fcfcfc !important;
-  color: #333 !important;
+  background: var(--color-panel) !important;
+  color: var(--color-text) !important;
 }
 
 ::v-deep .hljs-keyword,
@@ -2155,7 +2781,7 @@ code {
 ::v-deep .hljs-literal,
 ::v-deep .hljs-section,
 ::v-deep .hljs-link {
-  color: #fb7750 !important;
+  color: var(--color-primary) !important;
 }
 
 ::v-deep .hljs-string,
@@ -2230,7 +2856,7 @@ code {
 
 /* 滚动条轨道 */
 ::v-deep .el-textarea__inner::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: var(--color-panel);
   /* 轨道背景色 */
   border-radius: 4px;
   /* 圆角 */
@@ -2244,9 +2870,9 @@ code {
   gap: 8px;
   margin-bottom: 12px;
   padding: 8px 12px;
-  background-color: rgba(251, 119, 80, 0.05);
+  background-color: var(--color-primary-weak);
   border-radius: 6px;
-  border-left: 3px solid #fb7750;
+  border-left: 3px solid var(--color-primary);
 }
 
 .action-btn {
@@ -2329,27 +2955,8 @@ code {
   background-color: #f8f8f8;
 }
 
-::v-deep .el-collapse-item__header {
-  padding-left: 4px;
-  background: rgba(251, 119, 80, 0.1) !important;
-  border: 1px solid rgba(251, 119, 80, 0.2) !important;
-  color: #fb7750 !important;
-  transition: all 0.3s ease;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1);
-}
 
-::v-deep .el-collapse-item__header:hover {
-  background: rgba(251, 119, 80, 0.15) !important;
-  border-color: rgba(251, 119, 80, 0.4) !important;
-  box-shadow: 0 4px 8px rgba(251, 119, 80, 0.2);
-  transform: translateY(-1px);
-}
 
-::v-deep .el-collapse-item__header:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.15);
-}
 
 /* 附件相关样式 */
 .attachments-preview {
@@ -2365,7 +2972,7 @@ code {
   align-items: center;
   padding: 4px 8px;
   margin: 2px 0;
-  background-color: #fff;
+  background-color: var(--color-panel);
   border: 1px solid #dee2e6;
   border-radius: 4px;
   font-size: 12px;
@@ -2408,18 +3015,18 @@ code {
   gap: 4px;
   padding: 4px 8px;
   margin: 2px 4px 2px 0;
-  background-color: rgba(251, 119, 80, 0.1);
-  border: 1px solid rgba(251, 119, 80, 0.3);
+  background-color: rgba(255,255,255,0.06);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 12px;
-  color: #fb7750;
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .attachment-item-display:hover {
-  background-color: rgba(251, 119, 80, 0.2);
-  border-color: #fb7750;
+  background-color: rgba(255,255,255,0.10);
+  border-color: var(--color-border);
   transform: translateY(-1px);
 }
 
@@ -2451,11 +3058,11 @@ code {
   margin-right: 12px;
   margin-left: 2px;
   padding: 4px 8px;
-  background-color: rgba(251, 119, 80, 0.1);
-  border: 1px solid rgba(251, 119, 80, 0.2);
+  background-color: rgba(255,255,255,0.06);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   font-size: 11px;
-  color: #fb7750;
+  color: var(--color-text);
   font-weight: 500;
   transition: all 0.2s ease;
   cursor: help;
@@ -2463,8 +3070,8 @@ code {
 }
 
 .paste-tip:hover {
-  background-color: rgba(251, 119, 80, 0.15);
-  border-color: rgba(251, 119, 80, 0.3);
+  background-color: rgba(255,255,255,0.10);
+  border-color: var(--color-border);
   transform: translateY(-1px);
 }
 
@@ -2479,14 +3086,14 @@ code {
 }
 
 .btn_attachment {
-  background-color: rgba(251, 119, 80, 0.1) !important;
-  border-color: #fb7750 !important;
-  color: #fb7750 !important;
+  background-color: rgba(255,255,255,0.06) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text) !important;
 }
 
 .btn_attachment:hover {
-  background-color: rgba(251, 119, 80, 0.2) !important;
-  border-color: #fb8d6d !important;
+  background-color: rgba(255,255,255,0.10) !important;
+  border-color: var(--color-border) !important;
 }
 
 .clear-btn {
@@ -2520,14 +3127,14 @@ code {
 .collapse-toggle-btn {
   width: 36px;
   height: 36px;
-  background-color: rgba(251, 119, 80, 0.95);
-  border: 1px solid #fb7750;
+  background-color: var(--color-primary-weak-2);
+  border: 1px solid var(--color-primary);
   border-radius: 8px;
   display: flex !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: var(--color-primary);
   font-size: 16px;
   transition: all 0.3s ease;
   box-shadow: 0 3px 10px rgba(251, 119, 80, 0.4);
@@ -2537,7 +3144,7 @@ code {
 }
 
 .collapse-toggle-btn:hover {
-  background-color: #fb7750;
+  background-color: var(--color-primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4);
 }
@@ -2564,7 +3171,7 @@ code {
 
 
 .clear-btn:hover {
-  color: #fb7750;
+  color: var(--color-primary);
 }
 
 /* 发送按钮动画样式 */
@@ -2597,40 +3204,38 @@ code {
   cursor: not-allowed;
 }
 
-/* 折叠面板头部样式优化 - 扁平化设计 */
+/* 现代化折叠面板头部样式 */
 .collapse-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 12px 16px;
-  transition: all 0.2s ease;
-  background: #fff;
-  margin-bottom: 8px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
 }
 
-.collapse-header:hover {
-  border-color: #fff;
-}
 
 .collapse-title {
   flex: 1;
-  font-size: 14px;
-  font-weight: 500;
-  color: #ff9a7a;
-  letter-spacing: 0.3px;
-  margin-right: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.2px;
+  margin-right: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+  gap: 8px;
+  opacity: 0.6;
+  transition: all 0.3s ease;
 }
 
 .collapse-header:hover .header-actions {
@@ -2647,17 +3252,17 @@ code {
   padding: 0 !important;
   border-radius: 4px !important;
   border: 1px solid #fb7750 !important;
-  background: #fff !important;
+  background: var(--color-panel) !important;
   transition: all 0.2s ease !important;
 }
 
 .header-btn:hover {
-  background: rgba(251, 119, 80, 0.1) !important;
-  border-color: #fb7750 !important;
+  background: var(--color-primary-weak) !important;
+  border-color: var(--color-primary) !important;
 }
 
 .header-btn:active {
-  background: rgba(251, 119, 80, 0.2) !important;
+  background: var(--color-primary-weak-2) !important;
 }
 
 .header-btn i {
@@ -2672,8 +3277,8 @@ code {
 }
 
 .copy-btn:hover {
-  background: rgba(251, 119, 80, 0.1) !important;
-  color: #fb7750 !important;
+  background: var(--color-primary-weak) !important;
+  color: var(--color-primary) !important;
 }
 
 /* 删除按钮特定样式 - 扁平化设计 */
@@ -2683,8 +3288,8 @@ code {
 }
 
 .delete-btn:hover {
-  background: rgba(251, 119, 80, 0.15) !important;
-  color: #fb7750 !important;
+  background: var(--color-primary-weak-2) !important;
+  color: var(--color-primary) !important;
 }
 
 /* 响应式设计 */
@@ -2727,20 +3332,14 @@ code {
   }
 }
 
-/* 确保按钮在折叠面板中正确显示 */
-::v-deep .el-collapse-item__header .collapse-header {
-  margin: 0;
+
+
+/* 现代化折叠面板整体样式 */
+::v-deep .el-collapse-item {
+  background: var(--color-panel);
 }
 
-/* 优化折叠面板整体样式以匹配新的头部设计 */
-::v-deep .el-collapse-item {
-  border: none !important;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  background: #fff;
-}
+
 
 ::v-deep .el-collapse-item__header {
   background: transparent !important;
@@ -2756,12 +3355,182 @@ code {
 
 ::v-deep .el-collapse-item__wrap {
   border: none !important;
-  background: #fff;
+  background: var(--color-panel);
 }
 
 ::v-deep .el-collapse-item__content {
-  padding: 16px !important;
-  background: #fff;
-  border-top: 1px solid rgba(251, 119, 80, 0.1);
+  padding: 0 !important;
+  background: var(--color-panel);
+  border-top: none !important;
+}
+
+/* 现代化 Markdown 内容样式 */
+::v-deep .content-assistant h1,
+::v-deep .content-assistant h2,
+::v-deep .content-assistant h3,
+::v-deep .content-assistant h4,
+::v-deep .content-assistant h5,
+::v-deep .content-assistant h6 {
+  color: var(--color-text);
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+  line-height: 1.3;
+}
+
+::v-deep .content-assistant h1 {
+  font-size: 28px;
+  border-bottom: 2px solid var(--color-primary-weak);
+  padding-bottom: 12px;
+}
+
+::v-deep .content-assistant h2 {
+  font-size: 24px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 8px;
+}
+
+::v-deep .content-assistant h3 {
+  font-size: 20px;
+}
+
+::v-deep .content-assistant p {
+  color: var(--color-text);
+  line-height: 1.7;
+  margin: 16px 0;
+  font-size: 15px;
+}
+
+::v-deep .content-assistant ul,
+::v-deep .content-assistant ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+::v-deep .content-assistant li {
+  color: var(--color-text);
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+::v-deep .content-assistant blockquote {
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-primary-weak);
+  margin: 20px 0;
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--color-text);
+}
+
+/* 现代化表格样式 */
+::v-deep .content-assistant table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+  background: var(--color-panel);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border);
+}
+
+::v-deep .content-assistant th {
+  background: var(--color-primary-weak);
+  color: var(--color-text);
+  font-weight: 600;
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 2px solid var(--color-primary-weak-2);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+::v-deep .content-assistant th:first-child {
+  border-top-left-radius: 12px;
+}
+
+::v-deep .content-assistant th:last-child {
+  border-top-right-radius: 12px;
+}
+
+::v-deep .content-assistant td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 14px;
+  vertical-align: top;
+}
+
+::v-deep .content-assistant tr:last-child td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+::v-deep .content-assistant tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+::v-deep .content-assistant tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+::v-deep .content-assistant tr:nth-child(even) {
+  background: rgba(251, 119, 80, 0.02);
+}
+
+::v-deep .content-assistant tr:hover {
+  background: rgba(251, 119, 80, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+/* 强调文本样式 */
+::v-deep .content-assistant strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+::v-deep .content-assistant em {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* 链接样式 */
+::v-deep .content-assistant a {
+  color: var(--color-primary) !important;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+::v-deep .content-assistant a:hover {
+  border-bottom-color: var(--color-primary);
+  background: var(--color-primary-weak);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* 分隔线样式 */
+::v-deep .content-assistant hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+  margin: 32px 0;
+}
+
+/* 响应式表格 */
+@media (max-width: 768px) {
+  ::v-deep .content-assistant table {
+    font-size: 12px;
+    margin: 16px 0;
+  }
+  
+  ::v-deep .content-assistant th,
+  ::v-deep .content-assistant td {
+    padding: 10px 12px;
+  }
+  
+  ::v-deep .content-assistant th {
+    font-size: 12px;
+  }
 }
 </style>

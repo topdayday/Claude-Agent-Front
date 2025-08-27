@@ -1,0 +1,28 @@
+:root {
+  /* Brand primary palette */
+  --color-primary-500: #fb7750; /* current brand orange */
+  --color-primary-400: #ff9a7b;
+  --color-primary-300: #fb8d6d;
+
+  /* Semantic aliases */
+  --color-primary: var(--color-primary-500);
+  --color-primary-weak: rgba(251, 119, 80, 0.1);
+  --color-primary-weak-2: rgba(251, 119, 80, 0.2);
+  --color-primary-weak-3: rgba(251, 119, 80, 0.3);
+  --color-primary-weak-4: rgba(251, 119, 80, 0.4);
+
+  /* Text */
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+
+  /* Backgrounds */
+  --color-bg: #ffffff;
+  --color-panel: #fcfcfc;
+  --color-panel-weak: #f8fafc;
+
+  /* Borders and shadows */
+  --color-border: #e2e8f0;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+

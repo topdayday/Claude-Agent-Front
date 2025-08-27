@@ -24,7 +24,7 @@
           <path d="M2 17L12 22L22 17" />
           <path d="M2 12L12 17L22 12" />
         </svg>
-        <el-select v-model="model_type" placeholder="选择AI模型" class="model-select">
+        <el-select  v-model="model_type" placeholder="选择AI模型" class="model-select">
           <el-option v-for="model in llmsModelInfo" :key="model.modelId" :label="model.name" :value="model.modelId">
           </el-option>
         </el-select>
@@ -34,6 +34,14 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
+        <button class="action-btn" @click="toggleTheme()" :title="theme==='dark'?'切换到浅色':'切换到深色'">
+          <svg v-if="theme==='dark'" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm7 9a7 7 0 1 1-7-7 1 1 0 1 1 0 2 5 5 0 1 0 5 5 1 1 0 1 1 2 0z"/>
+          </svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>
+          </svg>
+        </button>
         <button class="action-btn action-btn--primary" @click="newSession()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -60,6 +68,7 @@
 <script>
 
 import { generate_session } from "@/utils/request";
+import { getTheme, toggleTheme } from "@/utils/theme";
 export default {
   name: 'AppTop',
   props: {
@@ -69,6 +78,7 @@ export default {
   data() {
     return {
       model_type: 50,
+      theme: 'light',
     }
   },
   watch: {
@@ -80,6 +90,7 @@ export default {
     },
   },
   mounted() {
+    this.theme = getTheme();
     let m_type = localStorage.getItem('model_type');
     if (m_type != null) {
       this.model_type = Number(m_type);
@@ -88,6 +99,10 @@ export default {
     }
   },
   methods: {
+    toggleTheme(){
+      const next = toggleTheme();
+      this.theme = next;
+    },
     changLeftMenu(val) {
       this.$emit('setLeftMenu', val);
     },
@@ -122,8 +137,8 @@ export default {
 .header-container {
   width: 100%;
   height: 48px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-panel-weak) 100%);
+  border-bottom: 1px solid var(--color-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -152,10 +167,10 @@ export default {
 .toggle-btn {
   width: 28px;
   height: 28px;
-  background: rgba(251, 119, 80, 0.1);
-  border: 1px solid rgba(251, 119, 80, 0.2);
+  background: var(--color-primary-weak);
+  border: 1px solid var(--color-primary-weak-2);
   border-radius: 14px;
-  color: #fb7750;
+  color: var(--color-text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -164,8 +179,8 @@ export default {
 }
 
 .toggle-btn:hover {
-  background: rgba(251, 119, 80, 0.15);
-  border-color: rgba(251, 119, 80, 0.3);
+  background: var(--color-primary-weak-2);
+  border-color: var(--color-primary-weak-3);
   transform: scale(1.05);
 }
 
@@ -194,30 +209,26 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: var(--color-bg);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   max-width: 120px;
   position: relative;
 }
 
 .model-selector:hover {
-  border-color: #fb7750;
-  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.15);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
 
 .model-selector:focus-within {
-  border-color: #fb7750;
-  box-shadow: 0 0 0 3px rgba(251, 119, 80, 0.1), 0 2px 8px rgba(251, 119, 80, 0.15);
+  border-color: var(--color-border);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.06), var(--shadow-sm);
   transform: translateY(-1px);
 }
 
 .model-icon {
-  color: #fb7750;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -232,10 +243,10 @@ export default {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: rgba(248, 250, 252, 0.8);
+  background: var(--color-bg);
   border-radius: 8px;
   padding: 4px 1px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
 }
 
 .action-btn {
@@ -254,8 +265,8 @@ export default {
 }
 
 .action-btn:hover {
-  background: rgba(251, 119, 80, 0.1);
-  color: #fb7750;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
   transform: translateY(-1px);
 }
 
@@ -264,18 +275,18 @@ export default {
 }
 
 .action-btn--active {
-  background: rgba(251, 119, 80, 0.15);
-  color: #fb7750;
+  background: var(--color-primary-weak-2);
+  color: var(--color-primary);
 }
 
 .action-btn--primary {
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
-  color: white;
+  background: var(--color-primary-weak);
+  color: var(--color-text);
   box-shadow: 0 2px 4px rgba(251, 119, 80, 0.3);
 }
 
 .action-btn--primary:hover {
-  background: linear-gradient(135deg, #ff8d6d 0%, #ffb199 100%);
+  background: var(--color-primary-weak-2);;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(251, 119, 80, 0.4);
 }
@@ -297,12 +308,12 @@ export default {
   max-width: 100px;
 }
 
-:deep(.model-select .el-input) {
+::deep(.model-select .el-input) {
   border: none !important;
   background: transparent !important;
 }
 
-:deep(.model-select .el-input__inner) {
+::deep(.model-select .el-input__inner) {
   border: none !important;
   background: transparent !important;
   color: #1e293b !important;
@@ -315,58 +326,58 @@ export default {
   -webkit-appearance: none;
 }
 
-:deep(.model-select .el-input__inner:focus) {
+::deep(.model-select .el-input__inner:focus) {
   border: none !important;
   box-shadow: none !important;
 }
 
-:deep(.model-select .el-input__suffix) {
+::deep(.model-select .el-input__suffix) {
   right: 0 !important;
 }
 
-:deep(.model-select .el-input__suffix-inner) {
+::deep(.model-select .el-input__suffix-inner) {
   color: #64748b !important;
   display: none !important;
 }
 
-:deep(.model-select .el-select__caret) {
+::deep(.model-select .el-select__caret) {
   color: #64748b !important;
   font-size: 14px !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-:deep(.model-select .el-select__caret:hover) {
-  color: #fb7750 !important;
+::deep(.model-select .el-select__caret:hover) {
+  color: var(--color-primary) !important;
   transform: scale(1.1) !important;
 }
 
-:deep(.model-select.is-focus .el-select__caret) {
-  color: #fb7750 !important;
+::deep(.model-select.is-focus .el-select__caret) {
+  color: var(--color-primary) !important;
   transform: rotate(180deg) !important;
 }
 
-:deep(.model-select .el-input.is-focus .el-select__caret) {
-  color: #fb7750 !important;
+::deep(.model-select .el-input.is-focus .el-select__caret) {
+  color: var(--color-primary) !important;
   transform: rotate(180deg) !important;
 }
 
 /* 下拉框样式优化 */
-:deep(.el-select-dropdown) {
+::deep(.el-select-dropdown) {
   border: 1px solid #e2e8f0 !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
   margin-top: 8px !important;
-  background: white !important;
+  background: var(--color-panel) !important;
   backdrop-filter: blur(10px) !important;
   overflow: hidden !important;
   animation: dropdown-appear 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-:deep(.el-select-dropdown .el-scrollbar) {
+::deep(.el-select-dropdown .el-scrollbar) {
   max-height: 280px !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item) {
+::deep(.el-select-dropdown .el-select-dropdown__item) {
   color: #374151 !important;
   font-weight: 500 !important;
   font-size: 14px !important;
@@ -379,37 +390,37 @@ export default {
   background: transparent !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item:first-child) {
+::deep(.el-select-dropdown .el-select-dropdown__item:first-child) {
   margin-top: 8px !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item:last-child) {
+::deep(.el-select-dropdown .el-select-dropdown__item:last-child) {
   margin-bottom: 8px !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item:hover) {
-  background: linear-gradient(135deg, rgba(251, 119, 80, 0.08) 0%, rgba(251, 119, 80, 0.12) 100%) !important;
-  color: #fb7750 !important;
+::deep(.el-select-dropdown .el-select-dropdown__item:hover) {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--color-text) !important;
   transform: translateX(2px) !important;
-  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1) !important;
+  box-shadow: none !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item.selected) {
+::deep(.el-select-dropdown .el-select-dropdown__item.selected) {
   background: transparent !important;
-  color: #fb7750 !important;
+  color: var(--color-primary) !important;
   font-weight: 600 !important;
-  border: 2px solid #fb7750 !important;
+  border: 2px solid var(--color-primary) !important;
   padding: 10px 14px !important;
   position: relative !important;
 }
 
-:deep(.el-select-dropdown .el-select-dropdown__item.selected::after) {
+::deep(.el-select-dropdown .el-select-dropdown__item.selected::after) {
   content: '✓' !important;
   position: absolute !important;
   right: 16px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  color: #fb7750 !important;
+  color: var(--color-primary) !important;
   font-weight: bold !important;
   font-size: 14px !important;
 }
@@ -428,7 +439,7 @@ export default {
 }
 
 /* 下拉框空状态样式 */
-:deep(.el-select-dropdown .el-select-dropdown__empty) {
+::deep(.el-select-dropdown .el-select-dropdown__empty) {
   padding: 20px !important;
   color: #9ca3af !important;
   text-align: center !important;
@@ -436,48 +447,48 @@ export default {
 }
 
 /* 下拉框加载状态 */
-:deep(.el-select-dropdown .el-select-dropdown__loading) {
+::deep(.el-select-dropdown .el-select-dropdown__loading) {
   padding: 20px !important;
   text-align: center !important;
-  color: #fb7750 !important;
+  color: var(--color-primary) !important;
 }
 
 /* 选择框激活状态 */
-:deep(.model-select.is-focus) {
-  border-color: #fb7750 !important;
+::deep(.model-select.is-focus) {
+  border-color: var(--color-primary) !important;
 }
 
-:deep(.model-select.is-focus .el-input__inner) {
-  color: #fb7750 !important;
+::deep(.model-select.is-focus .el-input__inner) {
+  color: var(--color-primary) !important;
 }
 
 /* 下拉框分组样式（如果有分组的话） */
-:deep(.el-select-group__title) {
+::deep(.el-select-group__title) {
   color: #6b7280 !important;
   font-size: 12px !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.05em !important;
   padding: 8px 16px 4px !important;
   margin: 0 !important;
 }
 
 /* 下拉框滚动条样式 */
-:deep(.el-select-dropdown .el-scrollbar__wrap) {
+::deep(.el-select-dropdown .el-scrollbar__wrap) {
   overflow-x: hidden !important;
 }
 
-:deep(.el-select-dropdown .el-scrollbar__bar) {
+::deep(.el-select-dropdown .el-scrollbar__bar) {
   right: 2px !important;
   border-radius: 4px !important;
 }
 
-:deep(.el-select-dropdown .el-scrollbar__thumb) {
+::deep(.el-select-dropdown .el-scrollbar__thumb) {
   background: rgba(251, 119, 80, 0.3) !important;
   border-radius: 4px !important;
 }
 
-:deep(.el-select-dropdown .el-scrollbar__thumb:hover) {
+::deep(.el-select-dropdown .el-scrollbar__thumb:hover) {
   background: rgba(251, 119, 80, 0.5) !important;
 }
 
@@ -531,5 +542,22 @@ export default {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+}
+
+
+::v-deep .el-input__inner {
+  background-color: var(--color-bg);
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);  
+  box-sizing: border-box;
+  color: var(--color-text);
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  outline: 0;
+  padding: 0 15px;
+  transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+  width: 100%
 }
 </style>

@@ -1,0 +1,31 @@
+/* Explicit light theme – uses tokens default values */
+:root[data-theme="light"] {
+  /* keep defaults from tokens.css */
+}
+
+/* Dark theme overrides */
+:root[data-theme="dark"] {
+  --color-primary-500: #ff8a5a;
+  --color-primary-400: #ff9f7a;
+  --color-primary-300: #ffb199;
+
+  --color-primary: var(--color-primary-500);
+  /* In dark theme, weak surfaces use neutral overlays (reduce orange dominance) */
+  --color-primary-weak: rgba(255, 255, 255, 0.06);
+  --color-primary-weak-2: rgba(255, 255, 255, 0.10);
+  --color-primary-weak-3: rgba(255, 255, 255, 0.16);
+  --color-primary-weak-4: rgba(255, 255, 255, 0.22);
+
+  --color-text: #E5EAF0;
+  --color-text-muted: #A6B3C2;
+
+  /* Base surfaces (参考深色仪表盘风格) */
+  --color-bg: #0B1217;
+  --color-panel: #111827;
+  --color-panel-weak: #0E1620;
+
+  --color-border: #1F2937;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+

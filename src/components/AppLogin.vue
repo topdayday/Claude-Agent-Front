@@ -204,11 +204,7 @@
 /* 主登录页面容器 */
 .login-main {
   min-height: 100vh;
-  background: linear-gradient(135deg, 
-    rgba(251, 119, 80, 0.1) 0%, 
-    rgba(253, 253, 248, 0.95) 30%, 
-    rgba(251, 119, 80, 0.05) 70%,
-    rgba(253, 253, 248, 0.9) 100%);
+  background: var(--color-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -267,7 +263,7 @@
 }
 
 .title-icon {
-  color: #fb7750;
+  color: var(--color-primary);
   font-size: 3rem;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -297,7 +293,7 @@
 }
 
 .tag {
-  background: linear-gradient(135deg, #fb7750, #fb8d6d);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300));
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -320,7 +316,7 @@
   margin-bottom: 50px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(251, 119, 80, 0.2);
+  border: 1px solid var(--color-primary-weak-2);
   position: relative;
   z-index: 1;
   max-width: 800px;
@@ -368,7 +364,7 @@
   border-color: #fb7750;
 }
 .model-desc {
-  color: #fb7750;
+  color: var(--color-primary);
   font-size: 16px;
   padding: 10px 0px 10px;
   display: flex;
@@ -381,7 +377,7 @@
 
 .model-icon i {
   font-size: 2rem;
-  color: #fb7750;
+  color: var(--color-primary);
 }
 
 .model-name {
@@ -398,7 +394,7 @@
 }
 
 .login-btn {
-  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300)) !important;
   border: none !important;
   border-radius: 25px !important;
   padding: 15px 40px !important;
@@ -415,7 +411,7 @@
 .login-btn:focus {
   transform: translateY(-3px) !important;
   box-shadow: 0 8px 25px rgba(251, 119, 80, 0.5) !important;
-  background: linear-gradient(135deg, #fb8d6d, #fba088) !important;
+  background: linear-gradient(135deg, var(--color-primary-300), #fba088) !important;
 }
 
 .login-btn i {
@@ -434,9 +430,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, 
-    rgba(251, 119, 80, 0.05) 0%, 
-    rgba(253, 253, 248, 0.95) 100%);
+  background: var(--color-panel);
   min-height: 100vh;
   padding: 20px;
 }
@@ -487,18 +481,18 @@
 }
 
 ::v-deep .el-input__inner {
-  border: 1px solid rgba(251, 119, 80, 0.3) !important;
+  border: 1px solid var(--color-primary-weak-3) !important;
   border-radius: 8px !important;
   transition: all 0.3s ease !important;
 }
 
 ::v-deep .el-input__inner:focus {
-  border-color: #fb7750 !important;
-  box-shadow: 0 0 0 2px rgba(251, 119, 80, 0.2) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px var(--color-primary-weak-2) !important;
 }
 
 ::v-deep .el-button--primary {
-  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300)) !important;
   border: none !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
@@ -507,7 +501,7 @@
 
 ::v-deep .el-button--primary:hover,
 ::v-deep .el-button--primary:focus {
-  background: linear-gradient(135deg, #fb8d6d, #fba088) !important;
+  background: linear-gradient(135deg, var(--color-primary-300), #fba088) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4) !important;
 }
@@ -518,7 +512,7 @@
 }
 
 ::v-deep .el-dialog__header {
-  background: linear-gradient(135deg, #fb7750, #fb8d6d) !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300)) !important;
   color: white !important;
   padding: 20px !important;
 }

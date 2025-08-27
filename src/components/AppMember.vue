@@ -379,7 +379,7 @@ export default {
 .user-avatar {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -485,14 +485,14 @@ export default {
 }
 
 .nav-item:hover {
-  background: rgba(251, 119, 80, 0.08);
-  color: #fb7750;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
   transform: translateX(2px);
 }
 
 .nav-item--active {
-  background: rgba(251, 119, 80, 0.15);
-  color: #fb7750;
+  background: var(--color-primary-weak-2);
+  color: var(--color-primary);
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(251, 119, 80, 0.1);
 }
@@ -630,8 +630,8 @@ export default {
 }
 
 .form-input:focus {
-  border-color: #fb7750;
-  box-shadow: 0 0 0 3px rgba(251, 119, 80, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-weak);
 }
 
 .form-input--disabled {
@@ -649,7 +649,7 @@ export default {
 }
 
 .form-input:focus+.input-icon {
-  color: #fb7750;
+  color: var(--color-primary);
 }
 
 .form-help {
@@ -701,7 +701,7 @@ export default {
 }
 
 .btn--primary {
-  background: linear-gradient(135deg, #fb7750 0%, #ff9a7b 100%);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-400) 100%);
   color: white;
   box-shadow: 0 2px 4px rgba(251, 119, 80, 0.3);
 }
