@@ -1971,6 +1971,7 @@ export default {
   align-items: center;
   width: 100%;
   padding-right: 10px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .collapse-title {
@@ -2879,24 +2880,24 @@ code {
   margin: 1rem 0;
   display: block;
   overflow-x: auto;
-  border: 0px solid #ddd;
+  border: 0px solid  var(--color-border);;
 }
 
 ::v-deep th,
 ::v-deep td {
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
 }
 
 ::v-deep th {
   font-weight: bold;
-  background-color: #f0f0f0;
-  color: #444;
+  background-color: var(--color-bg);
+  color: var(--color-text);
   text-align: center;
 }
 
 ::v-deep tr:nth-child(even) {
-  background-color: #f8f8f8;
+  background-color: var(--color-bg);
 }
 
 
@@ -3376,7 +3377,6 @@ code {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--color-border);
 }
 
 ::v-deep .content-assistant th {
@@ -3400,15 +3400,12 @@ code {
 
 ::v-deep .content-assistant td {
   padding: 14px 20px;
-  border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
   font-size: 14px;
   vertical-align: top;
 }
 
-::v-deep .content-assistant tr:last-child td {
-  border-bottom: 1px solid var(--color-border);
-}
+
 
 ::v-deep .content-assistant tr:last-child td:first-child {
   border-bottom-left-radius: 12px;
