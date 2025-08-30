@@ -30,8 +30,8 @@
         <!-- 表格头部 -->
         <div class="table-header">
           <div class="header-content" style="flex: 3;">对话内容</div>
-          <div class="header-time"    style="flex: 1;">创建时间</div>
-          <div class="header-action"  style="flex: 1;">操作</div>
+          <div class="header-time" style="flex: 1;">创建时间</div>
+          <div class="header-action" style="flex: 1;">操作</div>
         </div>
 
         <!-- 会话列表项 -->
@@ -561,10 +561,31 @@ export default {
   .header-action,
   .item-action {
     width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .content-title {
-    max-width: 200px;
+    max-width: 150px;
+  }
+
+  .delete-btn {
+    padding: 2px 8px;
+    font-size: 11px;
+    min-width: 50px;
+  }
+
+  /* 确保在小屏幕下各列的对齐 */
+  .item-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .item-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

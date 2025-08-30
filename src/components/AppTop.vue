@@ -34,7 +34,7 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <button class="action-btn action-btn--primary" @click="newSession()">
+        <button class="action-btn" @click="newSession()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
           </svg>
