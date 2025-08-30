@@ -2,7 +2,7 @@
   <div class="content-main">
     <div v-bind:class="{ main_left: showLeftMenu, main_left_hide: !showLeftMenu }" v-if="!smallWidth"></div>
     <div class="main-right-card" v-if="showIndexContent" v-loading="loading"
-      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : '加载中...'">
+      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : 'loading...'">
       <div class="model-selection-container">
         <div class="model-selection-header">
           <h2 class="selection-title">选择AI模型</h2>
@@ -18,16 +18,16 @@
               <p class="model-card__description">{{ model.desc }}</p>
             </div>
             <div class="model-card__footer">
-              <span class="model-card__status">
+              <el-button class="model-card__status">
                 {{ model_type === model.modelId ? '已选择' : '点击选择' }}
-              </span>
+              </el-button>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div :class="showLeftMenu&&(!smallWidth) ? 'content-warp-menu' : 'content-warp'" v-if="!showIndexContent" v-loading="loading"
-      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : '加载中...'">
+      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : 'loading...'">
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
           style="padding: 6px;">
@@ -2501,7 +2501,7 @@ code {
 }
 
 .model-card__content {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .model-card__title {
@@ -2522,7 +2522,7 @@ code {
 .model-card__footer {
   display: flex;
   justify-content: center;
-  padding-top: 16px;
+  padding-top: 8px;
   border-top: var(--color-border);
 }
 
@@ -2530,7 +2530,7 @@ code {
 .model-card__status {
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-primary-weak-4);
+  color: var(--color-text-secondary);
   padding: 8px 16px;
   background: var(--color-panel);
   border-radius: 20px;

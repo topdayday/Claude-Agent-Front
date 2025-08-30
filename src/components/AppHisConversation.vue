@@ -6,7 +6,7 @@
       <!-- 加载状态 -->
       <div v-if="loading" class="loading-container">
         <el-spinner></el-spinner>
-        <p class="loading-text">加载中...</p>
+        <p class="loading-text">loading...</p>
       </div>
 
       <!-- 会话列表 -->
@@ -29,9 +29,9 @@
 
         <!-- 表格头部 -->
         <div class="table-header">
-          <div class="header-content">对话内容</div>
-          <div class="header-time">创建时间</div>
-          <div class="header-action">操作</div>
+          <div class="header-content" style="flex: 3;">对话内容</div>
+          <div class="header-time"    style="flex: 1;">创建时间</div>
+          <div class="header-action"  style="flex: 1;">操作</div>
         </div>
 
         <!-- 会话列表项 -->
@@ -39,19 +39,19 @@
           <div v-for="(item, index) in conversation_list" :key="index" class="conversation-item"
             :class="{ 'active': item.session_id === session_id }">
 
-            <div class="item-content" @click="viewSession(item.session_id)">
+            <div class="item-content" @click="viewSession(item.session_id)" style="flex: 3;">
               <div class="content-text">
                 <i class="el-icon-chat-dot-round content-icon"></i>
                 <span class="content-title">{{ item.content_in }}</span>
               </div>
             </div>
 
-            <div class="item-time">
+            <div class="item-time" style="flex: 1;">
               <i class="el-icon-time time-icon"></i>
               <span>{{ dateFormat(item.create_time) }}</span>
             </div>
 
-            <div class="item-action">
+            <div class="item-action" style="flex: 1;">
               <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteSession(item.session_id)"
                 class="delete-btn">
                 删除
@@ -448,7 +448,6 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  float:right;
 }
 
 .delete-btn {

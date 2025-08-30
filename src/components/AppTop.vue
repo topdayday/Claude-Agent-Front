@@ -34,14 +34,6 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <button class="action-btn" @click="toggleTheme()">
-          <svg v-if="theme==='dark'" data-v-c4bf0156=""   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path data-v-c4bf0156="" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>
-          </svg>
-        </button>
         <button class="action-btn action-btn--primary" @click="newSession()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
@@ -58,6 +50,14 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="toggleTheme()">
+          <svg v-if="theme==='dark'" data-v-c4bf0156=""   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path data-v-c4bf0156="" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>
           </svg>
         </button>
       </div>

@@ -51,9 +51,9 @@
   import AppTop from './AppTop.vue'
   import AppCenter from './AppCenter.vue'
   import AppLogin from './AppLogin.vue'
-  import AppDrawer from './AppDrawer.vue'
+  import AppDrawer from './AppHisConversation.vue'
   import AppMember from './AppMember.vue'
-  import AppLeftDrawer from './AppLeftDrawer.vue'
+  import AppLeftDrawer from './AppLatestConversation.vue'
   import {list_llm} from "@/utils/request";
 export default {
   name: 'AppMain',

@@ -1,29 +1,13 @@
 <template>
   <div>
     <div class="login-main" id="login_index">
-      <!-- 主标题区域 -->
-      <div class="hero-section">
-        <div class="hero-content">
-          <h1 class="main-title" :class="{ 'mobile': smallWidth }">
-            <i class="el-icon-cpu title-icon"></i>
-            T2Day AI
-          </h1>
-          <h2 class="sub-title" :class="{ 'mobile': smallWidth }">
-            集成主流AI大模型，智能对话新体验
-          </h2>
-          <div class="feature-tags">
-            <span class="tag">多轮对话</span>
-            <span class="tag">多模态支持</span>
-            <span class="tag">高效便捷</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模型展示区域 -->
       <div class="models-showcase">
         <div class="models-header">
           <i class="el-icon-star-on"></i>
-          <span>支持的AI模型</span>
+          <span>T2Day AI</span>
+        </div>
+        <div class="models-header">
+          <span> 集成主流AI大模型，多模态，多轮对话新体验</span>
         </div>
         <div class="models-grid">
           <div 
@@ -35,7 +19,6 @@
                 <span class="model-desc">{{ item.name + '-' + item.ver }}</span>
              </i>
             </div>
-            <div class="model-name">{{item.desc}}</div>
           </div>
         </div>
       </div>
@@ -342,8 +325,8 @@
 
 .models-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -351,8 +334,8 @@
 .model-card {
   background: linear-gradient(135deg, rgba(251, 119, 80, 0.05), rgba(255, 255, 255, 0.8));
   border: 1px solid rgba(251, 119, 80, 0.2);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 2px;
+  padding: 6px;
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -372,7 +355,7 @@
   height: 100%;
 }
 .model-icon {
-  margin-bottom: 12px;
+  margin-top: 4px;
 }
 
 .model-icon i {

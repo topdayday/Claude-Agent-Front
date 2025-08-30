@@ -58,7 +58,6 @@
             <!-- 基本信息标签页 -->
             <div v-if="activeTab === 'profile'" class="tab-content">
               <div class="section-header">
-                <h3 class="section-title">基本信息</h3>
                 <p class="section-description">更新您的个人资料和联系方式</p>
               </div>
 
@@ -111,8 +110,7 @@
             <!-- 安全设置标签页 -->
             <div v-if="activeTab === 'security'" class="tab-content">
               <div class="section-header">
-                <h3 class="section-title">安全设置</h3>
-                <p class="section-description">修改密码以保护您的账户安全</p>
+                <p class="section-description">跟新密码以保护您的账户安全</p>
               </div>
 
               <form class="security-form" @submit.prevent="submitForm('memberForm')">
