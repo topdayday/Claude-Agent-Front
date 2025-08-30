@@ -288,6 +288,8 @@ export default {
       });
     },
     loginOut() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('session_id')
       this.$emit('update:token', null);
       this.$emit('update:session_id', null);
     },

@@ -37,9 +37,9 @@
       </div>
     </div>
     <el-dialog
-            title="用户登录"
+            title="登录/注册"
             :visible.sync="showLoginForm"
-            :show-close="true"
+            :show-close="false"
             :fullscreen="true"
             center>
             <div class="login-container"  id="login_from">
@@ -64,6 +64,7 @@
                   <div class="login-container-botton">
                     <el-button type="primary" @click="registerForm('loginForm')">注册</el-button>
                     <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+                    <el-button type="primary" @click="claoseLogin()">关闭</el-button>
                   </div>
                 </el-form-item>
               </el-form>
@@ -133,6 +134,9 @@
       showForm(){
         this.showLoginForm=true;
       },
+      claoseLogin(){
+        this.showLoginForm=false;
+      },
       generateCaptcha() {
         get_captcha().then(data => {
          this.captchaImage= data;
@@ -158,26 +162,27 @@
           }
         });
       },
-        registerForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    member_register(this.loginData).then(data => {
-                      if(data) {
-                        this.$message.success('欢迎使用!')
-                        this.tokenVal = data.token;
-                        this.sessionIdVal = data.session_id;
-                        localStorage.setItem('token', this.tokenVal);
-                        localStorage.setItem('session_id', this.sessionIdVal);
-                      }
-                    }) .catch(error => {
-                        console.error(error); //
-                    });
-                } else {
-                    this.$message.error('表单验证失败！');
-                    return false;
-                }
-            });
-        },
+      registerForm(formName) {
+          this.$refs[formName].validate((valid) => {
+              if (valid) {
+                  member_register(this.loginData).then(data => {
+                    if(data) {
+                      this.$message.success('欢迎使用!')
+                      this.tokenVal = data.token;
+                      this.sessionIdVal = data.session_id;
+                      localStorage.setItem('token', this.tokenVal);
+                      localStorage.setItem('session_id', this.sessionIdVal);
+                    }
+                  }) .catch(error => {
+                      console.error(error); //
+                  });
+              } else {
+                  this.$message.error('表单验证失败！');
+                  return false;
+              }
+          });
+      },
+
 
     },
   };
@@ -346,6 +351,7 @@
   box-shadow: 0 8px 25px rgba(251, 119, 80, 0.2);
   border-color: #fb7750;
 }
+
 .model-desc {
   color: var(--color-primary);
   font-size: 16px;
@@ -413,7 +419,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-panel);
   min-height: 100vh;
   padding: 20px;
 }
@@ -464,7 +469,8 @@
 }
 
 ::v-deep .el-input__inner {
-  border: 1px solid var(--color-primary-weak-3) !important;
+  border: 1px solid var(--color-primary-300) !important;
+ 
   border-radius: 8px !important;
   transition: all 0.3s ease !important;
 }
@@ -482,12 +488,7 @@
   transition: all 0.3s ease !important;
 }
 
-::v-deep .el-button--primary:hover,
-::v-deep .el-button--primary:focus {
-  background: linear-gradient(135deg, var(--color-primary-300), #fba088) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.4) !important;
-}
+
 
 ::v-deep .el-dialog {
   border-radius: 0px !important;
@@ -498,6 +499,7 @@
   background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-300)) !important;
   color: white !important;
   padding: 20px !important;
+  display: none !important;
 }
 
 ::v-deep .el-dialog__title {
