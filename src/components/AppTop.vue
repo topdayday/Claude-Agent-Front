@@ -34,9 +34,9 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <button class="action-btn" @click="toggleTheme()" :title="theme==='dark'?'切换到浅色':'切换到深色'">
-          <svg v-if="theme==='dark'" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm7 9a7 7 0 1 1-7-7 1 1 0 1 1 0 2 5 5 0 1 0 5 5 1 1 0 1 1 2 0z"/>
+        <button class="action-btn" @click="toggleTheme()">
+          <svg v-if="theme==='dark'" data-v-c4bf0156=""   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path data-v-c4bf0156="" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
           <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>

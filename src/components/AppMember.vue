@@ -157,22 +157,6 @@
                   </div>
                 </div>
               </form>
-
-              <!-- 危险操作区域 -->
-              <div class="danger-zone">
-                <div class="danger-header">
-                  <h4 class="danger-title">切换账号</h4>
-                </div>
-                <div class="danger-actions">
-                  <button class="btn btn--danger" @click="handleLogout">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <path
-                        d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" />
-                    </svg>
-                    <span>退出系统</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -186,13 +170,20 @@
               <path
                 d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" />
             </svg>
-            <span>取消</span>
+            <span>取消更改</span>
           </button>
           <button class="btn btn--primary" @click="submitForm('memberForm')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" />
             </svg>
             <span>保存更改</span>
+          </button>
+          <button class="btn btn--danger" @click="handleLogout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.59L17 17L22 12L17 7ZM4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z" />
+            </svg>
+            <span>退出登录</span>
           </button>
         </div>
       </div>
@@ -285,7 +276,7 @@ export default {
       });
     },
     handleLogout() {
-      MessageBox.confirm('确定要退出系统吗？', '确认退出', {
+      MessageBox.confirm('确定要退出登录吗？', '确认退出', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
