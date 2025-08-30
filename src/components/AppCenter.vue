@@ -1138,6 +1138,10 @@ export default {
   overflow-wrap: break-word;
   color: var(--color-text);
   font-weight: 500;
+  /* Allow flex item to shrink and show horizontal scroll for wide content */
+  min-width: 0;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .content-human:hover {
@@ -1194,6 +1198,10 @@ export default {
   overflow-wrap: break-word;
   color: var(--color-text);
   font-weight: 400;
+  /* Allow flex item to shrink and show horizontal scroll for wide content */
+  min-width: 0;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .content-assistant:hover {
