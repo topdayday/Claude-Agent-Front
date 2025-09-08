@@ -469,68 +469,66 @@ export default {
 }
 
 /* 深色主题适配 */
-@media (prefers-color-scheme: dark) {
-  .sidebar-title {
-    color: #e2e8f0 !important;
-  }
+:root[data-theme="dark"] .sidebar-title {
+  color: #e2e8f0 !important;
+}
 
-  .conversation-text {
-    color: #e2e8f0 !important;
-  }
+:root[data-theme="dark"] .conversation-text {
+  color: #e2e8f0 !important;
+}
 
-  .conversation-item:hover .conversation-text {
-    color: #f0f0f0 !important;
-  }
+:root[data-theme="dark"] .conversation-item:hover .conversation-text {
+  color: #f0f0f0 !important;
+}
 
-  .conversation-item--active .conversation-text {
-    color: #f0f0f0 !important;
-  }
+:root[data-theme="dark"] .conversation-item--active .conversation-text {
+  color: #f0f0f0 !important;
+}
 
-  .conversation-time {
-    color: #94a3b8 !important;
-  }
+:root[data-theme="dark"] .conversation-time {
+  color: #94a3b8 !important;
+}
 
-  .conversation-item:hover .conversation-time {
-    color: #b4b8c4 !important;
-  }
+:root[data-theme="dark"] .conversation-item:hover .conversation-time {
+  color: #b4b8c4 !important;
+}
 
-  /* 新建对话按钮深色主题 */
-  .new-chat-btn {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-600) 100%) !important;
-    box-shadow: 0 2px 8px rgba(251, 119, 80, 0.4) !important;
-  }
+/* 新建对话按钮深色主题 */
+:root[data-theme="dark"] .new-chat-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-600) 100%) !important;
+  box-shadow: 0 2px 8px rgba(251, 119, 80, 0.4) !important;
+}
 
-  .new-chat-btn:hover {
-    background: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-primary-500) 100%) !important;
-    box-shadow: 0 4px 12px rgba(251, 119, 80, 0.5) !important;
-    transform: translateY(-2px) !important;
-  }
+:root[data-theme="dark"] .new-chat-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-primary-500) 100%) !important;
+  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.5) !important;
+  transform: translateY(-2px) !important;
+}
 
-  .new-chat-btn:active {
-    transform: translateY(0) !important;
-    box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
-  }
+:root[data-theme="dark"] .new-chat-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
+}
 
-  /* 更多按钮深色主题 */
-  .more-history-btn-header {
-    background: rgba(251, 119, 80, 0.15) !important;
-    border-color: rgba(251, 119, 80, 0.3) !important;
-    color: var(--color-primary) !important;
-  }
+/* 更多按钮深色主题 */
+:root[data-theme="dark"] .more-history-btn-header {
+  background: rgba(251, 119, 80, 0.15) !important;
+  border-color: rgba(251, 119, 80, 0.3) !important;
+  color: var(--color-primary) !important;
+}
 
-  .more-history-btn-header:hover {
-    background: rgba(251, 119, 80, 0.25) !important;
-    border-color: rgba(251, 119, 80, 0.4) !important;
-    box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
-  }
+:root[data-theme="dark"] .more-history-btn-header:hover {
+  background: rgba(251, 119, 80, 0.25) !important;
+  border-color: rgba(251, 119, 80, 0.4) !important;
+  box-shadow: 0 2px 6px rgba(251, 119, 80, 0.3) !important;
+}
 
-  /* 对话项悬停效果深色主题优化 */
-  .conversation-item:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-  }
+/* 对话项悬停效果深色主题优化 */
+:root[data-theme="dark"] .conversation-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
 
-  .conversation-item--active {
-    background: linear-gradient(135deg, rgba(251, 119, 80, 0.1) 0%, rgba(251, 119, 80, 0.05) 100%) !important;
-  }
+:root[data-theme="dark"] .conversation-item--active {
+  background: linear-gradient(135deg, rgba(251, 119, 80, 0.1) 0%, rgba(251, 119, 80, 0.05) 100%) !important;
 }
 </style>

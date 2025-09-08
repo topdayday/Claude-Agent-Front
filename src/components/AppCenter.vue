@@ -12,8 +12,9 @@
           <div v-for="model in llmsModelInfo" :key="model.modelId"
             :class="['model-card', { 'model-card--selected': model_type === model.modelId }]"
             @click="selectType(model.modelId)">
-            <div class="model-card__content" >
-              <h3 v-if="model.multimodal >= 1" class="model-card__title">{{ model.name + '-' + model.ver + '-多模态' }}</h3>
+            <div class="model-card__content">
+              <h3 v-if="model.multimodal >= 1" class="model-card__title">{{ model.name + '-' + model.ver + '-多模态' }}
+              </h3>
               <h3 v-else class="model-card__title">{{ model.name + '-' + model.ver + '' }}</h3>
               <p class="model-card__description">{{ model.desc }}</p>
             </div>
@@ -26,8 +27,8 @@
         </div>
       </div>
     </div>
-    <div :class="showLeftMenu&&(!smallWidth) ? 'content-warp-menu' : 'content-warp'" v-if="!showIndexContent" v-loading="loading"
-      :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : 'loading...'">
+    <div :class="showLeftMenu && (!smallWidth) ? 'content-warp-menu' : 'content-warp'" v-if="!showIndexContent"
+      v-loading="loading" :element-loading-text="countdown > 0 ? `等待响应中... ${countdown}秒` : 'loading...'">
       <el-collapse v-model="activeNames" style="width: 100%;">
         <el-collapse-item v-for="(item, index) in content_his" :key="index" :id="'content_' + item.id" :name="item.id"
           style="padding: 6px;">
@@ -134,14 +135,16 @@
             <i class="el-icon-close attachment-remove" @click="removeAttachment(index)"></i>
           </div>
         </div>
-        
+
         <div class="gemini-input-wrapper">
           <!-- 左侧按钮组 -->
           <div class="input-actions-left">
             <!-- 附件上传按钮 -->
             <div v-if="showAttachments(model_type)" class="action-button-wrapper">
-              <input type="file" ref="fileInput" @change="handleFileSelect" multiple accept="*/*" style="display: none;" />
-              <button class="gemini-action-btn" @click="$refs.fileInput.click()" :disabled="sent_status == 1" title="上传附件">
+              <input type="file" ref="fileInput" @change="handleFileSelect" multiple accept="*/*"
+                style="display: none;" />
+              <button class="gemini-action-btn" @click="$refs.fileInput.click()" :disabled="sent_status == 1"
+                title="上传附件">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
                 </svg>
@@ -151,29 +154,22 @@
 
           <!-- 输入框 -->
           <div class="textarea-wrapper">
-            <el-input 
-              autofocus=true 
-              type="textarea" 
-              ref="textarea_in" 
-              :autosize="{ minRows: 1, maxRows: 10 }"
-              placeholder="输入消息..." 
-              v-model="content_in"
-              class="gemini-textarea">
+            <el-input autofocus=true type="textarea" ref="textarea_in" :autosize="{ minRows: 1, maxRows: 10 }"
+              placeholder="输入消息..." v-model="content_in" class="gemini-textarea">
             </el-input>
             <!-- 清空按钮 -->
             <button v-if="content_in" class="clear-button" @click="clearContent" title="清空">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                <path
+                  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
               </svg>
             </button>
           </div>
 
           <!-- 发送按钮 -->
           <div class="send-button-wrapper">
-            <button 
-              :disabled="sent_status == 1 || (!content_in.trim() && attachments.length === 0)" 
-              class="gemini-send-btn" 
-              @click="sendMessage()"
+            <button :disabled="sent_status == 1 || (!content_in.trim() && attachments.length === 0)"
+              class="gemini-send-btn" @click="sendMessage()"
               :class="{ 'sending': sent_status == 1, 'disabled': !content_in.trim() && attachments.length === 0 }">
               <span v-if="sent_status == 1" class="sending-animation">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="loading-icon">
@@ -299,10 +295,10 @@ export default {
   mounted() {
     // 监听DOM变化，为新生成的代码块添加复制按钮
     this.observeCodeBlocks();
-    
+
     // 显示粘贴图片功能提示
     this.showPasteImageTip();
-    
+
     // 手动添加粘贴事件监听器到输入框
     this.addPasteEventListener();
   },
@@ -622,10 +618,10 @@ export default {
         console.log('粘贴事件已被处理，跳过');
         return;
       }
-      
+
       console.log('粘贴事件触发', event);
       console.log('剪贴板数据:', event.clipboardData);
-      
+
       const items = event.clipboardData?.items;
       if (!items) {
         console.log('没有剪贴板数据');
@@ -639,25 +635,25 @@ export default {
 
       let hasImage = false;
       let processedImage = false;
-      
+
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
-        
+
         // 检查是否是图片类型
         if (item.type.indexOf('image') !== -1) {
           hasImage = true;
           const file = item.getAsFile();
-          
+
           if (file && !processedImage) {
             try {
               // 为粘贴的图片生成文件名
               const timestamp = new Date().getTime();
               const extension = this.getImageExtension(file.type);
               const fileName = `screenshot_${timestamp}.${extension}`;
-              
+
               // 创建新的File对象，包含文件名
               const renamedFile = new File([file], fileName, { type: file.type });
-              
+
               // 检查文件大小
               const maxSize = 10 * 1024 * 1024;
               if (renamedFile.size > maxSize) {
@@ -669,7 +665,7 @@ export default {
                 });
                 return;
               }
-              
+
               // 检查是否支持该图片格式
               if (!this.isSupportedImageType(file.type)) {
                 this.$notify({
@@ -680,27 +676,27 @@ export default {
                 });
                 return;
               }
-              
+
               // 添加到附件列表
               this.attachments.push(renamedFile);
-              
-                             // 阻止默认粘贴行为
-               event.preventDefault();
-               
-               // 标记事件已被处理，防止重复触发
-               event._processed = true;
-               
-               this.$notify({
-                 title: '截图已添加',
-                 message: `成功添加截图: ${fileName} (${this.formatFileSize(renamedFile.size)})`,
-                 type: 'success',
-                 duration: 2000
-               });
-               
-               processedImage = true;
-               
-               // 只处理第一个图片，避免重复
-               break;
+
+              // 阻止默认粘贴行为
+              event.preventDefault();
+
+              // 标记事件已被处理，防止重复触发
+              event._processed = true;
+
+              this.$notify({
+                title: '截图已添加',
+                message: `成功添加截图: ${fileName} (${this.formatFileSize(renamedFile.size)})`,
+                type: 'success',
+                duration: 2000
+              });
+
+              processedImage = true;
+
+              // 只处理第一个图片，避免重复
+              break;
             } catch (error) {
               console.error('处理粘贴图片时出错:', error);
               this.$notify({
@@ -713,7 +709,7 @@ export default {
           }
         }
       }
-      
+
       // 如果没有图片，允许正常的文本粘贴
       if (!hasImage) {
         return;
@@ -724,7 +720,7 @@ export default {
     isSupportedImageType(mimeType) {
       const supportedTypes = [
         'image/jpeg',
-        'image/jpg', 
+        'image/jpg',
         'image/png',
         'image/gif',
         'image/webp',
@@ -763,21 +759,21 @@ export default {
                 console.log('粘贴事件监听器已存在，跳过重复绑定');
                 return;
               }
-              
+
               // 移除之前的事件监听器，避免重复绑定
               textarea.removeEventListener('paste', this.handlePaste);
               // 添加新的事件监听器
               textarea.addEventListener('paste', this.handlePaste);
               // 标记已绑定
               textarea._pasteListenerBound = true;
-              
+
               console.log('粘贴事件监听器已添加');
               console.log('绑定的元素:', textarea);
               console.log('元素类型:', textarea.tagName);
             }
           }
         }
-        
+
         // 移除全局粘贴事件监听器，避免重复触发
         // 只使用输入框的粘贴事件监听器
         document.removeEventListener('paste', this.handleGlobalPaste);
@@ -1088,6 +1084,7 @@ export default {
   text-align: left;
   width: 96%;
 }
+
 .content-warp-menu {
   padding: 0 4px;
   text-align: left;
@@ -1473,8 +1470,13 @@ export default {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .sending-animation {
@@ -1490,22 +1492,22 @@ export default {
     gap: 8px;
     min-height: 48px;
   }
-  
+
   .gemini-action-btn,
   .gemini-send-btn {
     width: 36px;
     height: 36px;
   }
-  
+
   .gemini-textarea ::v-deep .el-textarea__inner {
     font-size: 14px !important;
     padding: 6px 36px 6px 0 !important;
   }
-  
+
   .attachments-preview-gemini {
     padding: 8px 12px 6px 12px;
   }
-  
+
   .attachment-item-gemini {
     padding: 6px 10px;
     font-size: 12px;
@@ -1691,26 +1693,24 @@ export default {
 }
 
 /* 深色主题下的多模态徽章优化 */
-@media (prefers-color-scheme: dark) {
-  .multimodal-badge--multimodal {
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-    border: 1px solid rgba(76, 175, 80, 0.4);
-  }
+:root[data-theme="dark"] .multimodal-badge--multimodal {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
 
-  .multimodal-badge--multimodal:hover {
-    background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
-  }
+:root[data-theme="dark"] .multimodal-badge--multimodal:hover {
+  background: linear-gradient(135deg, #45a049 0%, #388e3c 100%);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+}
 
-  .multimodal-badge--conversation {
-    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-    border: 1px solid rgba(33, 150, 243, 0.4);
-  }
+:root[data-theme="dark"] .multimodal-badge--conversation {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  border: 1px solid rgba(33, 150, 243, 0.4);
+}
 
-  .multimodal-badge--conversation:hover {
-    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.5);
-  }
+:root[data-theme="dark"] .multimodal-badge--conversation:hover {
+  background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.5);
 }
 
 .multimodal-icon {
@@ -1949,7 +1949,7 @@ export default {
   color: white;
 }
 
- 
+
 
 .model-card__description {
   font-size: 14px;
@@ -2106,320 +2106,310 @@ code {
   font-size: 85%;
 }
 
-/* 深色主题适配 */
-@media (prefers-color-scheme: dark) {
-  /* 用户输入内容深色主题 */
-  .content-human {
-    color: #f0f0f0 !important;
-  }
+/* 深色主题适配 - 基于应用主题属性 */
+:root[data-theme="dark"] .content-human {
+  color: #f0f0f0 !important;
+}
 
-  /* AI回复内容深色主题 */
-  .content-assistant {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] .content-assistant {
+  color: #e6e6e6 !important;
+}
 
-  /* AI回复内容中的所有文本元素 */
-  .content-assistant * {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] .content-assistant * {
+  color: #e6e6e6 !important;
+}
 
-  /* 确保markdown渲染的内容在深色主题下可见 */
-  ::v-deep .content-assistant p {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant p {
+  color: #e6e6e6 !important;
+}
 
-  ::v-deep .content-assistant div {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant div {
+  color: #e6e6e6 !important;
+}
 
-  ::v-deep .content-assistant span {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant span {
+  color: #e6e6e6 !important;
+}
 
-  ::v-deep .content-assistant li {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant li {
+  color: #e6e6e6 !important;
+}
 
-  ::v-deep .content-assistant h1,
-  ::v-deep .content-assistant h2,
-  ::v-deep .content-assistant h3,
-  ::v-deep .content-assistant h4,
-  ::v-deep .content-assistant h5,
-  ::v-deep .content-assistant h6 {
-    color: #f0f0f0 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant h1,
+:root[data-theme="dark"] ::v-deep .content-assistant h2,
+:root[data-theme="dark"] ::v-deep .content-assistant h3,
+:root[data-theme="dark"] ::v-deep .content-assistant h4,
+:root[data-theme="dark"] ::v-deep .content-assistant h5,
+:root[data-theme="dark"] ::v-deep .content-assistant h6 {
+  color: #f0f0f0 !important;
+}
 
-  ::v-deep .content-assistant td {
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant td {
+  color: #e6e6e6 !important;
+}
 
-  ::v-deep .content-assistant th {
-    color: #f0f0f0 !important;
-  }
+:root[data-theme="dark"] ::v-deep .content-assistant th {
+  color: #f0f0f0 !important;
+}
 
-  /* 折叠面板头部深色主题 */
-  .collapse-header {
-    background: rgba(0, 0, 0, 0.3) !important;
-    border-color: #333;
-  }
+:root[data-theme="dark"] .collapse-header {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-color: #333;
+}
 
-  .collapse-header:hover {
-    background: rgba(0, 0, 0, 0.4) !important;
-    border-color: var(--color-primary-weak-2);
-  }
+:root[data-theme="dark"] .collapse-header:hover {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-color: var(--color-primary-weak-2);
+}
 
-  /* Gemini 输入框深色主题 */
-  .gemini-input-container {
-    background: var(--color-panel);
-    border-color: #333;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-  }
+:root[data-theme="dark"] .gemini-input-container {
+  background: var(--color-panel);
+  border-color: #333;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
 
-  .gemini-input-container:hover {
-    border-color: var(--color-primary-weak-2);
-    box-shadow: 0 4px 16px rgba(251, 119, 80, 0.2);
-  }
+:root[data-theme="dark"] .gemini-input-container:hover {
+  border-color: var(--color-primary-weak-2);
+  box-shadow: 0 4px 16px rgba(251, 119, 80, 0.2);
+}
 
-  .gemini-input-container:focus-within {
-    border-color: var(--color-primary);
-    box-shadow: 0 4px 20px rgba(251, 119, 80, 0.3);
-  }
+:root[data-theme="dark"] .gemini-input-container:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(251, 119, 80, 0.3);
+}
 
-  .attachments-preview-gemini {
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom-color: #333;
-  }
+:root[data-theme="dark"] .attachments-preview-gemini {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom-color: #333;
+}
 
-  .attachment-item-gemini {
-    background: var(--color-panel);
-    border-color: #333;
-  }
+:root[data-theme="dark"] .attachment-item-gemini {
+  background: var(--color-panel);
+  border-color: #333;
+}
 
-  .attachment-item-gemini:hover {
-    background: var(--color-primary-weak);
-    border-color: var(--color-primary-weak-2);
-  }
+:root[data-theme="dark"] .attachment-item-gemini:hover {
+  background: var(--color-primary-weak);
+  border-color: var(--color-primary-weak-2);
+}
 
-  .gemini-action-btn {
-    color: #999;
-  }
+:root[data-theme="dark"] .gemini-action-btn {
+  color: #999;
+}
 
-  .gemini-action-btn:hover:not(:disabled) {
-    background: var(--color-primary-weak);
-    color: var(--color-primary);
-  }
+:root[data-theme="dark"] .gemini-action-btn:hover:not(:disabled) {
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+}
 
-  .clear-button {
-    background: #666;
-    color: var(--color-panel);
-  }
+:root[data-theme="dark"] .clear-button {
+  background: #666;
+  color: var(--color-panel);
+}
 
-  .clear-button:hover {
-    background: #888;
-  }
+:root[data-theme="dark"] .clear-button:hover {
+  background: #888;
+}
 
-  .gemini-send-btn.disabled {
-    background: #444;
-    color: #666;
-  }
+:root[data-theme="dark"] .gemini-send-btn.disabled {
+  background: #444;
+  color: #666;
+}
 
-  /* 代码块深色主题 */
-  pre {
-    background: #1a1a1a;
-    border-color: #333;
-    color: #e6e6e6;
-  }
+/* 代码块深色主题 */
+:root[data-theme="dark"] pre {
+  background: #1a1a1a;
+  border-color: #333;
+  color: #e6e6e6;
+}
 
-  .code-copy-btn {
-    background: rgba(26, 26, 26, 0.9);
-    border-color: #444;
-    color: #999;
-  }
+:root[data-theme="dark"] .code-copy-btn {
+  background: rgba(26, 26, 26, 0.9);
+  border-color: #444;
+  color: #999;
+}
 
-  .code-copy-btn:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: white;
-  }
+:root[data-theme="dark"] .code-copy-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
 
-  code {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-primary);
-  }
+:root[data-theme="dark"] code {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-primary);
+}
 
-  .selection-title {
-    color: #e6e6e6;
-  }
+:root[data-theme="dark"] .selection-title {
+  color: #e6e6e6;
+}
 
-  .selection-subtitle {
-    color: #999;
-  }
+:root[data-theme="dark"] .selection-subtitle {
+  color: #999;
+}
 
-  /* 模型卡片深色主题 */
-  .model-card {
-    background: var(--color-panel);
-    border-color: #333;
-  }
+/* 模型卡片深色主题 */
+:root[data-theme="dark"] .model-card {
+  background: var(--color-panel);
+  border-color: #333;
+}
 
-  .model-card:hover {
-    border-color: #444;
-  }
+:root[data-theme="dark"] .model-card:hover {
+  border-color: #444;
+}
 
+:root[data-theme="dark"] .model-card__description {
+  color: #999;
+}
 
+/* 折叠面板深色主题 */
+:root[data-theme="dark"] .collapse-title {
+  color: var(--color-primary);
+}
 
-  .model-card__description {
-    color: #999;
-  }
+/* 附件相关深色主题 */
+:root[data-theme="dark"] .attachments-preview {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-bottom-color: #333;
+}
 
+:root[data-theme="dark"] .attachment-item {
+  background-color: var(--color-panel);
+  border-color: #333;
+}
 
-  /* 折叠面板深色主题 */
-  .collapse-title {
-    color: var(--color-primary);
-  }
+:root[data-theme="dark"] .attachment-name {
+  color: #e6e6e6;
+}
 
-  /* 附件相关深色主题 */
-  .attachments-preview {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-bottom-color: #333;
-  }
+:root[data-theme="dark"] .attachment-size {
+  color: #999;
+}
 
-  .attachment-item {
-    background-color: var(--color-panel);
-    border-color: #333;
-  }
+:root[data-theme="dark"] .attachment-item-display {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: #333;
+  color: #e6e6e6;
+}
 
-  .attachment-name {
-    color: #e6e6e6;
-  }
+:root[data-theme="dark"] .attachment-item-display:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: #444;
+}
 
-  .attachment-size {
-    color: #999;
-  }
+/* 按钮深色主题 */
+:root[data-theme="dark"] .btn_attachment {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: #333 !important;
+  color: #e6e6e6 !important;
+}
 
-  .attachment-item-display {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: #333;
-    color: #e6e6e6;
-  }
+:root[data-theme="dark"] .btn_attachment:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: #444 !important;
+}
 
-  .attachment-item-display:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    border-color: #444;
-  }
+:root[data-theme="dark"] .header-btn {
+  background: var(--color-panel) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
 
-  /* 按钮深色主题 */
-  .btn_attachment {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border-color: #333 !important;
-    color: #e6e6e6 !important;
-  }
+:root[data-theme="dark"] .header-btn:hover {
+  background: var(--color-primary-weak) !important;
+}
 
-  .btn_attachment:hover {
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border-color: #444 !important;
-  }
+/* 表格深色主题 */
+:root[data-theme="dark"] table {
+  border-color: #333;
+}
 
-  .header-btn {
-    background: var(--color-panel) !important;
-    border-color: var(--color-primary) !important;
-    color: var(--color-primary) !important;
-  }
+:root[data-theme="dark"] th,
+:root[data-theme="dark"] td {
+  border-color: #333;
+}
 
-  .header-btn:hover {
-    background: var(--color-primary-weak) !important;
-  }
+:root[data-theme="dark"] th {
+  background-color: #2d2d2d;
+  color: #e6e6e6;
+}
 
-  /* 表格深色主题 */
-  table {
-    border-color: #333;
-  }
+:root[data-theme="dark"] tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
 
-  th, td {
-    border-color: #333;
-  }
+/* 粘贴提示深色主题 */
+:root[data-theme="dark"] .paste-tip {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: #333;
+  color: #e6e6e6;
+}
 
-  th {
-    background-color: #2d2d2d;
-    color: #e6e6e6;
-  }
+:root[data-theme="dark"] .paste-tip:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: #444;
+}
 
-  tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.02);
-  }
+/* 清除按钮深色主题 */
+:root[data-theme="dark"] .clear-btn {
+  color: #666;
+}
 
-  /* 粘贴提示深色主题 */
-  .paste-tip {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: #333;
-    color: #e6e6e6;
-  }
+:root[data-theme="dark"] .clear-btn:hover {
+  color: var(--color-primary);
+}
 
-  .paste-tip:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    border-color: #444;
-  }
+/* 收缩按钮深色主题 */
+:root[data-theme="dark"] .collapse-toggle-btn {
+  background-color: var(--color-panel);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
 
-  /* 清除按钮深色主题 */
-  .clear-btn {
-    color: #666;
-  }
+:root[data-theme="dark"] .collapse-toggle-btn:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
 
-  .clear-btn:hover {
-    color: var(--color-primary);
-  }
+:root[data-theme="dark"] .dot-icon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-300));
+}
 
-  /* 收缩按钮深色主题 */
-  .collapse-toggle-btn {
-    background-color: var(--color-panel);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
+/* 语法高亮深色主题优化 */
+:root[data-theme="dark"] .hljs-keyword,
+:root[data-theme="dark"] .hljs-selector-tag,
+:root[data-theme="dark"] .hljs-literal,
+:root[data-theme="dark"] .hljs-section,
+:root[data-theme="dark"] .hljs-link {
+  color: #ff6b6b !important;
+}
 
-  .collapse-toggle-btn:hover {
-    background-color: var(--color-primary);
-    color: white;
-  }
+:root[data-theme="dark"] .hljs-string,
+:root[data-theme="dark"] .hljs-title,
+:root[data-theme="dark"] .hljs-name,
+:root[data-theme="dark"] .hljs-type,
+:root[data-theme="dark"] .hljs-attribute,
+:root[data-theme="dark"] .hljs-symbol,
+:root[data-theme="dark"] .hljs-bullet,
+:root[data-theme="dark"] .hljs-built_in,
+:root[data-theme="dark"] .hljs-addition,
+:root[data-theme="dark"] .hljs-variable,
+:root[data-theme="dark"] .hljs-template-tag,
+:root[data-theme="dark"] .hljs-template-variable {
+  color: #51cf66 !important;
+}
 
-  .dot-icon {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-300));
-  }
+:root[data-theme="dark"] .hljs-comment,
+:root[data-theme="dark"] .hljs-quote,
+:root[data-theme="dark"] .hljs-deletion,
+:root[data-theme="dark"] .hljs-meta {
+  color: #868e96 !important;
+}
 
-  /* 语法高亮深色主题优化 */
-  .hljs-keyword,
-  .hljs-selector-tag,
-  .hljs-literal,
-  .hljs-section,
-  .hljs-link {
-    color: #ff6b6b !important;
-  }
-
-  .hljs-string,
-  .hljs-title,
-  .hljs-name,
-  .hljs-type,
-  .hljs-attribute,
-  .hljs-symbol,
-  .hljs-bullet,
-  .hljs-built_in,
-  .hljs-addition,
-  .hljs-variable,
-  .hljs-template-tag,
-  .hljs-template-variable {
-    color: #51cf66 !important;
-  }
-
-  .hljs-comment,
-  .hljs-quote,
-  .hljs-deletion,
-  .hljs-meta {
-    color: #868e96 !important;
-  }
-
-  .hljs-number,
-  .hljs-regexp,
-  .hljs-literal {
-    color: #74c0fc !important;
-  }
+:root[data-theme="dark"] .hljs-number,
+:root[data-theme="dark"] .hljs-regexp,
+:root[data-theme="dark"] .hljs-literal {
+  color: #74c0fc !important;
 }
 
 
@@ -2547,7 +2537,7 @@ code {
 }
 
 .model-card--selected .model-card__status {
-  background: var(--color-primary-weak);  
+  background: var(--color-primary-weak);
   color: var(--color-primary);
 }
 
@@ -2888,7 +2878,8 @@ code {
   margin: 1rem 0;
   display: block;
   overflow-x: auto;
-  border: 0px solid  var(--color-border);;
+  border: 0px solid var(--color-border);
+  ;
 }
 
 ::v-deep th,
@@ -2968,7 +2959,7 @@ code {
   gap: 4px;
   padding: 4px 8px;
   margin: 2px 4px 2px 0;
-  background-color: rgba(255,255,255,0.06);
+  background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 12px;
@@ -2978,7 +2969,7 @@ code {
 }
 
 .attachment-item-display:hover {
-  background-color: rgba(255,255,255,0.10);
+  background-color: rgba(255, 255, 255, 0.10);
   border-color: var(--color-border);
   transform: translateY(-1px);
 }
@@ -3011,7 +3002,7 @@ code {
   margin-right: 12px;
   margin-left: 2px;
   padding: 4px 8px;
-  background-color: rgba(255,255,255,0.06);
+  background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   font-size: 11px;
@@ -3023,7 +3014,7 @@ code {
 }
 
 .paste-tip:hover {
-  background-color: rgba(255,255,255,0.10);
+  background-color: rgba(255, 255, 255, 0.10);
   border-color: var(--color-border);
   transform: translateY(-1px);
 }
@@ -3039,13 +3030,13 @@ code {
 }
 
 .btn_attachment {
-  background-color: rgba(255,255,255,0.06) !important;
+  background-color: rgba(255, 255, 255, 0.06) !important;
   border-color: var(--color-border) !important;
   color: var(--color-text) !important;
 }
 
 .btn_attachment:hover {
-  background-color: rgba(255,255,255,0.10) !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
   border-color: var(--color-border) !important;
 }
 
@@ -3277,7 +3268,8 @@ code {
   }
 
   .paste-tip span {
-    display: none; /* 在小屏幕上隐藏文字，只显示图标 */
+    display: none;
+    /* 在小屏幕上隐藏文字，只显示图标 */
   }
 
   .paste-tip i {
@@ -3472,12 +3464,12 @@ code {
     font-size: 12px;
     margin: 16px 0;
   }
-  
+
   ::v-deep .content-assistant th,
   ::v-deep .content-assistant td {
     padding: 10px 12px;
   }
-  
+
   ::v-deep .content-assistant th {
     font-size: 12px;
   }
