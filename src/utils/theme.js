@@ -1,15 +1,7 @@
 const THEME_KEY = 'app_theme';
 
-function systemPrefersDark() {
-  try {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  } catch (e) {
-    return false;
-  }
-}
-
 export function getTheme() {
-  return localStorage.getItem(THEME_KEY) || (systemPrefersDark() ? 'dark' : 'light');
+  return localStorage.getItem(THEME_KEY) || 'light';
 }
 
 export function setTheme(theme) {
