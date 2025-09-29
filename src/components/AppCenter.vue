@@ -109,19 +109,6 @@
     <!-- 完整的输入框 -->
     <div v-if="!isInputCollapsed" :class="(smallWidth || !showLeftMenu) ? 'fixed-bottom-hiden' : 'fixed-bottom'"
       v-on:keydown.ctrl.enter="sendMessage">
-      <!-- 收缩按钮容器 -->
-      <div class="collapse-buttons-container">
-        <div class="collapse-toggle-btn" @click="scrollToTop" title="回到顶部">
-          <i class="el-icon-top"></i>
-        </div>
-        <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
-          <i class="el-icon-minus"></i>
-        </div>
-        <div class="collapse-toggle-btn" @click="scrollToBottom" title="滚动底部">
-          <i class="el-icon-bottom"></i>
-        </div>
-      </div>
-
       <div class="gemini-input-container">
         <!-- 附件显示区域 -->
         <div v-if="attachments.length > 0" class="attachments-preview-gemini">
@@ -184,6 +171,19 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 固定在右下角的工具按钮（参考 collapsed-dot 定位） -->
+    <div v-if="!isInputCollapsed" class="collapse-buttons-container">
+      <div class="collapse-toggle-btn" @click="scrollToTop" title="回到顶部">
+        <i class="el-icon-top"></i>
+      </div>
+      <div class="collapse-toggle-btn" @click="toggleInputCollapse" title="收缩输入框">
+        <i class="el-icon-minus"></i>
+      </div>
+      <div class="collapse-toggle-btn" @click="scrollToBottom" title="滚动底部">
+        <i class="el-icon-bottom"></i>
       </div>
     </div>
 
@@ -3057,14 +3057,15 @@ code {
 
 /* 收缩按钮容器样式 */
 .collapse-buttons-container {
-  position: absolute;
-  top: -140px;
-  right: 10px;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  z-index: 1001;
+  gap: 8px;
   pointer-events: auto;
+  transition: all 0.3s ease;
 }
 
 /* 收缩按钮样式 */
@@ -3085,6 +3086,8 @@ code {
   backdrop-filter: blur(4px);
   pointer-events: auto;
   position: relative;
+  top: auto;
+  right: auto;
 }
 
 .collapse-toggle-btn:hover {
@@ -3101,8 +3104,9 @@ code {
 /* 确保按钮在小屏幕上也能显示 */
 @media (max-width: 768px) {
   .collapse-buttons-container {
-    right: 5px;
-    top: -130px;
+    right: 30px;
+    bottom: 20px;
+    top: auto;
   }
 
   .collapse-toggle-btn {
