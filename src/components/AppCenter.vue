@@ -13,9 +13,9 @@
             :class="['model-card', { 'model-card--selected': model_type === model.modelId }]"
             @click="selectType(model.modelId)">
             <div class="model-card__content">
-              <h3 v-if="model.multimodal >= 1" class="model-card__title">{{ model.name + '-' + model.ver + '-多模态' }}
+              <h3 v-if="model.multimodal >= 1" class="model-card__title">{{ model.name }}
               </h3>
-              <h3 v-else class="model-card__title">{{ model.name + '-' + model.ver + '' }}</h3>
+              <h3 v-else class="model-card__title">{{ model.name }}</h3>
               <p class="model-card__description">{{ model.desc }}</p>
             </div>
             <div class="model-card__footer">
