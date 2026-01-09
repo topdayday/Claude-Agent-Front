@@ -29,7 +29,17 @@
 
     <div class="sidebar-content">
       <el-scrollbar class="conversation-scrollbar" :style="{ height: '100%' }">
-        <div class="conversation-list">
+        <!-- Loading状态 -->
+        <div v-if="loading" class="loading-container">
+          <div class="loading-spinner"></div>
+          <span class="loading-text">加载中...</span>
+        </div>
+        <!-- 空状态 -->
+        <div v-else-if="conversation_list.length === 0" class="empty-state">
+          暂无对话记录
+        </div>
+        <!-- 对话列表 -->
+        <div v-else class="conversation-list">
           <div v-for="(item, index) in conversation_list" :key="index"
             :class="['conversation-item', { 'conversation-item--active': activeMenuIndex === index.toString() }]"
             @click="viewSession(item.session_id)">
@@ -45,8 +55,6 @@
               <div class="conversation-time">{{ formatTime(item.create_time) }}</div>
             </div>
           </div>
-
-
         </div>
       </el-scrollbar>
     </div>
@@ -77,9 +85,8 @@ export default {
   watch: {
     session_id(val) {
       if (!val) {
-        let targetSessionId = localStorage.getItem('session_id');
-        this.conversation_list = this.conversation_list.filter(item => item.session_id != targetSessionId)
         localStorage.removeItem('session_id');
+        this.latestSession()   
       }
       this.setActiveIndex()
     },
@@ -417,10 +424,38 @@ export default {
   background: rgba(251, 119, 80, 0.4);
 }
 
+/* Loading状态样式 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(251, 119, 80, 0.2);
+  border-top-color: var(--color-primary, #fb7750);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
 /* 空状态样式 */
-.conversation-list:empty::before {
-  content: '暂无对话记录';
-  display: block;
+.empty-state {
   text-align: center;
   color: #94a3b8;
   font-size: 14px;

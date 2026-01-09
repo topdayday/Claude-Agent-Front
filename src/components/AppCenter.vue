@@ -195,7 +195,7 @@ import { list_session, del_conversation, assistant_with_attachments, downloadAtt
 import MarkdownIt from 'markdown-it';
 import mditHighlightjs from 'markdown-it-highlightjs';
 import 'highlight.js/styles/default.css';
-
+import { generate_session } from "@/utils/request";
 // import 'highlight.js/styles/github.css';
 // import 'highlight.js/styles/dark.css';
 // import 'highlight.js/styles/vs.css';
@@ -364,6 +364,10 @@ export default {
       this.loading = true;
       let token = localStorage.getItem('token');
       let session_id = localStorage.getItem('session_id');
+      if(session_id==null){
+        this.loading = false;
+        return
+      }
       list_session(token, session_id).then(data => {
         this.loading = false;
         this.content_his = data.data;
@@ -426,7 +430,8 @@ export default {
     selectType(model_type) {
       this.model_type = model_type;
     },
-    sendMessage() {
+
+    async sendMessage() {
       if (this.sent_status === 1) {
         this.$notify({
           title: '提示',
@@ -436,8 +441,7 @@ export default {
         return;
       }
       let token = localStorage.getItem('token');
-      let session_id = localStorage.getItem('session_id');
-      if (!token || !session_id) {
+      if (!token) {
         this.$notify({
           title: '提示',
           message: '请先登录...',
@@ -445,6 +449,19 @@ export default {
         });
         return;
       }
+
+      let session_id = localStorage.getItem('session_id');
+      if(!session_id){
+        try {
+          session_id = await generate_session(token);
+          localStorage.setItem('session_id', session_id);
+          this.$emit('update:session_id', session_id);
+        } catch (error) {
+          console.error(error);
+          return;
+        }
+      }
+      token = localStorage.getItem('token');
       if ((!this.content_in || this.content_in.trim().length === 0) && this.attachments.length === 0) {
         this.$notify({
           title: '提示',
