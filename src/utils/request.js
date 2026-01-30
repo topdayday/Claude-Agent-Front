@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MessageBox } from "element-ui";
+import { MessageBox, Message } from "element-ui";
 
 // Create axios instance with timeout
 const instance = axios.create({
@@ -590,4 +590,137 @@ export function downloadAttachment(id, fileName, mimeType) {
 
         return Promise.resolve();
     }
+}
+
+export function add_fav_session(token, session_id, title) {
+    return instance({
+        method: 'POST',
+        url: base_url + '/add_fav_session/',
+        data: {
+            token: token,
+            session_id: session_id,
+            tilte: title,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+        .then(response => {
+            if (response.data.code === -1) {
+                MessageBox.alert(response.data.data, '提示');
+                login_out();
+            } else if (response.data.code === 0) {
+                Message.success({
+                    message: '收藏成功！',
+                    duration: 2000,
+                    showClose: true
+                });
+                return response.data.data;
+            } else if (response.data.code === 1) {
+                Message.warning({
+                    message: response.data.data,
+                    duration: 2000,
+                    showClose: true
+                });
+            }
+        }).catch((e) => {
+            console.error(e);
+            Message.error({
+                message: '收藏会话失败,请联系管理员！',
+                duration: 2000,
+                showClose: true
+            });
+            throw new Error('请求失败');
+        });
+}
+
+export function list_fav_session(token, page_number, filter_date, title) {
+    return instance({
+        method: 'POST',
+        url: base_url + '/list_fav_session/',
+        data: {
+            token: token,
+            page_number: page_number,
+            filter_date: filter_date,
+            title: title,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+        .then(response => {
+            if (response.data.code === -1) {
+                MessageBox.alert(response.data.data, '提示');
+                login_out();
+            } else if (response.data.code === 0) {
+                return response.data.data;
+            } else if (response.data.code === 1) {
+                MessageBox.alert(response.data.data, '提示');
+            }
+        }).catch((e) => {
+            console.error(e);
+            MessageBox.alert('请求收藏列表失败,请联系管理员！', '提示')
+            throw new Error('请求失败');
+        });
+}
+
+export function del_fav_session(token, session_id) {
+    return instance({
+        method: 'POST',
+        url: base_url + '/del_fav_session/',
+        data: {
+            token: token,
+            session_id: session_id,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+        .then(response => {
+            if (response.data.code === -1) {
+                login_out();
+                MessageBox.alert(response.data.data, '提示');
+            } else if (response.data.code === 0) {
+                return response.data.data;
+            } else if (response.data.code === 1) {
+                MessageBox.alert(response.data.data);
+            }
+        }).catch((e) => {
+            console.error(e);
+            MessageBox.alert('请求删除收藏失败,请联系管理员！', '提示')
+            throw new Error('请求失败');
+        });
+}
+
+export function update_fav_session(token, session_id, title) {
+    return instance({
+        method: 'POST',
+        url: base_url + '/update_fav_session/',
+        data: {
+            token: token,
+            session_id: session_id,
+            title: title,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer Auction'
+        }
+    })
+        .then(response => {
+            if (response.data.code === -1) {
+                login_out();
+                MessageBox.alert(response.data.data, '提示');
+            } else if (response.data.code === 0) {
+                return response.data.data;
+            } else if (response.data.code === 1) {
+                MessageBox.alert(response.data.data, '提示');
+            }
+        }).catch((e) => {
+            console.error(e);
+            MessageBox.alert('更新标题失败,请联系管理员！', '提示')
+            throw new Error('请求失败');
+        });
 }

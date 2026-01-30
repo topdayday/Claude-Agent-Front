@@ -4,6 +4,7 @@
       <AppTop  :smallWidth.sync="smallWidth"
                :showDrawer.sync="showDrawer"
                :showMember.sync="showMember"
+               :showFavDrawer.sync="showFavDrawer"
                :session_id.sync="session_id"
                :token.sync="token"
                :selectedModel.sync="selectedModel"
@@ -26,8 +27,13 @@
                   :token.sync="token"
                   :session_id.sync="session_id" />
     </div>
+    <div class="" v-if="token">
+      <AppFavDrawer  :showFavDrawer.sync="showFavDrawer"
+                     :token.sync="token"
+                     :session_id.sync="session_id" />
+    </div>
     <div class=""  v-if="token">
-      <AppMember  :showMember.sync="showMember" 
+      <AppMember  :showMember.sync="showMember"
                   :session_id.sync="session_id"
                   :token.sync="token"/>
     </div>
@@ -54,6 +60,7 @@
   import AppDrawer from './AppHisConversation.vue'
   import AppMember from './AppMember.vue'
   import AppLeftDrawer from './AppLatestConversation.vue'
+  import AppFavDrawer from './AppFavConversation.vue'
   import {list_llm} from "@/utils/request";
 export default {
   name: 'AppMain',
@@ -64,6 +71,7 @@ export default {
     AppDrawer,
     AppMember,
     AppLeftDrawer,
+    AppFavDrawer,
   },
   data(){
     return{
@@ -71,10 +79,11 @@ export default {
       session_id:'',
       showDrawer:false,
       showMember:false,
+      showFavDrawer:false,
       selectedModel:0,
       smallWidth:false,
       showLeftMenu:localStorage.getItem('showLeftMenu')==='false'?false:true,
-      windowWidth: window.innerWidth,  
+      windowWidth: window.innerWidth,
       llmsModelInfo:[],
     }
   },
