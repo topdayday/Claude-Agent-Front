@@ -21,7 +21,7 @@
           </div>
           <div class="filter-item">
             <i class="el-icon-search filter-icon"></i>
-            <el-input v-model="searchTitle" placeholder="搜索标题" @input="onTitleSearch" clearable
+            <el-input v-model="searchTitle" placeholder="搜索标题（按回车搜索）" @keyup.enter.native="onTitleSearch" @clear="onTitleSearch" clearable
               class="title-search" size="small">
             </el-input>
           </div>
@@ -43,7 +43,7 @@
         <!-- 会话列表项 -->
         <div class="conversation-list">
           <div v-for="(item, index) in conversation_list" :key="index" class="conversation-item"
-            :class="{ 'active': item.session_id === session_id }">
+            :class="{ 'active': item.session_id === session_id, 'editing': editingSessionId === item.session_id }">
 
             <div class="item-content" style="flex: 3;">
               <div class="content-text" v-if="editingSessionId !== item.session_id">
@@ -360,9 +360,9 @@ export default {
 }
 
 .clear-btn {
-  background-color: #f5f5f5;
-  border-color: #d9d9d9;
-  color: #666;
+  background-color: rgba(251, 119, 80, 0.1);
+  border-color: var(--color-primary-weak-3);
+  color: var(--color-primary);
   border-radius: 12px;
   padding: 4px 8px;
   font-size: 12px;
@@ -374,7 +374,6 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: white;
-  transform: translateY(-1px);
 }
 
 /* 日期选择器样式定制 */
@@ -444,25 +443,37 @@ export default {
 .conversation-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  padding: 18px 20px;
   border-bottom: 1px solid var(--color-border);
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .conversation-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transform: translateX(2px);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.conversation-item:hover .item-action {
+  opacity: 1;
+}
+
+.conversation-item.editing .item-action {
+  opacity: 1;
 }
 
 .conversation-item.active {
   background-color: var(--color-primary-weak);
   border-left: 4px solid var(--color-primary);
+  box-shadow: inset 0 1px 3px rgba(251, 119, 80, 0.1);
 }
 
 /* 内容区域 */
 .item-content {
   flex: 1;
+}
+
+.item-content .content-title {
   cursor: pointer;
 }
 
@@ -480,10 +491,14 @@ export default {
 .content-title {
   font-size: 14px;
   color: var(--color-text);
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 300px;
+  word-break: break-word;
+  line-height: 1.5;
+  max-width: 400px;
 }
 
 /* 时间区域 */
@@ -493,13 +508,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  color: #999;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
 }
 
 .time-icon {
   margin-right: 4px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* 操作区域 */
@@ -510,12 +526,14 @@ export default {
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .edit-action-btn {
-  background-color: var(--color-primary);
+  background-color: transparent;
   border-color: var(--color-primary);
-  color: white;
+  color: var(--color-primary);
   border-radius: 15px;
   padding: 4px 12px;
   font-size: 12px;
@@ -524,16 +542,16 @@ export default {
 
 .edit-action-btn:hover,
 .edit-action-btn:focus {
-  background-color: var(--color-primary-300);
-  border-color: var(--color-primary-300);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(251, 119, 80, 0.3);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(251, 119, 80, 0.2);
 }
 
 .delete-btn {
-  background-color: #ff4757;
-  border-color: #ff4757;
-  color: white;
+  background-color: transparent;
+  border-color: #ddd;
+  color: #999;
   border-radius: 15px;
   padding: 4px 12px;
   font-size: 12px;
@@ -542,10 +560,10 @@ export default {
 
 .delete-btn:hover,
 .delete-btn:focus {
-  background-color: #ff3838;
-  border-color: #ff3838;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 71, 87, 0.3);
+  background-color: #ff4757;
+  border-color: #ff4757;
+  color: white;
+  box-shadow: 0 2px 4px rgba(255, 71, 87, 0.2);
 }
 
 .save-btn {
@@ -562,8 +580,7 @@ export default {
 .save-btn:focus {
   background-color: #27ae60;
   border-color: #27ae60;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+  box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
 }
 
 .cancel-btn {
@@ -580,8 +597,7 @@ export default {
 .cancel-btn:focus {
   background-color: #7f8c8d;
   border-color: #7f8c8d;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(149, 165, 166, 0.3);
+  box-shadow: 0 2px 4px rgba(149, 165, 166, 0.2);
 }
 
 /* 编辑模式 */
@@ -651,8 +667,7 @@ export default {
 .page-btn:focus {
   background-color: var(--color-primary-300);
   border-color: var(--color-primary-300);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
+  box-shadow: 0 2px 6px rgba(251, 119, 80, 0.2);
 }
 
 .page-info {

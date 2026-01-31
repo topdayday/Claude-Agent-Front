@@ -19,8 +19,14 @@
               value-format="yyyy-MM-dd" @change="onDateChange" clearable class="date-picker">
             </el-date-picker>
           </div>
+          <div class="filter-item">
+            <i class="el-icon-search filter-icon"></i>
+            <el-input v-model="searchTitle" placeholder="搜索标题（按回车搜索）" @keyup.enter.native="onTitleSearch" @clear="onTitleSearch" clearable
+              class="title-search" size="small">
+            </el-input>
+          </div>
           <div class="filter-actions">
-            <el-button v-if="selectedDate" @click="clearDateFilter" size="mini" icon="el-icon-refresh-left"
+            <el-button v-if="selectedDate || searchTitle" @click="clearFilters" size="mini" icon="el-icon-refresh-left"
               class="clear-btn">
               清除筛选
             </el-button>
@@ -100,6 +106,7 @@ export default {
       pageNumber: 0,
       loading: true,
       selectedDate: null, // 选择的日期
+      searchTitle: '', // 搜索标题
     }
   },
   created() {
@@ -139,7 +146,7 @@ export default {
       let token = localStorage.getItem('token');
       this.loading = true;
       this.conversation_list = []
-      latest_session(token, this.pageNumber, this.selectedDate).then(data => {
+      latest_session(token, this.pageNumber, this.selectedDate, this.searchTitle).then(data => {
         this.conversation_list = data;
         this.loading = false;
         // console.log('latest_session:',data);
@@ -156,9 +163,16 @@ export default {
       this.latestSession(); // 重新加载数据
     },
 
-    // 清除日期过滤
-    clearDateFilter() {
+    // 标题搜索
+    onTitleSearch() {
+      this.pageNumber = 0; // 重置页码
+      this.latestSession(); // 重新加载数据
+    },
+
+    // 清除所有过滤
+    clearFilters() {
       this.selectedDate = null;
+      this.searchTitle = '';
       this.pageNumber = 0; // 重置页码
       this.latestSession(); // 重新加载数据
     },
@@ -276,7 +290,8 @@ export default {
   padding: 15px 20px;
   background: linear-gradient(to bottom, rgba(251, 119, 80, 0.05), rgba(253, 253, 248, 0.05));
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  gap: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .filter-item {
@@ -294,15 +309,19 @@ export default {
   width: 180px;
 }
 
+.title-search {
+  width: 200px;
+}
+
 .filter-actions {
   display: flex;
   align-items: center;
 }
 
 .clear-btn {
-  background-color: #f5f5f5;
-  border-color: #d9d9d9;
-  color: #666;
+  background-color: rgba(251, 119, 80, 0.1);
+  border-color: var(--color-primary-weak-3);
+  color: var(--color-primary);
   border-radius: 12px;
   padding: 4px 8px;
   font-size: 12px;
@@ -314,7 +333,6 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: white;
-  transform: translateY(-1px);
 }
 
 /* 日期选择器样式定制 */
@@ -345,6 +363,21 @@ export default {
 
 :deep(.date-picker .el-input__suffix .el-input__icon) {
   color: var(--color-primary);
+}
+
+/* 标题搜索框样式 */
+:deep(.title-search .el-input__inner) {
+  background-color: rgba(248, 250, 252, 0.8);
+  border: 1px solid var(--color-primary-weak-3);
+  border-radius: 8px;
+  color: #2c3e50;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+:deep(.title-search .el-input__inner:focus) {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-weak-2);
 }
 
 /* 表格头部 */
@@ -383,20 +416,25 @@ export default {
 .conversation-item {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
+  padding: 18px 20px;
   border-bottom: 1px solid var(--color-border);
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .conversation-item:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  transform: translateX(2px);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.conversation-item:hover .item-action {
+  opacity: 1;
 }
 
 .conversation-item.active {
   background-color: var(--color-primary-weak);
   border-left: 4px solid var(--color-primary);
+  box-shadow: inset 0 1px 3px rgba(251, 119, 80, 0.1);
 }
 
 /* 内容区域 */
@@ -419,10 +457,14 @@ export default {
 .content-title {
   font-size: 14px;
   color: var(--color-text);
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 300px;
+  word-break: break-word;
+  line-height: 1.5;
+  max-width: 400px;
 }
 
 /* 时间区域 */
@@ -432,13 +474,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  color: #999;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
 }
 
 .time-icon {
   margin-right: 4px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* 操作区域 */
@@ -448,12 +491,14 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .delete-btn {
-  background-color: #ff4757;
-  border-color: #ff4757;
-  color: white;
+  background-color: transparent;
+  border-color: #ddd;
+  color: #999;
   border-radius: 15px;
   padding: 4px 12px;
   font-size: 12px;
@@ -462,10 +507,10 @@ export default {
 
 .delete-btn:hover,
 .delete-btn:focus {
-  background-color: #ff3838;
-  border-color: #ff3838;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 71, 87, 0.3);
+  background-color: #ff4757;
+  border-color: #ff4757;
+  color: white;
+  box-shadow: 0 2px 4px rgba(255, 71, 87, 0.2);
 }
 
 /* 空状态 */
@@ -514,8 +559,7 @@ export default {
 .page-btn:focus {
   background-color: var(--color-primary-300);
   border-color: var(--color-primary-300);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(251, 119, 80, 0.3);
+  box-shadow: 0 2px 6px rgba(251, 119, 80, 0.2);
 }
 
 .page-info {
@@ -546,6 +590,19 @@ export default {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-item {
+    width: 100%;
+  }
+
+  .date-picker,
+  .title-search {
+    width: 100%;
+  }
 
   .table-header,
   .conversation-item {

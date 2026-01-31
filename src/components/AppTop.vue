@@ -34,54 +34,42 @@
     <!-- 右侧操作按钮组 -->
     <div class="header-actions">
       <div class="action-group">
-        <el-tooltip content="新增会话" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="newSession()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-            </svg>
-          </button>
-        </el-tooltip>
-        <el-tooltip content="历史会话" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="setDrawer()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20Z" />
-              <path d="M12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" />
-            </svg>
-          </button>
-        </el-tooltip>
-        <el-tooltip content="收藏会话" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="addFavSession()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-            </svg>
-          </button>
-        </el-tooltip>
-        <el-tooltip content="历史收藏" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="setFavDrawer()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z" />
-            </svg>
-          </button>
-        </el-tooltip>
-        <el-tooltip content="个人中心" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="setMember()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
-            </svg>
-          </button>
-        </el-tooltip>
-        <el-tooltip content="系统主题" placement="bottom" :open-delay="500">
-          <button class="action-btn" @click="toggleTheme()">
-            <svg v-if="theme==='dark'" data-v-c4bf0156=""   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path data-v-c4bf0156="" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-            <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>
-            </svg>
-          </button>
-        </el-tooltip>
+        <button class="action-btn" @click="newSession()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16ZM11 12H13V14H11V12ZM11 6H13V10H11V6Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="setDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20Z" />
+            <path d="M12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="addFavSession()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="setFavDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="setMember()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" />
+          </svg>
+        </button>
+        <button class="action-btn" @click="toggleTheme()">
+          <svg v-if="theme==='dark'" data-v-c4bf0156=""   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path data-v-c4bf0156="" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm0-3h-1v3h1V2zm0 18h-1v3h1v-3zM2 11H-1v1h3v-1zm23 0h-3v1h3v-1zM4.95 19.07l-1.41 1.41 1.79 1.8 1.41-1.41-1.79-1.8zM18.36 4.93l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42z"/>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -531,23 +519,6 @@ export default {
 
 ::deep(.el-select-dropdown .el-scrollbar__thumb:hover) {
   background: rgba(251, 119, 80, 0.5) !important;
-}
-
-/* Tooltip样式定制 */
-::v-deep .el-tooltip__popper {
-  background: rgba(0, 0, 0, 0.85) !important;
-  color: white !important;
-  font-size: 12px !important;
-  padding: 6px 10px !important;
-  border-radius: 4px !important;
-}
-
-::v-deep .el-tooltip__popper[x-placement^="bottom"] .popper__arrow {
-  border-bottom-color: rgba(0, 0, 0, 0.85) !important;
-}
-
-::v-deep .el-tooltip__popper[x-placement^="bottom"] .popper__arrow::after {
-  border-bottom-color: rgba(0, 0, 0, 0.85) !important;
 }
 
 /* 响应式设计 */

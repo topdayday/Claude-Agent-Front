@@ -170,7 +170,7 @@ export function assistant(token, session_id, content_in, model_type) {
 
 
 
-export function latest_session(token, page_number, filter_date) {
+export function latest_session(token, page_number, filter_date, title) {
     return instance({
         method: 'POST',
         url: base_url + '/latest_session/',
@@ -178,6 +178,7 @@ export function latest_session(token, page_number, filter_date) {
             token: token,
             page_number: page_number,
             filter_date: filter_date,
+            tilte: title,
         },
         headers: {
             'Content-Type': 'multipart/form-data',
